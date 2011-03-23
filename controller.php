@@ -1,30 +1,35 @@
 <?php 
   include("configuration.php");
   include("classes/Db.class.php");
+  include("classes/Track.class.php");
+  include("classes/Collection.class.php");
+  include("classes/Queue.class.php");
   include("include/functions.php");
   
   $c = new Config();
   $db = new Db();
+  $q = new Queue();
   session_start();  
   
   switch (strtolower($_REQUEST['r'])) {
+
     case "queue":
-      $rec = $db->query("SELECT id FROM queue WHERE trackKey='".$_REQUEST['key']."' AND completed IS NULL");
-      if (mysql_num_rows($rec)<=0) {
-        $db->query("INSERT INTO queue (trackKey, added) VALUES ('".$_REQUEST['key']."', NOW())");
+      
+      if (!$q->isComingUp($_REQUEST['key'])) {      
+        $q->push($_REQUEST['key']);
       }
     case 'getqueue':
 
-      $db->query("SELECT trackKey FROM queue WHERE completed IS NULL ORDER BY added");
+      $tracks = $q->getQueue();
 
-      while ($rec = $db->fetch_array()) {
-        $tracks .= $rec['trackKey'].'", "';
-      }
-      if (strlen($tracks)>0) $tracks = substr($tracks, 0, strlen($tracks)-3);
-      $tracks = '{ "queue" : ["'.$tracks.'] }';
+      $tracks = '{ "timestamp" : '.time().', "queue" : '.json_encode($tracks).' }';
 
       print $tracks;
       break;
     case 'finishedTrack':
       break;
+    case 'getrandomtrack':
+      $c = new Collection();
+      $t = $c->getRandomTrack();
+      print "<pre>".print_r($t, true)."</pre>";
   }
