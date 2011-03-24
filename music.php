@@ -20,7 +20,7 @@
       var playbackToken = "<?php print $token->result; ?>";
       var domain = "<?php print $c->app_domain; ?>";
     </script>
-    <script src="js/musicqueue.js"></script>  
+    <script src="js/musicqueue.class.js"></script>  
     <script src="js/controller.js"></script>   
   </head>
   <body>
