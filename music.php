@@ -5,6 +5,7 @@
   include("classes/Album.class.php");
   include("classes/Track.class.php");
   include("classes/Queue.class.php");  
+  include("classes/Collection.class.php");    
   include("include/functions.php");
   
   $c = new Config();
@@ -29,17 +30,17 @@
     <script src="js/controller.js"></script>   
   </head>
   <body>
+    <h2>Queue</h2>
+    <ul id="queue"></ul>
+    <h2>Collection</h2>
     <ul id="music">
 <?php
-  $artists = $db->query("SELECT `key`, `name` FROM artist ORDER BY `name`");
-  while ($rec = mysql_fetch_array($artists)) {
-    print "<li class=\"artist closed\" id=\"".$rec['key']."\">".$rec['name']."</li>\n";
+  $cx = new Collection();
+  foreach ($cx->getArtists() as $artist) {
+    print "<li class=\"artist closed\" id=\"".$artist->key."\">".$artist->name."</li>\n";
   }
 ?>  
     </ul>
     <div id="api_swf"></div>
-    <a id="addTrack">click to add a track</a>
-    <a id="next">click to go to the next track</a>
-    <a id="play">click to go to play</a>    
   </body>
 </html>

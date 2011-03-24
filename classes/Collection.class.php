@@ -1,5 +1,18 @@
 <?php
   class Collection {
+    function getArtists() {
+      $db = new Db();
+      
+      $db->query("SELECT `key`, `name` FROM artist ORDER BY `name`");    
+      $artists = Array();
+      
+      while ($rec = $db->fetch_array()) {
+        $artists[] = new Artist($rec['key']);
+      }
+      
+      return $artists;
+    }
+
     function getRandomTrack($includeQueued=false) {
       $db = new Db();
       $q = new Queue();
