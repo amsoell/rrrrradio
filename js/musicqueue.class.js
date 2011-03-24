@@ -15,20 +15,22 @@ function musicQueue() {
     this.ptr = 0;
   }
   this.updateQueue = function(tracks) {
-    // at the moment, this function assumes that the first track in the `track` parameter is the one currently playing
+    // at the moment, this function assumes that the first track in the `tracks` parameter is the one currently playing
     // only works properly when triggered on a track change event -- i think
     
     // get key for last track in existing `q`
-    lastTrackKey = this.q[this.q.length-1];
+    lastTrackKey = this.q[this.q.length-1].key;
   
     // replace local `q` with tracks
     this.q = tracks;
     
     // set internal `ptr` to the position of the last track queued
     this.ptr = -1;
+    
     for (i=this.q.length-1;(i>=0)&&(this.ptr==-1);i--) {
-      if (q[i]==lastTrackKey) {
-        this.ptr = i;
+
+      if (this.q[i].key==lastTrackKey) {
+        this.ptr = i+1;
       }
     }
 

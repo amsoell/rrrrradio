@@ -14,9 +14,9 @@
   switch (strtolower($_REQUEST['r'])) {
 
     case "queue":
-      
+      // add a requested track to the queue
       if (!$q->isComingUp($_REQUEST['key'])) {      
-        $q->push($_REQUEST['key']);
+        $q->push($_REQUEST['key'], true);
       }
     case 'getqueue':
 

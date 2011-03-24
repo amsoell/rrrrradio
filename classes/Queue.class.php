@@ -22,7 +22,7 @@
       return $tracks;
     }
     
-    function push($obj) {
+    function push($obj, $requested=false) {
       $db = new Db();
       $endplay = $this->endOfQueue();
       
@@ -36,6 +36,8 @@
       if (strlen($track->key)>0) {
         $db->query("INSERT INTO queue (trackKey, added, startplay, endplay) VALUES ('$key', UNIX_TIMESTAMP(NOW()), ".($endplay+1).", ".($endplay+$track->duration+1).")");
       }
+      
+      if ($requested) $db->query("UPDATE track SET requested=1 WHERE `key`='$key' AND requested=0");
     }
     
     function endOfQueue() {
