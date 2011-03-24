@@ -22,9 +22,15 @@
       return $tracks;
     }
     
-    function push($key) {
+    function push($obj) {
       $db = new Db();
       $endplay = $this->endOfQueue();
+      
+      if ($obj instanceof Track) {
+        $key = $obj->key;
+      } else {
+        $key = $obj;
+      }
       $track = new Track($key);
 
       if (strlen($track->key)>0) {
@@ -42,6 +48,17 @@
         return $endplay;
       } else {
         return time();
+      }
+    }
+    
+    function length() {
+      $db = new Db();
+      
+      $rs = $db->query("SELECT COUNT(id) AS length FROM queue WHERE endplay>UNIX_TIMESTAMP(NOW())");
+      if ($rec = mysql_fetch_array($rs)) {
+        return $rec['length'];
+      } else {
+        return 0;
       }
     }
   }
