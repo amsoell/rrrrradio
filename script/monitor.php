@@ -5,6 +5,8 @@
 
   include("$dir../configuration.php");
   include("$dir../classes/Db.class.php");
+  include("$dir../classes/Artist.class.php");
+  include("$dir../classes/Album.class.php");
   include("$dir../classes/Track.class.php");
   include("$dir../classes/Queue.class.php");
   include("$dir../classes/Collection.class.php");
@@ -18,6 +20,6 @@
   $length = $q->length();
 
   for (;$length<=3;$length++) {
-    $q->push($c->getRandomTrack());
+    $q->push($c->getRandomTrack(true));
   }
 ?>

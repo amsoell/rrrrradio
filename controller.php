@@ -1,6 +1,8 @@
 <?php 
   include("configuration.php");
   include("classes/Db.class.php");
+  include("classes/Artist.class.php");
+  include("classes/Album.class.php");
   include("classes/Track.class.php");
   include("classes/Collection.class.php");
   include("classes/Queue.class.php");
