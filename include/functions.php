@@ -18,6 +18,14 @@
       $_SESSION['state'] = 2;
       $_SESSION['token'] = $access_token_info['oauth_token'];
       $_SESSION['secret'] = $access_token_info['oauth_token_secret'];
+      
+      $oauth = new OAuth($c->rdio_conskey, $c->rdio_conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+      $oauth->setToken($access_token_info['oauth_token'],$access_token_info['oauth_token_secret']);
+      $oauth->setAuthType(OAUTH_AUTH_TYPE_FORM);
+      $oauth->fetch($c->rdio_api_url, array("method" => "currentUser"), OAUTH_HTTP_METHOD_FORM);
+      $json = json_decode($oauth->getLastResponse());    
+      
+      $_SESSION['userKey'] = $json->result->key;
     }   
   }
 

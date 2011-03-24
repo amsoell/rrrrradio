@@ -22,7 +22,7 @@
       return $tracks;
     }
     
-    function push($obj, $requested=false) {
+    function push($obj, $requested=false, $requestedBy=null) {
       $db = new Db();
       $endplay = $this->endOfQueue();
       
@@ -34,7 +34,7 @@
       $track = new Track($key);
 
       if ($track->canStream) {
-        $db->query("INSERT INTO queue (trackKey, added, startplay, endplay) VALUES ('$key', UNIX_TIMESTAMP(NOW()), ".($endplay+1).", ".($endplay+$track->duration+1).")");
+        $db->query("INSERT INTO queue (trackKey, userKey, added, startplay, endplay) VALUES ('$key', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", UNIX_TIMESTAMP(NOW()), ".($endplay+1).", ".($endplay+$track->duration+1).")");
       }
       
       if ($requested) $db->query("UPDATE track SET requested=1 WHERE `key`='$key' AND requested=0");

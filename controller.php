@@ -18,7 +18,7 @@
     case "queue":
       // add a requested track to the queue
       if (!$q->isComingUp($_REQUEST['key'])) {      
-        $q->push($_REQUEST['key'], true);
+        $q->push($_REQUEST['key'], true, $_SESSION['userKey']);
       }
     case 'getqueue':
 
