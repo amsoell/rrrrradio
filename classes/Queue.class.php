@@ -33,7 +33,7 @@
       }
       $track = new Track($key);
 
-      if (strlen($track->key)>0) {
+      if ($track->canStream) {
         $db->query("INSERT INTO queue (trackKey, added, startplay, endplay) VALUES ('$key', UNIX_TIMESTAMP(NOW()), ".($endplay+1).", ".($endplay+$track->duration+1).")");
       }
       

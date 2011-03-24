@@ -13,7 +13,7 @@
       return $artists;
     }
 
-    function getRandomTrack($includeQueued=false) {
+    function getRandomTrack($includeQueued=false, $includeAll=false) {
       $db = new Db();
       $q = new Queue();
       
@@ -27,7 +27,11 @@
         $queuetracks = array("");
       }
       
-      $rs = $db->query("SELECT `key` FROM track WHERE rnd>RAND() AND requested=1 AND `key` NOT IN ('".implode(",''", $queuetracks)."') ORDER BY rnd LIMIT 1");
+      if (!$includeAll) {
+        $requestedBit = "requested=1 AND ";
+      }
+      
+      $rs = $db->query("SELECT `key` FROM track WHERE rnd>RAND() AND ".$requestedBit."`key` NOT IN ('".implode(",''", $queuetracks)."') ORDER BY rnd LIMIT 1");
       if ($rec = mysql_fetch_array($rs)) {
         $t = new Track($rec['key']);
         return $t;

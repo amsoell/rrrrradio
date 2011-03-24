@@ -15,11 +15,9 @@
   $c = new Config();
   $db = new Db();
   $q = new Queue();
-  $c = new Collection;
   
   $length = $q->length();
-
   for (;$length<=3;$length++) {
-    $q->push($c->getRandomTrack(true));
+    $q->push(Collection::getRandomTrack(false, true));
   }
 ?>

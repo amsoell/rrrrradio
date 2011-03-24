@@ -18,7 +18,7 @@
 ?>
 <html>
   <head>
-    <title>Crumppbo -- radioasoell:mark IV</title>
+    <title>Crumppbo</title>
     <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
     <script type="text/javascript">
@@ -35,8 +35,7 @@
     <h2>Collection</h2>
     <ul id="music">
 <?php
-  $cx = new Collection();
-  foreach ($cx->getArtists() as $artist) {
+  foreach (Collection::getArtists() as $artist) {
     print "<li class=\"artist closed\" id=\"".$artist->key."\">".$artist->name."</li>\n";
   }
 ?>  
