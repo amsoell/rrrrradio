@@ -27,6 +27,15 @@
         return false;
       }
     }
+    
+    function exists($key) { 
+      $db = new Db();
+      
+      $key = trim($key);
+      
+      $rs = $db->query("SELECT `key` FROM track WHERE `key`='$key'");
+      return (mysql_num_rows($rs)>0);
+    }
   }
   
   class QueueTrack extends Track {
