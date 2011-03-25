@@ -35,9 +35,8 @@
 
       if ($track->canStream) {
         $db->query("INSERT INTO queue (trackKey, userKey, added, startplay, endplay) VALUES ('$key', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$track->duration).")");
+        $db->query("UPDATE track SET ".($requested?"requested='1', ":"")."lastqueue=UNIX_TIMESTAMP(NOW()) WHERE `key`='$key'");
       }
-      
-      if ($requested) $db->query("UPDATE track SET requested=1 WHERE `key`='$key' AND requested=0");
     }
     
     function endOfQueue() {

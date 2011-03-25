@@ -1,6 +1,7 @@
 <?php 
   include("configuration.php");
   include("classes/Db.class.php");
+  include("classes/User.class.php");
   include("classes/Artist.class.php");
   include("classes/Album.class.php");
   include("classes/Track.class.php");
@@ -18,7 +19,7 @@
 ?>
 <html>
   <head>
-    <title>Crumppbo (<?php print $_SESSION['userKey']; ?>)</title>
+    <title>Crumppbo</title>
     <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
     <script type="text/javascript">
@@ -30,6 +31,8 @@
     <script src="js/controller.js"></script>   
   </head>
   <body>
+    <img src="<?php print $_SESSION['user']->icon; ?>" />
+    <h1>Hello, <?php print $_SESSION['user']->firstName.' '.$_SESSION['user']->lastName.' ('.$_SESSION['user']->username.')'; ?></h1>
     <h2>Queue</h2>
     <ul id="queue"></ul>
     <h2>Collection</h2>
@@ -41,5 +44,8 @@
 ?>  
     </ul>
     <div id="api_swf"></div>
+<?php
+print "<pre>".print_r($_SESSION['user'], true)."</pre>";
+?>
   </body>
 </html>

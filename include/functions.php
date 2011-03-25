@@ -1,5 +1,6 @@
 <?php
   function authenticate() {
+    $db = new Db();
     $c = new Config();  
   
     if(!isset($_GET['oauth_token']) && $_SESSION['state']==1) $_SESSION['state'] = 0;
@@ -22,10 +23,12 @@
       $oauth = new OAuth($c->rdio_conskey, $c->rdio_conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
       $oauth->setToken($access_token_info['oauth_token'],$access_token_info['oauth_token_secret']);
       $oauth->setAuthType(OAUTH_AUTH_TYPE_FORM);
-      $oauth->fetch($c->rdio_api_url, array("method" => "currentUser"), OAUTH_HTTP_METHOD_FORM);
+      $oauth->fetch($c->rdio_api_url, array("method" => "currentUser", "extras" => "username"), OAUTH_HTTP_METHOD_FORM);
       $json = json_decode($oauth->getLastResponse());    
+      $u = $json->result;
       
-      $_SESSION['userKey'] = $json->result->key;
+      $db->query("REPLACE INTO user (`key`, username, firstName, lastName, icon, gender, state, token, secret) VALUES ('".$u->key."', '".addslashes($u->username)."', '".addslashes($u->firstName)."', '".addslashes($u->lastName)."', '".addslashes($u->icon)."', '".$u->gender."', 2, '".addslashes($access_token_info['oauth_token'])."', '".addslashes($access_token_info['oauth_token_secret'])."')");
+      $_SESSION['user'] = new User($json->result->key);
     }   
   }
 
