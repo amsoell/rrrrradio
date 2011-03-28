@@ -2,8 +2,6 @@
   include("configuration.php");
   include("classes/Db.class.php");
   include("classes/User.class.php");
-  include("classes/Artist.class.php");
-  include("classes/Album.class.php");
   include("classes/Track.class.php");
   include("classes/Queue.class.php");  
   include("classes/Collection.class.php");    
@@ -41,7 +39,9 @@
       <ul id="music">
 <?php
   foreach (Collection::getArtists() as $artist) {
-    print "<li class=\"artist closed\" id=\"".$artist->key."\">".$artist->name."</li>\n";
+    $key = explode("|", $artist->key);
+    $key = str_replace("rl", "r", $key[0]);
+    print "<li class=\"artist closed\" id=\"".$key."\">".$artist->name."</li>\n";
   }
 ?>  
       </ul>    

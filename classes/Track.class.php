@@ -21,7 +21,6 @@
         $this->name = $rec['name'];
         $this->duration = $rec['duration'];
         $this->trackNum = $rec['trackNum'];
-        $this->album = new Album($rec['albumKey']);
         if ($rec['canStream']==1) $this->canStream = true;
 
         return true;

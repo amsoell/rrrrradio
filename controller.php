@@ -1,8 +1,6 @@
 <?php 
   include("configuration.php");
   include("classes/Db.class.php");
-  include("classes/Artist.class.php");
-  include("classes/Album.class.php");
   include("classes/Track.class.php");
   include("classes/Collection.class.php");
   include("classes/Queue.class.php");
@@ -23,6 +21,13 @@
     case 'getqueue':
 
       $tracks = $q->getQueue();
+      for ($i=0; $i<count($tracks); $i++) {
+        $key = $tracks[$i]->key;
+        $detail = rdioGet(array("method"=>"get", "keys"=>$key));
+        $tracks[$i]->icon = $detail->result->$key->icon;  
+        $tracks[$i]->artist = $detail->result->$key->artist;
+        $tracks[$i]->album = $detail->result->$key->album;
+      }
 
       $tracks = '{ "timestamp" : '.time().', "queue" : '.json_encode($tracks).' }';
 

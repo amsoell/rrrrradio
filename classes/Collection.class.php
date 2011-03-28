@@ -1,15 +1,9 @@
 <?php
   class Collection {
     function getArtists() {
-      $db = new Db();
-      
-      $db->query("SELECT `key`, `name` FROM artist ORDER BY `name`");    
-      $artists = Array();
-      
-      while ($rec = $db->fetch_array()) {
-        $artists[] = new Artist($rec['key']);
-      }
-      
+      $artists = rdioGet(array("method"=>"getArtistsInCollection", "user"=>"s298644"));    
+      $artists = $artists->result;
+
       return $artists;
     }
 

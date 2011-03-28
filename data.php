@@ -8,30 +8,21 @@
   session_start();  
   
   if (array_key_exists('r', $_REQUEST)) {
-    // GET ALBUMS FROM A SPECIFIED ARTIST AND RETURN VIA JSON OBJECT
-    $db->query("SELECT `key`, `name` FROM album WHERE artistKey='".$_REQUEST['r']."' ORDER BY releaseDate DESC");
-    
-    $albums = "";
-    while ($rec = $db->fetch_array()) {
-      $key = explode("|", $rec['key']);
-      $key = $key[0];
-      $key = str_replace("al", "a", $key);
-      $albums .= '{ "key": "'.$key.'", "name": '.json_encode($rec['name']).' }, ';
-    }
-    if (strlen($albums)>0) $albums = substr($albums, 0, strlen($albums)-2);
-    
-    $albums = "[ ".$albums. " ]";
-    print $albums;
+    // GET ALBUMS FROM A SPECIFIED ARTIST AND RETURN VIA JSON OBJECT  
+    $albums = rdioGet(array("method"=>"getAlbumsForArtistInCollection", "artist"=>$_REQUEST['r']));
+    $albums = $albums->result;
+
+    usort($albums, "albumSort");
+    print json_encode($albums);
   } elseif (array_key_exists('a', $_REQUEST)) {
     // GET TRACKS FROM A SPECIFIED ALBUM AND RETURN VIA JSON OBJECT
-    $db->query("SELECT `key`, `name`, trackNum FROM track WHERE albumKey='".$_REQUEST['a']."' ORDER BY trackNum");
-    
-    $tracks = "";
-    while ($rec = $db->fetch_array()) {
-      $tracks .= '{ "key": "'.$rec['key'].'", "name": '.json_encode($rec['name']).', "trackNum": '.$rec['trackNum'].' }, ';
-    }
-    if (strlen($tracks)>0) $tracks = substr($tracks, 0, strlen($tracks)-2);
-    
-    $tracks = "[ ".$tracks. " ]";
-    print $tracks;
+    $tracks = rdioGet(array("method"=>"getTracksForAlbumInCollection", "album"=>$_REQUEST['a'], "extras"=>"trackNum"));    
+    $tracks = $tracks->result;
+
+    print json_encode($tracks);
+  }
+
+  function albumsort($a, $b) { 
+    if ($a->releaseDate==$b->releaseDate) return 0; 
+    return (($a->releaseDate < $b->releaseDate) ? 1 : -1); 
   }
