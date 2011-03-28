@@ -1,0 +1,135 @@
+* {
+  font-family: "Century Gothic";
+}
+
+#collection {
+  font-size: 12px;
+  margin-top: 20px;
+  padding: 10px;
+  position: relative;
+
+}
+
+#collection #mask {
+  position: absolute;
+  left: 292;
+  background: #FFF;
+  height: 420px;
+  width: 18px;
+  z-index: 100;
+}
+
+#collection, #collection #music {
+  width: 300px;
+  height: 400px;
+
+}
+
+#collection #music {
+  padding-top: 20px;
+  overflow: auto;
+  z-index: 1;  
+}
+
+#collection #music ul {
+  padding-left: 30px;
+}
+
+#collection #music ul ul li {
+  list-style: decimal;
+}
+
+#collection #fadetop {
+  height: 21px;
+  width: 300px;
+  background: url('/css/theme/crumppbo/images/gradient-white.png') repeat-x;
+  float: left;
+  position: absolute;
+}
+
+#collection #fadebottom {
+  height: 21px;
+  width: 300px;
+  background: url('/css/theme/crumppbo/images/gradient-white-bottom.png') repeat-x;
+  float: left;
+  position: absolute;
+  top:409px;
+}
+
+#queue {
+  position: absolute;
+  top: 20px;
+  left: 330px;
+  width: 636px;
+  margin: 0;
+  padding: 0;
+}
+
+#queue .track {
+  width: 200px;
+  height: 200px;
+  border: solid 1px #a9a9a9;
+  background: #dfdfdf;
+  margin: 0 10px 10px 0;
+  padding: 0;
+  float: left;
+  position: relative;
+}
+
+#queue .track:first-child {
+}
+
+#queue .track:hover {
+  box-shadow: 0px 0px 10px #666;  
+  cursor: pointer;
+}
+
+#queue .track .title {
+  padding: 5px;
+  height: 35px;
+  font-family:"Century Gothic";
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFF;
+  background: url('/css/theme/crumppbo/images/trackbg.png');
+}
+
+#queue .track .title .trackname {
+  margin: 0;
+  padding: 0;
+  height: 20px;
+}
+
+#queue .track .title .artist {
+  margin: 0;
+  padding: 0;
+  height: 15px;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+#queue .track .userpic {
+  position: absolute;
+  top: 4px;
+  left: 2px;
+}
+
+#queue .track .user {
+  padding: 5px;
+  height: 14px;
+  width: 190px;
+  font-size: 11px;
+  font-weight: normal;
+  color: #FFF;
+  background: url('/css/theme/crumppbo/images/trackbg.png');
+  position: absolute;
+  top: 177px;
+}
+
+#queue .track .user .username {
+  padding-left: 16px;
+}
+
+br.clear {
+  clear: both;
+}
