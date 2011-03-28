@@ -14,9 +14,15 @@ function musicQueue() {
     this.q = tracks;
     this.ptr = 0;
   }
-  this.updateQueue = function(tracks) {
+  this.updateQueue = function(tracks, currentlyPlaying) {
     // at the moment, this function assumes that the first track in the `tracks` parameter is the one currently playing
     // only works properly when triggered on a track change event -- i think
+    
+    // currentlyPlaying parameter indicates the song that is *actually* playing right now, whether or not it *should* be 
+    // based on this object's queue. Need to figure away to correct when these values are different.
+    // - We don't want to just skip ahead at the beginning of every track, because that could mean missing the first 2 seconds
+    //   of every song
+    // - Maybe set a threshold for skipping ahead. 10-15 seconds?
     
     // get key for last track in existing `q`
     lastTrackKey = this.q[this.q.length-1].key;

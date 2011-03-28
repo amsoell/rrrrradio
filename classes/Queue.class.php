@@ -1,4 +1,6 @@
 <?php
+  include_once("User.class.php");
+
   class Queue {
     function isComingUp($key) {
       $db = new Db();
@@ -10,12 +12,15 @@
     function getQueue() {
       $db = new Db();
       
-      $rs = $db->query("SELECT trackKey, startplay, endplay FROM queue WHERE endplay>=UNIX_TIMESTAMP(NOW()) ORDER BY startplay");    
+      $rs = $db->query("SELECT trackKey, userKey, startplay, endplay FROM queue WHERE endplay>=UNIX_TIMESTAMP(NOW()) ORDER BY startplay");    
       $tracks = Array();
       while ($rec = mysql_fetch_array($rs)) {
         $t = new QueueTrack($rec['trackKey']);
         $t->startplay = $rec['startplay'];
         $t->endplay = $rec['endplay'];
+        if (!is_null($rec['userKey'])) {
+          $t->user = new User($rec['userKey']);
+        }
         $tracks[] = $t;
       }
       

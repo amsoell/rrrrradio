@@ -29,23 +29,24 @@
     </script>
     <script src="js/musicqueue.class.js"></script>  
     <script src="js/controller.js"></script>   
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2r1/build/reset/reset-min.css">    
+    <link type="text/css" rel="stylesheet" href="/css/theme/crumppbo/style.css" /> 
   </head>
   <body>
-    <img src="<?php print $_SESSION['user']->icon; ?>" />
-    <h1>Hello, <?php print $_SESSION['user']->firstName.' '.$_SESSION['user']->lastName.' ('.$_SESSION['user']->username.')'; ?></h1>
-    <h2>Queue</h2>
-    <ul id="queue"></ul>
-    <h2>Collection</h2>
-    <ul id="music">
+    <div id="queue"></div>
+    <div id="collection">
+      <div id="fadetop"></div>
+      <div id="fadebottom"></div>   
+      <div id="mask"></div>   
+      <ul id="music">
 <?php
   foreach (Collection::getArtists() as $artist) {
     print "<li class=\"artist closed\" id=\"".$artist->key."\">".$artist->name."</li>\n";
   }
 ?>  
-    </ul>
+      </ul>    
+    </div>
+    
     <div id="api_swf"></div>
-<?php
-print "<pre>".print_r($_SESSION['user'], true)."</pre>";
-?>
   </body>
 </html>

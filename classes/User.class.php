@@ -7,9 +7,9 @@
     public $lastName;
     public $icon;
     public $gender;
-    public $state;
-    public $token;
-    public $secret;
+    private $state;
+    private $token;
+    private $secret;
     
     function __construct($key) {
       $db = new Db();

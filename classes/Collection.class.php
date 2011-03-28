@@ -45,10 +45,9 @@
       
       if (!$this->trackExists($track->key)) {
         $db->query("REPLACE INTO track (`key`, albumKey, artistKey, `name`, trackNum, shortUrl, duration, isExplicit, isClean, canStream, requested, rnd) VALUES ('".$track->key."', '".$track->albumKey."', '".$track->artistKey."', '".addslashes($track->name)."', ".$track->trackNum.", '".$track->shortUrl."', ".$track->duration.", ".intval($track->isExplicit).", ".intval($track->isClean).", ".intval($track->canStream).", 1, rand())");
-        print "<br />";
         $albumKey = $track->albumKey;
         $album = rdioGet(array("method"=>"get", "keys"=>$albumKey));
-        
+        print $albumKey;
         $this->addAlbum($album->result->$albumKey);
       }
     }

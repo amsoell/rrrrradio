@@ -27,7 +27,7 @@
       $json = json_decode($oauth->getLastResponse());    
       $u = $json->result;
       
-      $db->query("REPLACE INTO user (`key`, username, firstName, lastName, icon, gender, state, token, secret) VALUES ('".$u->key."', '".addslashes($u->username)."', '".addslashes($u->firstName)."', '".addslashes($u->lastName)."', '".addslashes($u->icon)."', '".$u->gender."', 2, '".addslashes($access_token_info['oauth_token'])."', '".addslashes($access_token_info['oauth_token_secret'])."')");
+      $db->query("REPLACE INTO user (`key`, username, firstName, lastName, icon, gender, state, token, secret, lastseen) VALUES ('".$u->key."', '".addslashes($u->username)."', '".addslashes($u->firstName)."', '".addslashes($u->lastName)."', '".addslashes($u->icon)."', '".$u->gender."', 2, '".addslashes($access_token_info['oauth_token'])."', '".addslashes($access_token_info['oauth_token_secret'])."', UNIX_TIMESTAMP(NOW()))");
       $_SESSION['user'] = new User($json->result->key);
     }   
   }
