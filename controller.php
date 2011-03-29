@@ -44,5 +44,4 @@
     case 'getrandomtrack':
       $c = new Collection();
       $t = $c->getRandomTrack();
-      print "<pre>".print_r($t, true)."</pre>";
   }
