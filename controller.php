@@ -20,10 +20,11 @@
       }
     case 'getqueue':
 
-      $tracks = $q->getQueue();
+      $tracks = $q->getQueue();      
       for ($i=0; $i<count($tracks); $i++) {
         $key = $tracks[$i]->key;
         $detail = rdioGet(array("method"=>"get", "keys"=>$key));
+        $tracks[$i]->name = $detail->result->$key->name;
         $tracks[$i]->icon = $detail->result->$key->icon;  
         $tracks[$i]->artist = $detail->result->$key->artist;
         $tracks[$i]->album = $detail->result->$key->album;

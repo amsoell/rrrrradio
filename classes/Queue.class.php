@@ -15,9 +15,11 @@
       $rs = $db->query("SELECT trackKey, userKey, startplay, endplay FROM queue WHERE endplay>=UNIX_TIMESTAMP(NOW()) ORDER BY startplay");    
       $tracks = Array();
       while ($rec = mysql_fetch_array($rs)) {
-        $t = new QueueTrack($rec['trackKey']);
+        $t = new QueueTrack();
+        $t->key = $rec['trackKey'];
         $t->startplay = $rec['startplay'];
         $t->endplay = $rec['endplay'];
+        $t->duration = $rec['endplay']-$rec['startplay'];
         if (!is_null($rec['userKey'])) {
           $t->user = new User($rec['userKey']);
         }
@@ -36,12 +38,14 @@
       } else {
         $key = $obj;
       }
-      $track = new Track($key);
+//      $track = new Track($key);
 
-      if ($track->canStream) {
-        $db->query("INSERT INTO queue (trackKey, userKey, added, startplay, endplay) VALUES ('$key', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$track->duration).")");
+//      if ($track->canStream) {
+
+
+        $db->query("INSERT INTO queue (trackKey, userKey, added, startplay, endplay) VALUES ('$key', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
         $db->query("UPDATE track SET ".($requested?"requested='1', ":"")."lastqueue=UNIX_TIMESTAMP(NOW()) WHERE `key`='$key'");
-      }
+//      }
     }
     
     function endOfQueue() {

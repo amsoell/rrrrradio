@@ -25,10 +25,19 @@
         $requestedBit = "requested=1 AND ";
       }
       
-      $rs = $db->query("SELECT `key` FROM track WHERE rnd>RAND() AND ".$requestedBit."`key` NOT IN ('".implode(",''", $queuetracks)."') AND IFNULL(lastqueue, 0)<=UNIX_TIMESTAMP(NOW())-".$lastplaythreshold." ORDER BY rnd LIMIT 1");
+      $rs = $db->query("SELECT FLOOR(RAND()*COUNT(DISTINCT trackKey)) AS offset FROM queue");
       if ($rec = mysql_fetch_array($rs)) {
-        $t = new Track($rec['key']);
-        return $t;
+        $offset = $rec['offset'];
+
+        $rs = $db->query("SELECT DISTINCT trackKey, endplay-startplay AS duration FROM queue LIMIT $offset, 1");
+        if ($rec = mysql_fetch_array($rs)) {
+          $t = new Track();
+          $t->key = $rec['trackKey'];
+          $t->duration = $rec['duration'];
+          return $t;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
