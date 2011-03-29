@@ -11,11 +11,13 @@
     
     function getQueue() {
       $db = new Db();
-      
+
       $rs = $db->query("SELECT trackKey, userKey, startplay, endplay FROM queue WHERE endplay>=UNIX_TIMESTAMP(NOW()) ORDER BY startplay");    
       $tracks = Array();
+
       while ($rec = mysql_fetch_array($rs)) {
         $t = new QueueTrack();
+
         $t->key = $rec['trackKey'];
         $t->startplay = $rec['startplay'];
         $t->endplay = $rec['endplay'];
@@ -24,6 +26,7 @@
           $t->user = new User($rec['userKey']);
         }
         $tracks[] = $t;
+
       }
       
       return $tracks;

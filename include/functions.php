@@ -20,6 +20,7 @@
       $_SESSION['token'] = $access_token_info['oauth_token'];
       $_SESSION['secret'] = $access_token_info['oauth_token_secret'];
       
+      api_log(null, $args);      
       $oauth = new OAuth($c->rdio_conskey, $c->rdio_conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
       $oauth->setToken($access_token_info['oauth_token'],$access_token_info['oauth_token_secret']);
       $oauth->setAuthType(OAUTH_AUTH_TYPE_FORM);
@@ -33,8 +34,9 @@
   }
 
   function rdioGet($args) {
-    $c = new Config();
+    $c = new Config();  
     
+    api_log($_SESSION['user']->key, $args);
     $oauth = new OAuth($c->rdio_conskey, $c->rdio_conssec, OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
     $oauth->setToken($_SESSION['token'],$_SESSION['secret']);
     $oauth->setAuthType(OAUTH_AUTH_TYPE_FORM);
@@ -42,5 +44,11 @@
     $json = json_decode($oauth->getLastResponse());    
     
     return $json;  
+  }
+  
+  function api_log($user, $params) {
+    $db = new Db();
+    
+    $db->query("INSERT INTO api_usage (user, executed, params) VALUES ('".addslashes($user)."', UNIX_TIMESTAMP(NOW()), '".addslashes(json_encode($params))."')");
   }
 ?>

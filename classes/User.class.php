@@ -22,12 +22,14 @@
         $this->secret = $rec['secret'];
         
         $key = $rec['key'];
-        $user = rdioGet(array("method"=>"get", "keys"=>$key, "extras"=>"username"));
-        $this->username = $user->result->$key->username;
-        $this->firstName = $user->result->$key->firstName;        
-        $this->lastName = $user->result->$key->lastName;        
-        $this->icon = $user->result->$key->icon;        
-        $this->gender = $user->result->$key->gender;        
+        if (class_exists("OAuth")) {
+          $user = rdioGet(array("method"=>"get", "keys"=>$key, "extras"=>"username"));
+          $this->username = $user->result->$key->username;
+          $this->firstName = $user->result->$key->firstName;        
+          $this->lastName = $user->result->$key->lastName;        
+          $this->icon = $user->result->$key->icon;        
+          $this->gender = $user->result->$key->gender;        
+        }
       }
     }
   

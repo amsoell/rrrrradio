@@ -28,6 +28,7 @@
         $tracks[$i]->icon = $detail->result->$key->icon;  
         $tracks[$i]->artist = $detail->result->$key->artist;
         $tracks[$i]->album = $detail->result->$key->album;
+        $tracks[$i]->canStream = intval($detail->result->$key->canStream);
       }
 
       $tracks = '{ "timestamp" : '.time().', "queue" : '.json_encode($tracks).' }';
