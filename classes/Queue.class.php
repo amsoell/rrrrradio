@@ -34,7 +34,7 @@
     
     function push($obj, $requested=false, $requestedBy=null) {
       $db = new Db();
-      $endplay = $this->endOfQueue();
+      $endplay = $this->endOfQueue()+1;
       
       if (is_object($obj)) {
         $key = $obj->key;

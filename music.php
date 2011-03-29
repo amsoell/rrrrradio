@@ -31,12 +31,17 @@
     <link type="text/css" rel="stylesheet" href="/css/theme/crumppbo/style.css" /> 
   </head>
   <body>
-    <div id="queue"></div>
-    <div id="collection">
-      <div id="fadetop"></div>
-      <div id="fadebottom"></div>   
-      <div id="mask"></div>   
-      <ul id="music">
+
+    <div id="nowplaying">
+      <div id="progress"><div id="slider"></div></div>
+    </div>
+    <div id="browser">
+      <div id="queue"></div>
+      <div id="collection">
+        <div id="fadetop"></div>
+        <div id="fadebottom"></div>   
+        <div id="mask"></div>   
+        <ul id="music">
 <?php
   foreach (Collection::getArtists() as $artist) {
     $key = explode("|", $artist->key);
@@ -44,8 +49,10 @@
     print "<li class=\"artist closed\" id=\"".$key."\">".$artist->name."</li>\n";
   }
 ?>  
-      </ul>    
+        </ul>    
+      </div>
     </div>
+    <div id="time"></div>
     
     <div id="api_swf"></div>
   </body>
