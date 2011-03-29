@@ -10,7 +10,7 @@
     public $canStream;
     
     function __construct($key=null) {
-      $this->canStream = false;
+      $this->canStream = 1;
       if (!is_null($key)) {
         return $this->load($key);
       } else {

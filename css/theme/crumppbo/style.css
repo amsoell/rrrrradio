@@ -56,6 +56,10 @@
   top:409px;
 }
 
+#collection .track.unstreamable {
+  color: #999;
+}
+
 #queue {
   position: absolute;
   top: 20px;
@@ -87,7 +91,6 @@
 #queue .track .title {
   padding: 5px;
   height: 35px;
-
   font-family:"Century Gothic";
   font-size: 14px;
   font-weight: bold;

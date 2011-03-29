@@ -16,6 +16,8 @@
   
   $length = $q->length();
   for (;$length<=3;$length++) {
-    $q->push(Collection::getRandomTrack(false, false));
+    $track = Collection::getRandomTrack(false, false);
+    print_r($track);
+    $q->push($track);
   }
 ?>

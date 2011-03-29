@@ -36,19 +36,18 @@
       $db = new Db();
       $endplay = $this->endOfQueue();
       
-      if ($obj instanceof Track) {
+      if (is_object($obj)) {
         $key = $obj->key;
+        $duration = $obj->duration;
       } else {
         $key = $obj;
       }
-//      $track = new Track($key);
 
-//      if ($track->canStream) {
-
-
+      if (is_object($obj) && property_exists($obj, "canStream") && $obj->canStream==0) {
+        return false;
+      } else {
         $db->query("INSERT INTO queue (trackKey, userKey, added, startplay, endplay) VALUES ('$key', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
-        $db->query("UPDATE track SET ".($requested?"requested='1', ":"")."lastqueue=UNIX_TIMESTAMP(NOW()) WHERE `key`='$key'");
-//      }
+      }
     }
     
     function endOfQueue() {

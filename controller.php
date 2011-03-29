@@ -15,8 +15,12 @@
 
     case "queue":
       // add a requested track to the queue
-      if (!$q->isComingUp($_REQUEST['key'])) {      
-        $q->push($_REQUEST['key'], true, $_SESSION['user']->key);
+      if (!$q->isComingUp($_REQUEST['key'])) { 
+        $key = $_REQUEST['key'];
+        $track = rdioGet(array("method"=>"get", "keys"=>$key));
+        if (property_exists($track->result, $key)) {  
+        $q->push($track->result->$key, true, $_SESSION['user']->key);
+        }
       }
     case 'getqueue':
 
