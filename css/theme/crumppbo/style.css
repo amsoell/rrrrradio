@@ -87,6 +87,7 @@
 #queue .track .title {
   padding: 5px;
   height: 35px;
+
   font-family:"Century Gothic";
   font-size: 14px;
   font-weight: bold;
@@ -95,12 +96,14 @@
 }
 
 #queue .track .title .trackname {
+  overflow: hidden;
   margin: 0;
   padding: 0;
   height: 20px;
 }
 
 #queue .track .title .artist {
+  overflow: hidden;
   margin: 0;
   padding: 0;
   height: 15px;
