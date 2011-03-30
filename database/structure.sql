@@ -6,7 +6,7 @@ CREATE TABLE `queue` (
   `startplay` int(11) default NULL,
   `endplay` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1850 DEFAULT CHARSET=latin1;
+)
 
 CREATE TABLE `user` (
   `key` varchar(10) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE `user` (
   `secret` varchar(64) default NULL,
   `lastseen` int(11) default NULL,
   PRIMARY KEY  (`key`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+)
 
 CREATE TABLE `api_usage` (
   `id` int(11) NOT NULL auto_increment,
@@ -24,4 +24,4 @@ CREATE TABLE `api_usage` (
   `params` varchar(200) default NULL,
   `return` mediumtext default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+)
