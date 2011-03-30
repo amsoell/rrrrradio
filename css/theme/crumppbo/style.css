@@ -22,6 +22,10 @@
   border: 1px solid #a9a9a9;
 }
 
+#nowplaying #album {
+  font-size: 11px;
+}
+
 #progress {
   height: 10px;
   width: 200px;

@@ -33,6 +33,8 @@
   <body>
 
     <div id="nowplaying">
+      <div id="song"><span id="song_title"></span> - <span id="song_artist"></span></div>
+      <div id="album">From the album <span id="song_album"></span></div>
       <div id="progress"><div id="slider"></div></div>
     </div>
     <div id="browser">

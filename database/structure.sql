@@ -22,5 +22,6 @@ CREATE TABLE `api_usage` (
   `user` varchar(200) default NULL,
   `executed` int(11) default NULL,
   `params` varchar(200) default NULL,
+  `return` mediumtext default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
