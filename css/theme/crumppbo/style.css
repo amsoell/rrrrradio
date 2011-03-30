@@ -17,7 +17,7 @@
   top: 10px;
   padding: 15px;
   width:595px;
-  height: 175px;
+  height: 96px;
   background: #dfdfdf;
   border: 1px solid #a9a9a9;
 }
@@ -102,7 +102,7 @@
 
 #queue {
   position: absolute;
-  top: 205px;
+  top: 126px;
   left: 330px;
   width: 636px;
   margin: 0;

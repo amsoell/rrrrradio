@@ -34,6 +34,11 @@
         $tracks[$i]->album = $detail->result->$key->album;
         $tracks[$i]->canStream = intval($detail->result->$key->canStream);
       }
+      
+      $xml = lastfmGet(array("method"=>"artist.getimages", "artist"=>urlencode($tracks[0]->artist)));        
+      $imgindex = rand(0, count($xml->images->image)-1);
+//print (string)$xml->images->image[$imgindex]->sizes->size[2];      
+      $tracks[0]->artistIcon = (string)$xml->images->image[$imgindex]->sizes->size[2];
 
       $tracks = '{ "timestamp" : '.time().', "queue" : '.json_encode($tracks).' }';
 
