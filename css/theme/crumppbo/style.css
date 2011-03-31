@@ -2,6 +2,11 @@
   font-family: "Century Gothic";
 }
 
+p {
+  padding-top: 10px;
+  font-size: 12px;
+}
+
 #logo {
   width: 300px;
   height: 200px;
@@ -11,7 +16,7 @@
 
 
 
-#nowplaying {
+#nowplaying, #intro {
   position: absolute;
   left: 330px;
   top: 10px;
@@ -39,6 +44,7 @@
 }
 
 #browser {
+  top: 126px;
   position: relative;
 }
 
@@ -102,7 +108,7 @@
 
 #queue {
   position: absolute;
-  top: 126px;
+
   left: 330px;
   width: 636px;
   margin: 0;

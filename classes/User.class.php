@@ -13,6 +13,7 @@
     
     function __construct($key) {
       $db = new Db();
+      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
       
       $rs = $db->query("SELECT `key`, state, token, secret FROM user WHERE `key`='$key' LIMIT 1");
       if ($rec = mysql_fetch_array($rs)) {
@@ -23,7 +24,7 @@
         
         $key = $rec['key'];
         if (class_exists("OAuth")) {
-          $user = rdioGet(array("method"=>"get", "keys"=>$key, "extras"=>"username"));
+          $user = $rdio->get(array("keys"=>$key, "extras"=>"username"));
           $this->username = $user->result->$key->username;
           $this->firstName = $user->result->$key->firstName;        
           $this->lastName = $user->result->$key->lastName;        

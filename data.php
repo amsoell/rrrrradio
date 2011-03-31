@@ -1,22 +1,24 @@
 <?php 
   include("configuration.php");
   include("classes/Db.class.php");
+  include("classes/Rdio.class.php");
   include("include/functions.php");
   
   $c = new Config();
   $db = new Db();
+  $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
   session_start();  
   
   if (array_key_exists('r', $_REQUEST)) {
     // GET ALBUMS FROM A SPECIFIED ARTIST AND RETURN VIA JSON OBJECT  
-    $albums = rdioGet(array("method"=>"getAlbumsForArtistInCollection", "artist"=>$_REQUEST['r']));
+    $albums = $rdio->getAlbumsForArtistInCollection(array("artist"=>$_REQUEST['r'], "user"=>$c->rdio_collection_userkey, "force"=>true));
     $albums = $albums->result;
 
     usort($albums, "albumSort");
     print json_encode($albums);
   } elseif (array_key_exists('a', $_REQUEST)) {
     // GET TRACKS FROM A SPECIFIED ALBUM AND RETURN VIA JSON OBJECT
-    $tracks = rdioGet(array("method"=>"getTracksForAlbumInCollection", "album"=>$_REQUEST['a'], "extras"=>"trackNum"));    
+    $tracks = $rdio->getTracksForAlbumInCollection(array("album"=>$_REQUEST['a'], "extras"=>"trackNum", "user"=>$c->rdio_collection_userkey, "force"=>true));    
     $tracks = $tracks->result;
 
     print json_encode($tracks);

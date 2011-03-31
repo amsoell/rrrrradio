@@ -1,7 +1,10 @@
 <?php
   class Collection {
     function getArtists() {
-      $artists = rdioGet(array("method"=>"getArtistsInCollection", "user"=>"s298644"));    
+      $c = new Config();
+      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+      
+      $artists = $rdio->getArtistsInCollection(array("user"=>$c->rdio_collection_userkey));    
       $artists = $artists->result;
 
       return $artists;
@@ -45,11 +48,12 @@
     
     function addTrack($track) {
       $db = new Db();
+      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
       
       if (!$this->trackExists($track->key)) {
         $db->query("REPLACE INTO track (`key`, albumKey, artistKey, `name`, trackNum, shortUrl, duration, isExplicit, isClean, canStream, requested, rnd) VALUES ('".$track->key."', '".$track->albumKey."', '".$track->artistKey."', '".addslashes($track->name)."', ".$track->trackNum.", '".$track->shortUrl."', ".$track->duration.", ".intval($track->isExplicit).", ".intval($track->isClean).", ".intval($track->canStream).", 1, rand())");
         $albumKey = $track->albumKey;
-        $album = rdioGet(array("method"=>"get", "keys"=>$albumKey));
+        $album = $rdio->get(array("keys"=>$albumKey));
         print $albumKey;
         $this->addAlbum($album->result->$albumKey);
       }
@@ -57,12 +61,13 @@
     
     function addAlbum($album) {
       $db = new Db();
+      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
       
       if (!$this->albumExists($album->key)) {
         $db->query("REPLACE INTO album (`key`, artistKey, `name`, icon, url, isExplicit, isClean, canStream, shortUrl, embedUrl, duration) VALUES ('".$album->key."', '".$album->artistKey."', '".addslashes($album->name)."', '".$album->icon."', '".$album->url."', ".intval($album->isExplicit).", ".intval($album->isClean).", ".intval($album->canStream).", '".$album->shortUrl."', '".$album->embedUrl."', ".$album->duration.")");
         print "<br />";
         $artistKey = $album->artistKey;
-        $artist = rdioGet(array("method"=>"get", "keys"=>$artistKey));
+        $artist = $rdio->get(array("keys"=>$artistKey));
         
         $this->addArtist($artist->result->$artistKey);
       }
