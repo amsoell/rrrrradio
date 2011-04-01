@@ -32,16 +32,28 @@ p {
 }
 
 #progress {
-  height: 10px;
+  height: 12px;
   width: 200px;
+  margin-top: 10px;  
   border: 1px solid #a9a9a9;
+  font-size: 10px;
 }
 
 #progress #slider {
-  height: 10px;
+  height: 12px;
   width: 1px;
+
   background-color: #a9a9a9;
+  position: relative;
 }
+
+#progress #time {
+  position: absolute;
+  left: 5px;
+  width: 120px;
+}
+
+#progress #time_current, #progress #time_total { width: 50px; }
 
 #browser {
   top: 126px;
@@ -54,6 +66,10 @@ p {
   padding: 10px;
   position: relative;
 
+}
+
+#collection .artist, #collection .album, #collection .track {
+  cursor: pointer;
 }
 
 #collection #mask {
@@ -108,9 +124,10 @@ p {
 
 #queue {
   position: absolute;
-
+  background: url('/css/theme/crumppbo/images/queuebg.gif');
   left: 330px;
   width: 636px;
+  min-height: 414px;
   margin: 0;
   padding: 0;
 }
@@ -118,7 +135,7 @@ p {
 #queue .track {
   width: 200px;
   height: 200px;
-  border: solid 1px #a9a9a9;
+  border: solid 1px #dfdfdf;
   background: #dfdfdf;
   margin: 0 10px 10px 0;
   padding: 0;
@@ -130,17 +147,19 @@ p {
 }
 
 #queue .track:hover {
-  box-shadow: 0px 0px 10px #666;  
   cursor: pointer;
 }
 
 #queue .track .title {
-  padding: 5px;
+  padding: 5px 10px 5px 10px;
   height: 35px;
   font-family:"Century Gothic";
   font-size: 14px;
   font-weight: bold;
   color: #FFF;
+  position: absolute;
+  top: 155;
+  width: 180px;
   background: url('/css/theme/crumppbo/images/trackbg.png');
 }
 

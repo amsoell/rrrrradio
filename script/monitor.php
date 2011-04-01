@@ -5,6 +5,7 @@
 
   include("$dir../configuration.php");
   include("$dir../classes/Db.class.php");
+  include("$dir../classes/Rdio.class.php");
   include("$dir../classes/Track.class.php");
   include("$dir../classes/Queue.class.php");
   include("$dir../classes/Collection.class.php");

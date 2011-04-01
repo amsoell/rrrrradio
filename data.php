@@ -11,14 +11,14 @@
   
   if (array_key_exists('r', $_REQUEST)) {
     // GET ALBUMS FROM A SPECIFIED ARTIST AND RETURN VIA JSON OBJECT  
-    $albums = $rdio->getAlbumsForArtistInCollection(array("artist"=>$_REQUEST['r'], "user"=>$c->rdio_collection_userkey, "force"=>true));
+    $albums = $rdio->getAlbumsForArtistInCollection(array("artist"=>$_REQUEST['r'], "user"=>$c->rdio_collection_userkey));
     $albums = $albums->result;
 
     usort($albums, "albumSort");
     print json_encode($albums);
   } elseif (array_key_exists('a', $_REQUEST)) {
     // GET TRACKS FROM A SPECIFIED ALBUM AND RETURN VIA JSON OBJECT
-    $tracks = $rdio->getTracksForAlbumInCollection(array("album"=>$_REQUEST['a'], "extras"=>"trackNum", "user"=>$c->rdio_collection_userkey, "force"=>true));    
+    $tracks = $rdio->getTracksForAlbumInCollection(array("album"=>$_REQUEST['a'], "extras"=>"trackNum", "user"=>$c->rdio_collection_userkey));    
     $tracks = $tracks->result;
 
     print json_encode($tracks);

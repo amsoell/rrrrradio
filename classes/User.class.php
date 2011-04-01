@@ -1,5 +1,4 @@
 <?php
-  
   class User {
     public $key;
     public $username;

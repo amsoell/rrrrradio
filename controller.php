@@ -17,7 +17,11 @@
 
     case "queue":
       // add a requested track to the queue
-      if (!$q->isComingUp($_REQUEST['key'])) { 
+      if ($q->isComingUp($_REQUEST['key'])) { 
+        $response = "Track is already in upcoming queue";
+      } elseif (!$rdio->loggedIn()) {
+        $response = "You are not logged in to Rdio";
+      } else {
         $key = $_REQUEST['key'];
         $track = $rdio->get(array("keys"=>$key));
         if (property_exists($track->result, $key)) {  
@@ -41,9 +45,11 @@
         $tracks[$i]->artistIcon = (string)$xml->images->image[$imgindex]->sizes->size[2];        
       }
       
-      $tracks = '{ "timestamp" : '.time().', "queue" : '.json_encode($tracks).' }';
+      $return  = '{ ';
+      if (strlen($response)>0) $return .= '"response": '.json_encode($response).', ';
+      $return .='"timestamp" : '.time().', "queue" : '.json_encode($tracks).' }';
 
-      print $tracks;
+      print $return;
       break;
     case 'finishedTrack':
       break;

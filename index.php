@@ -41,7 +41,7 @@
     <div id="nowplaying">
       <div id="song"><span id="song_title"></span> - <span id="song_artist"></span></div>
       <div id="album">From the album <span id="song_album"></span></div>
-      <div id="progress"><div id="slider"></div></div>
+      <div id="progress"><div id="slider"><div id="time"><span id="time_current"></span> / <span id="time_total"></span></div></div></div>
     </div>
 <?php else: ?>
     <div id="intro">
