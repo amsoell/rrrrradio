@@ -25,7 +25,7 @@
         $key = $_REQUEST['key'];
         $track = $rdio->get(array("keys"=>$key));
         if (property_exists($track->result, $key)) {  
-        $q->push($track->result->$key, true, $_SESSION['user']->key);
+          $q->push($track->result->$key, true, $_SESSION['user']->key);
         }
       }
     case 'getqueue':

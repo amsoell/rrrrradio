@@ -115,6 +115,8 @@ class Rdio {
     $_SESSION['access_key'] = $pieces['oauth_token'];
     $_SESSION['access_secret'] = $pieces['oauth_token_secret'];
     
+    $_SESSION['user'] = $this->currentUser()->result;
+    
     // clear the request token
     unset($_SESSION['request_key']);
     unset($_SESSION['request_secret']);

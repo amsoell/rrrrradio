@@ -143,6 +143,14 @@ p {
   position: relative;
 }
 
+#queue .track .indicator {
+  width: 10px;
+  height: 10px;
+  background: url('/css/theme/crumppbo/images/indicator_req.png');
+  position: absolute;
+  left: 190;
+}
+
 #queue .track:first-child {
 }
 
@@ -194,7 +202,7 @@ p {
   color: #FFF;
   background: url('/css/theme/crumppbo/images/trackbg.png');
   position: absolute;
-  top: 177px;
+  display: none;
 }
 
 #queue .track .user .username {
