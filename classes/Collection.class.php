@@ -28,11 +28,11 @@
         $requestedBit = "requested=1 AND ";
       }
       
-      $rs = $db->query("SELECT FLOOR(RAND()*COUNT(DISTINCT trackKey)) AS offset FROM queue");
+      $rs = $db->query("SELECT FLOOR(RAND()*COUNT(DISTINCT trackKey)) AS offset FROM queue WHERE endplay-startplay<=360");
       if ($rec = mysql_fetch_array($rs)) {
         $offset = $rec['offset'];
 
-        $rs = $db->query("SELECT DISTINCT trackKey, endplay-startplay AS duration FROM queue LIMIT $offset, 1");
+        $rs = $db->query("SELECT DISTINCT trackKey, endplay-startplay AS duration FROM queue WHERE endplay-startplay<=360 LIMIT $offset, 1");
         if ($rec = mysql_fetch_array($rs)) {
           $t = new Track();
           $t->key = $rec['trackKey'];

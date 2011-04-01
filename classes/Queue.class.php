@@ -34,7 +34,9 @@
     
     function push($obj, $requested=false, $requestedBy=null) {
       $db = new Db();
-      $endplay = $this->endOfQueue()+1;
+      $c = new Config();
+      $buffer = $c->song_buffer; // seconds between tracks
+      $endplay = $this->endOfQueue()+$buffer;
       
       if (is_object($obj)) {
         $key = $obj->key;
