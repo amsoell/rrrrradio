@@ -31,7 +31,7 @@
     </script>
     <script src="js/musicqueue.class.js"></script>  
     <script src="js/controller.js"></script>   
-    <script src="/theme/<?php print $c->theme; ?>/js/controller.js"></script>       
+    <script src="/theme/<?php print $c->theme; ?>/js/controller.js"></script>    
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2r1/build/reset/reset-min.css">    
     <link type="text/css" rel="stylesheet" href="/theme/<?php print $c->theme; ?>/css/style.css" /> 
   </head>

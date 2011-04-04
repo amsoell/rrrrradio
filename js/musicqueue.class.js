@@ -17,6 +17,9 @@ function musicQueue() {
     this.q = tracks;
     this.ptr = -1;
   }
+  this.length = function() {
+    return this.q.length;
+  }
   this.updateQueue = function(tracks) {
     // find the track in the internal queue that matches the first track in `tracks`
     for (i=0;i<this.q.length;i++) {
