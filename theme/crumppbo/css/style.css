@@ -1,0 +1,206 @@
+* {
+  font-family: "Century Gothic";
+}
+
+p {
+  padding-top: 10px;
+  font-size: 12px;
+}
+
+#logo {
+  width: 300px;
+  height: 200px;
+  background: #dfdfdf;
+  border: 1px solid #a9a9a9;
+}
+
+
+
+#nowplaying, #intro {
+  position: absolute;
+  left: 330px;
+  top: 10px;
+  padding: 15px;
+  width:595px;
+  height: 96px;
+  background: #dfdfdf;
+  border: 1px solid #a9a9a9;
+}
+
+#nowplaying #album {
+  font-size: 11px;
+}
+
+#progress {
+  height: 12px;
+  width: 200px;
+  margin-top: 10px;  
+  border: 1px solid #a9a9a9;
+  font-size: 10px;
+}
+
+#progress #slider {
+  height: 12px;
+  width: 1px;
+
+  background-color: #a9a9a9;
+  position: relative;
+}
+
+#progress #time {
+  position: absolute;
+  left: 5px;
+  width: 120px;
+}
+
+#progress #time_current, #progress #time_total { width: 50px; }
+
+#browser {
+  top: 126px;
+  position: relative;
+}
+
+#collection {
+  font-size: 12px;
+  margin-top: 20px;
+  padding: 10px;
+  position: relative;
+
+}
+
+#collection .artist, #collection .album, #collection .track {
+  cursor: pointer;
+}
+
+#collection #mask {
+  position: absolute;
+  left: 292;
+  background: #FFF;
+  height: 420px;
+  width: 18px;
+  z-index: 100;
+}
+
+#collection, #collection #music {
+  width: 300px;
+  height: 400px;
+
+}
+
+#collection #music {
+  padding-top: 20px;
+  overflow: auto;
+  z-index: 1;  
+}
+
+#collection #music ul {
+  padding-left: 30px;
+}
+
+#collection #music ul ul li {
+  list-style: decimal;
+}
+
+#collection #fadetop {
+  height: 21px;
+  width: 300px;
+  background: url('/css/theme/crumppbo/images/gradient-white.png') repeat-x;
+  float: left;
+  position: absolute;
+}
+
+#collection #fadebottom {
+  height: 21px;
+  width: 300px;
+  background: url('/css/theme/crumppbo/images/gradient-white-bottom.png') repeat-x;
+  float: left;
+  position: absolute;
+  top:409px;
+}
+
+#collection .track.unstreamable {
+  color: #999;
+}
+
+#queue {
+  position: absolute;
+  background: url('/css/theme/crumppbo/images/queuebg.gif');
+  left: 330px;
+  width: 636px;
+  min-height: 414px;
+  margin: 0;
+  padding: 0;
+}
+
+#queue .track {
+  width: 200px;
+  height: 200px;
+  border: solid 1px #dfdfdf;
+  background: #dfdfdf;
+  margin: 0 10px 10px 0;
+  padding: 0;
+  float: left;
+  position: relative;
+}
+
+#queue .track:first-child {
+}
+
+#queue .track:hover {
+  cursor: pointer;
+}
+
+#queue .track .title {
+  padding: 5px 10px 5px 10px;
+  height: 35px;
+  font-family:"Century Gothic";
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFF;
+  position: absolute;
+  top: 155;
+  width: 180px;
+  background: url('/css/theme/crumppbo/images/trackbg.png');
+}
+
+#queue .track .title .trackname {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 20px;
+}
+
+#queue .track .title .artist {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 15px;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+#queue .track .userpic {
+  position: absolute;
+  top: 4px;
+  left: 2px;
+}
+
+#queue .track .user {
+  padding: 5px;
+  height: 14px;
+  width: 190px;
+  font-size: 11px;
+  font-weight: normal;
+  color: #FFF;
+  background: url('/css/theme/crumppbo/images/trackbg.png');
+  position: absolute;
+  top: 177px;
+}
+
+#queue .track .user .username {
+  padding-left: 16px;
+}
+
+br.clear {
+  clear: both;
+}

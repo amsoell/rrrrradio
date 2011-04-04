@@ -21,16 +21,18 @@
     $db = new Db();
     $c = new Config();
     
+/*
     $rs = $db->query("SELECT `return` FROM api_usage WHERE api='lastfm' AND params='".addslashes(json_encode($args))."' AND executed>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR)) ORDER BY executed DESC LIMIT 1");
     if (($rec = mysql_fetch_array($rs)) && (!is_null($rec['return']))) {
       $output = $rec['return'];
     } else {
+*/
       $qs = "?";
       foreach ($args as $key=>$val) {
         $qs .= $key."=".$val."&";
       }
       $qs .= "api_key=".$c->lastfm_conskey;
-      
+
       $ch = curl_init($c->lastfm_api_url.$qs);
       curl_setopt($ch, CURLOPT_HEADER, 0);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -38,7 +40,7 @@
       curl_close($ch);
       
       api_log_lastfm($_SESSION['user']->key, $args, $output);
-    }    
+//    }    
     
     return new SimpleXMLElement($output, LIBXML_NOCDATA);
   }

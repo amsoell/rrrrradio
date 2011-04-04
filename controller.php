@@ -39,10 +39,6 @@
         $tracks[$i]->artist = $detail->result->$key->artist;
         $tracks[$i]->album = $detail->result->$key->album;
         $tracks[$i]->canStream = intval($detail->result->$key->canStream);
-        
-        $xml = lastfmGet(array("method"=>"artist.getimages", "artist"=>urlencode($tracks[$i]->artist)));        
-        $imgindex = rand(0, count($xml->images->image)-1);
-        $tracks[$i]->artistIcon = (string)$xml->images->image[$imgindex]->sizes->size[2];        
       }
       
       $return  = '{ ';

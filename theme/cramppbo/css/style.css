@@ -2,9 +2,26 @@
   font-family: "Century Gothic";
 }
 
+body {
+  text-align: center;
+}
+
 p {
   padding-top: 10px;
   font-size: 12px;
+}
+
+.ajax-loader {
+  height: 11px;
+  width: 16px;
+  background: url('/theme/cramppbo/images/ajax-loader.gif') no-repeat;
+}
+
+#page {
+  width: 626px;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #logo {
@@ -14,17 +31,15 @@ p {
   border: 1px solid #a9a9a9;
 }
 
-
-
 #nowplaying, #intro {
-  position: absolute;
-  left: 330px;
-  top: 10px;
+  position: relative;
   padding: 15px;
-  width:595px;
-  height: 96px;
+  width:382px;
+  height: 170px;
   background: #dfdfdf;
-  border: 1px solid #a9a9a9;
+  border: 1px solid #dfdfdf;
+  margin: 0 10px 10px 0;
+  float: left;  
 }
 
 #nowplaying #album {
@@ -55,81 +70,91 @@ p {
 
 #progress #time_current, #progress #time_total { width: 50px; }
 
-#browser {
-  top: 126px;
-  position: relative;
-}
-
 #collection {
-  font-size: 12px;
-  margin-top: 20px;
-  padding: 10px;
+  padding-top: 10px;
+  width: 626px;
   position: relative;
-
 }
 
-#collection .artist, #collection .album, #collection .track {
+#collection .header {
+  border: solid 1px #dfdfdf;
+  background: #dfdfdf;
+  font-size: 12px;
+  padding: 5px;
+  height: 15px;
   cursor: pointer;
 }
 
-#collection #mask {
-  position: absolute;
-  left: 292;
-  background: #FFF;
-  height: 420px;
-  width: 18px;
-  z-index: 100;
+#collection #browser {
+  font-size: 12px;
+  height: 424px;
+  display: none;
+  position: relative;
 }
 
-#collection, #collection #music {
-  width: 300px;
-  height: 400px;
-
-}
-
-#collection #music {
-  padding-top: 20px;
+#collection #browser #music {
+  width: 190px;
+  height: 100%;
   overflow: auto;
-  z-index: 1;  
+  padding: 10px 10px 0 10px;
 }
 
-#collection #music ul {
+#collection #browser #music ul {
   padding-left: 30px;
 }
 
-#collection #music ul ul li {
+#collection #browser #music ul ul li {
   list-style: decimal;
 }
 
-#collection #fadetop {
-  height: 21px;
-  width: 300px;
-  background: url('/css/theme/crumppbo/images/gradient-white.png') repeat-x;
-  float: left;
+#collection #browser #album {
   position: absolute;
+  top: 0;
+  left: 220;
+  height:424px;
+  width: 406px;
+  overflow: auto;
 }
 
-#collection #fadebottom {
-  height: 21px;
-  width: 300px;
-  background: url('/css/theme/crumppbo/images/gradient-white-bottom.png') repeat-x;
-  float: left;
-  position: absolute;
-  top:409px;
+#collection #browser #album .album {
+  width: 200px;
+  padding: 5px;
+  float: right;
 }
 
-#collection .track.unstreamable {
-  color: #999;
+#collection #browser #album h1 {
+  font-size: 16px;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+#collection #browser #album .album img {
+  width: 200px;
+  height: 200px;
+}
+
+#collection #browser #album .album.closed {
+  width: 120px;
+  float: left;
+}
+
+#collection #browser #album .album.closed img {
+  width: 120px;
+  height: 120px;
+}
+
+#collection #browser #album .album p {
+  padding-top: 0;
+  text-align: center;
 }
 
 #queue {
-  position: absolute;
-  background: url('/css/theme/crumppbo/images/queuebg.gif');
+  background: url('/theme/cramppbo/images/queuebg.gif');
   left: 330px;
   width: 636px;
   min-height: 414px;
-  margin: 0;
   padding: 0;
+  margin: 10px 0 10px 0;
 }
 
 #queue .track {
@@ -143,10 +168,15 @@ p {
   position: relative;
 }
 
+#queue .track.placeholder {
+  background: url('/theme/cramppbo/images/ajax-loader-large.gif') no-repeat center center #dfdfdf;
+  background-postion: center;
+}
+
 #queue .track .indicator {
   width: 10px;
   height: 10px;
-  background: url('/css/theme/crumppbo/images/indicator_req.png');
+  background: url('/theme/cramppbo/images/indicator_req.png');
   position: absolute;
   left: 190;
 }
@@ -168,7 +198,7 @@ p {
   position: absolute;
   top: 155;
   width: 180px;
-  background: url('/css/theme/crumppbo/images/trackbg.png');
+  background: url('/theme/cramppbo/images/trackbg.png');
 }
 
 #queue .track .title .trackname {
@@ -200,7 +230,7 @@ p {
   font-size: 11px;
   font-weight: normal;
   color: #FFF;
-  background: url('/css/theme/crumppbo/images/trackbg.png');
+  background: url('/theme/cramppbo/images/trackbg.png');
   position: absolute;
   display: none;
 }
