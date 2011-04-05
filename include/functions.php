@@ -15,6 +15,11 @@
       $rdio->logOut();
       header("Location: ".$c->rdio_callback_url);
     }  
+    
+    if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
+      $u = new User($_SESSION['user']->key);
+      $u->ping();
+    }    
   }
 
   function lastfmGet($args) {
