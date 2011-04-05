@@ -4,6 +4,11 @@
 
 body {
   text-align: center;
+  position: relative;
+}
+
+a, a:visited {
+  color: #C70;
 }
 
 p {
@@ -11,10 +16,107 @@ p {
   font-size: 12px;
 }
 
+.hidden {
+  display: none;
+}
+
 .ajax-loader {
   height: 11px;
   width: 16px;
   background: url('/theme/cramppbo/images/ajax-loader.gif') no-repeat;
+}
+
+h1 {
+  font-size: 16px
+  font-weight: bold;
+  padding-bottom: 30px;
+}
+
+dt {
+  font-weight: bold;
+  font-size: 13px;
+  padding-bottom: 5px;
+}
+
+dd { 
+  padding-bottom: 25px;
+  font-size: 12px;
+}
+
+#toolbar {
+  padding: 5px 10px;
+  width: 100%;
+  height: 20px;
+  background: #FA3;
+  position: fixed;
+  box-shadow: 0 0 3px #000;
+  -moz-box-shadow: 0 0 3px #000;
+  -webkit-box-shadow: 0 0 3px #000;  
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=0, Color='#000000')";
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=0, Color='#000000');  
+  overflow: hidden;  
+  z-index: 1000;    
+}
+
+#toolbar #tools {
+  width: 640px;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1000;  
+}
+
+#toolbar #tools #nowplaying {
+  position: absolute;
+}
+
+#toolbar #tools #ops {
+  position: absolute;
+  top: 30px;
+}
+
+#toolbar #volume {
+  display: block;
+  position: absolute;
+  left: 25px;
+  top: 5px;
+  border: 1px solid #333;
+  height: 4px;
+  width: 100px;
+  padding: 1px;
+}
+
+#toolbar #volume img {
+  border: 0;
+  width: 8px;
+  height: 4px;
+  padding: 0 1px;
+  margin: 0;
+  cursor: pointer;
+}
+
+#toolbar .song_title {
+  font-weight: bold;
+}
+
+#toolbar .progress {
+  position: absolute;
+  left: 0;
+  top: -10px;
+  width: 100%;
+  right: 0;
+  border: none;
+  z-index: 50;
+}
+
+#toolbar .progress .slider {
+  background-color: #F7A025;
+  z-index: 50;
+}
+
+#toolbar .progress, #toolbar .progress .slider {
+  height: 30px; 
 }
 
 #page {
@@ -31,7 +133,7 @@ p {
   border: 1px solid #a9a9a9;
 }
 
-#nowplaying, #intro {
+#queue #nowplaying, #queue #intro {
   position: relative;
   padding: 15px;
   width:382px;
@@ -42,11 +144,11 @@ p {
   float: left;  
 }
 
-#nowplaying #album {
+#queue #nowplaying #album {
   font-size: 11px;
 }
 
-#progress {
+.progress {
   height: 12px;
   width: 200px;
   margin-top: 10px;  
@@ -54,24 +156,23 @@ p {
   font-size: 10px;
 }
 
-#progress #slider {
+.progress .slider {
   height: 12px;
   width: 1px;
-
   background-color: #a9a9a9;
   position: relative;
 }
 
-#progress #time {
+.progress .time {
   position: absolute;
   left: 5px;
   width: 120px;
 }
 
-#progress #time_current, #progress #time_total { width: 50px; }
+.progress .time_current, .progress .time_total { width: 50px; }
 
 #collection {
-  padding-top: 10px;
+  padding-top: 40px;
   width: 626px;
   position: relative;
 }
@@ -110,7 +211,7 @@ p {
 #collection #browser #album {
   position: absolute;
   top: 0;
-  left: 220;
+  left: 220px;
   height:424px;
   width: 406px;
   overflow: auto;
@@ -178,7 +279,7 @@ p {
   height: 10px;
   background: url('/theme/cramppbo/images/indicator_req.png');
   position: absolute;
-  left: 190;
+  left: 190px;
 }
 
 #queue .track:first-child {
@@ -196,7 +297,7 @@ p {
   font-weight: bold;
   color: #FFF;
   position: absolute;
-  top: 155;
+  top: 155px;
   width: 180px;
   background: url('/theme/cramppbo/images/trackbg.png');
 }
@@ -241,4 +342,28 @@ p {
 
 br.clear {
   clear: both;
+}
+
+#welcome {
+  width: 580px;
+  text-align: left;
+  padding-bottom: 30px;
+}
+
+#welcome h1 {
+  padding: 10px;
+  background: #FA3;
+  color: #FFF;
+}
+
+#welcome p {
+  padding: 10px 20px 0 20px;
+}
+
+#welcome ol {
+  padding: 10px 50px 0 50px;
+}
+
+#welcome ol li {
+  list-style: decimal;
 }

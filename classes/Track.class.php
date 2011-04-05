@@ -30,6 +30,13 @@
       $rs = $db->query("SELECT `key` FROM track WHERE `key`='$key'");
       return (mysql_num_rows($rs)>0);
     }
+    
+    function canStream() {
+      $r = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+      $key = $this->key;
+      $track = $r->get(array("keys"=>$key));
+      return ($track->result->$key->canStream==1?true:false);
+    }
   }
   
   class QueueTrack extends Track {

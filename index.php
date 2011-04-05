@@ -1,42 +1,6 @@
 <?php 
-  session_start();  
-
-  include("configuration.php");
-  include("classes/Db.class.php");
-  include("classes/Rdio.class.php");
-  include("classes/User.class.php");
-  include("classes/Track.class.php");
-  include("classes/Queue.class.php");  
-  include("classes/Collection.class.php");    
-  include("include/functions.php");
-  
-  $c = new Config();
-  $db = new Db();
-  $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
-  authenticate();
-  
-  $token = $rdio->getPlaybackToken(array("domain"=>$c->app_domain));
+  include("include/header.php");
 ?>
-<html>
-  <head>
-    <title>Crumppbo</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
-    
-      var loggedIn = <?php print $rdio->loggedIn()?'true':'false'; ?>;
-      var api_swf = "http://www.rdio.com/api/swf/";
-      var playbackToken = "<?php print $token->result; ?>";
-      var domain = "<?php print $c->app_domain; ?>";
-    </script>
-    <script src="js/musicqueue.class.js"></script>  
-    <script src="js/controller.js"></script>   
-    <script src="/theme/<?php print $c->theme; ?>/js/controller.js"></script>    
-    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2r1/build/reset/reset-min.css">    
-    <link type="text/css" rel="stylesheet" href="/theme/<?php print $c->theme; ?>/css/style.css" /> 
-  </head>
-  <body>
-    <div id="page">
       <div id="collection">
         <div class="header">Request a song</div>
         <div id="browser">
@@ -56,9 +20,8 @@
       <div id="queue">
 <?php if ($rdio->loggedIn()): ?>
         <div id="nowplaying">
-          <div id="song"><span id="song_title"></span> - <span id="song_artist"></span></div>
-          <div id="album">From the album <span id="song_album"></span></div>
-          <div id="progress"><div id="slider"><div id="time"><span id="time_current"></span> / <span id="time_total"></span></div></div></div>
+          <div id="song"><span class="song_title"></span> - <span class="song_artist"></span></div>
+          <div id="album">From the album <span class="song_album"></span></div>
         </div>
 <?php else: ?>
         <div id="intro">
@@ -73,5 +36,28 @@
       </div>
     </div>
     <div id="api_swf"></div>
-  </body>
-</html>
+    <div class="hidden">
+<?php
+  if (!$rdio->loggedIn()) : ?>    
+      <div id="welcome">
+        <h1>Crumppbo: Social Listening</h1>
+        <p>We're putting the social back into radio. Listen to music in a truly social way with your friends; You hear what they hear. You listen to what they request, and they hear your requests along with you. Make requests, make dedications, and maybe make some friends.
+        <p>Starting is simple</p>
+        <ol>
+          <li>Log in to your Rdio account</li>
+          <p>Crumppbo is powered by Rdio's massive online collection of music, so you'll need a subscription to join in. Plans start at $4.99/month, but you can always give it a try with a free 7-day trial to see if you like it first.</p>
+          <p><a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">Log in now</a>, or <a href="http://rdio.com/accounts/login">sign up for a free 7-day trial</a>.</p>
+          <li>Authorize Crumppbo to connect to your Rdio account</li>
+          <p><a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">Click here</a> to hook it up.</p>
+          <li>Start listening</li>
+          <p>That's the easy part. Just come back to this site, click "play," and you're done!</p>
+          <p>If you're still not convinced to check it out, you can look over our <a href="faq.php">FAQ page</a> or contact us at <a href="mailto:crumppbo@teamsoell.com">crumppbo@teamsoell.com</a></p>
+        </ol>    
+      </div>
+      <a href="#welcome" id="welcomelink" class="autoclick">Introduction</a>
+    </div>
+<?php 
+  endif;
+  include("include/footer.php");
+?>
+    

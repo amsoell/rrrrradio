@@ -32,6 +32,12 @@
         }
       }
     }
+    
+    function ping() {
+      $db = new Db();
+
+      $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()) WHERE `key`='".$this->key."' LIMIT 1");
+    }
   
   }
 ?>

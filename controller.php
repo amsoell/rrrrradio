@@ -12,6 +12,7 @@
   $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
   $q = new Queue();
   session_start();  
+  authenticate();
   
   switch (strtolower($_REQUEST['r'])) {
 

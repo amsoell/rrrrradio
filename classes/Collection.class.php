@@ -37,6 +37,10 @@
           $t = new Track();
           $t->key = $rec['trackKey'];
           $t->duration = $rec['duration'];
+          
+          // Make sure track is streamable
+          if (!$t->canStream()) $t = Collection::getRandomTrack($includeQueued, $includeAll, $lastplaythreshold);
+
           return $t;
         } else {
           return false;
