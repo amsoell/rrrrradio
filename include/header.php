@@ -20,7 +20,7 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>Crumppbo</title>
+    <title><?php print $c->sitename; ?></title>
     <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
     <script type="text/javascript">
