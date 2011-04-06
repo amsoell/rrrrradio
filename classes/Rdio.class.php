@@ -70,7 +70,7 @@ class Rdio {
     
     // check API cache
     $rs = $db->query("SELECT `return` FROM api_usage WHERE api='rdio' AND params='".addslashes(json_encode($params))."' AND executed>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR)) ORDER BY executed DESC LIMIT 1");
-    if ( !array_key_exists('force', $arguments) && ($rec = mysql_fetch_array($rs)) && (!is_null($rec['return'])) ) {
+    if (($params['method']!='currentUser') && !array_key_exists('force', $arguments) && ($rec = mysql_fetch_array($rs)) && (!is_null($rec['return'])) ) {
       $json = json_decode($rec['return']);
     } else {    
       // make the request

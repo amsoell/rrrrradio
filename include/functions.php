@@ -2,6 +2,7 @@
   function authenticate() {
     $c = new Config();
     $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+    $db = new Db();
     
     $op = $_GET["op"];
     if($op == "login") {
@@ -17,8 +18,7 @@
     }  
     
     if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
-      $u = new User($_SESSION['user']->key);
-      $u->ping();
+      $db->query("REPLACE INTO user (`key`, lastseen) VALUES ('".addslashes($_SESSION['user']->key)."', UNIX_TIMESTAMP(NOW()))");
     }    
   }
 
