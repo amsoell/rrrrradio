@@ -41,9 +41,10 @@
   </head>
   <body onload="$('.autoclick').trigger('click')">
     <div id="toolbar">
-      <div id="tools">
+      <div id="tools">      
         <div id="nowplaying">
           <span class="song_title"></span> : <span class="song_artist"></span>
+
         </div>
         <div id="ops">
           <img class="player_mute" src="/theme/cramppbo/images/tools/sound_high.png" />
@@ -55,6 +56,7 @@
           <img src="/theme/cramppbo/images/tools/cancel.png" />
 -->
         </div>
+        <span class="nowlistening"><span class="listeners"></span></span>                      
       </div>
       <div class="progress"><div class="slider"></div></div>                  
     </div>

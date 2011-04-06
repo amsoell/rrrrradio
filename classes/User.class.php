@@ -33,6 +33,18 @@
       }
     }
     
+    function getCurrentListeners($minutes = 10) {
+      $db = new Db();
+      
+      $l = array();
+      $rs = $db->query("SELECT `key` FROM user WHERE lastseen>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL ".$minutes." MINUTE)) ORDER BY lastseen DESC");      
+      while ($rec = mysql_fetch_array($rs)) {
+        $l[] = new User($rec['key']);
+      }
+      
+      return $l;
+    }
+    
     function ping() {
       $db = new Db();
 

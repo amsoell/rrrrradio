@@ -42,9 +42,11 @@
         $tracks[$i]->canStream = intval($detail->result->$key->canStream);
       }
       
+      $listeners = User::getCurrentListeners();      
+      
       $return  = '{ ';
       if (strlen($response)>0) $return .= '"response": '.json_encode($response).', ';
-      $return .='"timestamp" : '.time().', "queue" : '.json_encode($tracks).' }';
+      $return .='"timestamp" : '.time().', "queue" : '.json_encode($tracks).', "listeners" : '.json_encode($listeners).' }';
 
       print $return;
       break;
