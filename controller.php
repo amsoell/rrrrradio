@@ -23,11 +23,8 @@
       } elseif (!$rdio->loggedIn()) {
         $response = "You are not logged in to Rdio";
       } else {
-        $key = $_REQUEST['key'];
-        $track = $rdio->get(array("keys"=>$key));
-        if (property_exists($track->result, $key)) {  
-          $q->push($track->result->$key, true, $_SESSION['user']->key);
-        }
+        $track = new Track($_REQUEST['key']);
+        $q->push($track, true, $_SESSION['user']->key);
       }
     case 'getqueue':
 

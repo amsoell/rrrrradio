@@ -32,14 +32,12 @@
       if ($rec = mysql_fetch_array($rs)) {
         $offset = $rec['offset'];
 
-        $rs = $db->query("SELECT DISTINCT trackKey, endplay-startplay AS duration FROM queue WHERE endplay-startplay<=360 LIMIT $offset, 1");
+        $rs = $db->query("SELECT DISTINCT trackKey, albumKey, artistKey, endplay-startplay AS duration FROM queue WHERE endplay-startplay<=360 LIMIT $offset, 1");
         if ($rec = mysql_fetch_array($rs)) {
-          $t = new Track();
-          $t->key = $rec['trackKey'];
-          $t->duration = $rec['duration'];
+          $t = new Track($rec['trackKey']);
           
           // Make sure track is streamable
-          if (!$t->canStream()) $t = Collection::getRandomTrack($includeQueued, $includeAll, $lastplaythreshold);
+          if ($t->canStream!=1) $t = Collection::getRandomTrack($includeQueued, $includeAll, $lastplaythreshold);
 
           return $t;
         } else {

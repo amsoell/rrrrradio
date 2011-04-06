@@ -48,7 +48,7 @@
       if (is_object($obj) && property_exists($obj, "canStream") && $obj->canStream==0) {
         return false;
       } else {
-        $db->query("INSERT INTO queue (trackKey, userKey, added, startplay, endplay) VALUES ('$key', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
+        $db->query("INSERT INTO queue (trackKey, albumKey, artistKey, userKey, added, startplay, endplay) VALUES ('$key', '".$obj->album."', '".$obj->artist."', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
       }
     }
     
