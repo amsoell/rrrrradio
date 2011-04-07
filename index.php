@@ -30,7 +30,7 @@
             <?php print $c->sitename; ?> is the best place to listen to your favorite music along with your friends across the Internet. 
             <?php print $c->sitename; ?> is powered by Rdio Internet Radio, so you'll need a web subscription to enjoy the music. If you have 
             an account, <a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">log in</a> and join in!</p>
-          <p>Don't have an Rdio account? Sign up for a <a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">free 7-day trial</a> and see what you think.</p>
+          <p>Don't have an Rdio account? Sign up for a <a href="<?php print $c->affiliate_link_subscribe; ?>">free 7-day trial</a> and see what you think.</p>
         </div>
 <?php endif; ?>      
       </div>
@@ -50,7 +50,7 @@
         <ol>
           <li>Log in to your Rdio account</li>
           <p><?php print $c->sitename; ?> is powered by Rdio's massive online collection of music, so you'll need a subscription to join in. Plans start at $4.99/month, but you can always give it a try with a free 7-day trial to see if you like it first.</p>
-          <p><a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">Log in now</a>, or <a href="http://rdio.com/accounts/login">sign up for a free 7-day trial</a>.</p>
+          <p><a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">Log in now</a>, or <a href="<?php print $c->affiliate_link_subscribe; ?>">sign up for a free 7-day trial</a>.</p>
           <li>Authorize <?php print $c->sitename; ?>to connect to your Rdio account</li>
           <p><a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">Click here</a> to hook it up.</p>
           <li>Start listening</li>
