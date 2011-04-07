@@ -114,6 +114,7 @@ dd {
 #toolbar #tools #ops {
   position: absolute;
   top: 30px;
+  z-index: 55;
 }
 
 #toolbar #volume {
@@ -244,6 +245,10 @@ dd {
   padding-left: 30px;
 }
 
+#collection #browser #music .artist {
+  cursor: pointer;
+}
+
 #collection #browser #music ul ul li {
   list-style: decimal;
 }
@@ -260,6 +265,7 @@ dd {
 #collection #browser #album .album {
   width: 200px;
   padding: 5px;
+  cursor: pointer;
   float: right;
 }
 
@@ -287,6 +293,16 @@ dd {
 #collection #browser #album .album p {
   padding-top: 0;
   text-align: center;
+}
+
+#collection #browser #album ol {
+  list-style: decimal;
+  padding-left: 28px;
+}
+
+#collection #browser #album ol li {
+  cursor: pointer;
+  list-style: decimal;
 }
 
 #queue {
