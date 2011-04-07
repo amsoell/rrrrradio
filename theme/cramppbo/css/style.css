@@ -2,11 +2,22 @@
   font-family: "Century Gothic", "MS Trebuchet", Verdana;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   text-align: center;
   position: relative;
 }
 
+body #wrapper {
+  min-height: 100%;
+}
+
+body #page {
+  padding-bottom: 26px;
+}
 a, a:visited {
   color: #C70;
 }
@@ -395,4 +406,27 @@ br.clear {
 
 #welcome ol li {
   list-style: decimal;
+}
+
+#footer {
+  clear: both;
+  position: relative;
+  margin-top: -26px;
+  color: #FFF;
+  font-size: 12px;
+  background: url('/theme/cramppbo/images/stagebg.jpg');
+  height: 16px;
+  width: 100%;
+  padding: 5px 0;
+}
+
+#footer .details {
+  margin-top: 3px;
+  padding-left: 10px;
+  float: left;
+}
+
+#footer .rdio { 
+  padding-right: 10px;
+  float: right;
 }

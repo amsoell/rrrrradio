@@ -40,24 +40,25 @@
     <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
   </head>
   <body onload="$('.autoclick').trigger('click')">
-    <div id="toolbar">
-      <div id="tools">      
-        <div id="nowplaying">
-          <span class="song_title"></span> : <span class="song_artist"></span>
-
-        </div>
-        <div id="ops">
-          <img class="player_mute" src="/theme/cramppbo/images/tools/sound_high.png" />
-          <span id="volume">
-            <img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="1" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="2" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="3" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="4" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="5" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="6" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="7" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="8" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="9" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="10" />
-          </span>
+    <div id="wrapper">
+      <div id="toolbar">
+        <div id="tools">      
+          <div id="nowplaying">
+            <span class="song_title"></span> : <span class="song_artist"></span>
+  
+          </div>
+          <div id="ops">
+            <img class="player_mute" src="/theme/cramppbo/images/tools/sound_high.png" />
+            <span id="volume">
+              <img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="1" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="2" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="3" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="4" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="5" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="6" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="7" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="8" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="9" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="10" />
+            </span>
 <!--
-          <img src="/theme/cramppbo/images/tools/heart.png" />
-          <img src="/theme/cramppbo/images/tools/cancel.png" />
+            <img src="/theme/cramppbo/images/tools/heart.png" />
+            <img src="/theme/cramppbo/images/tools/cancel.png" />
 -->
+          </div>
+          <span class="nowlistening"><span class="listeners"></span></span>                      
         </div>
-        <span class="nowlistening"><span class="listeners"></span></span>                      
+        <div class="progress"><div class="slider"></div></div>                  
       </div>
-      <div class="progress"><div class="slider"></div></div>                  
-    </div>
-    <div id="page">
+      <div id="page">
