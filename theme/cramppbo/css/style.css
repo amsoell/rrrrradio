@@ -260,42 +260,40 @@ dd {
   height:424px;
   width: 406px;
   overflow: auto;
+  clear: both;
 }
 
 #collection #browser #album .album {
-  width: 200px;
-  padding: 5px;
-  cursor: pointer;
-  float: right;
+  clear: both;
+  display: inline;
+  position: relative;
+  padding: 5px;  
+}
+
+#collection #browser #album .detail {
+  float: left;
+  padding-left: 15px;
+  width: 250px;
 }
 
 #collection #browser #album h1 {
+  padding-top: 10px;  
   font-size: 16px;
   font-weight: bold;
   padding-bottom: 10px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 #collection #browser #album .album img {
-  width: 200px;
-  height: 200px;
-}
-
-#collection #browser #album .album.closed {
-  width: 120px;
+  clear: both;
   float: left;
-}
-
-#collection #browser #album .album.closed img {
+  padding-top: 10px;    
   width: 120px;
   height: 120px;
 }
 
-#collection #browser #album .album p {
-  padding-top: 0;
-  text-align: center;
-}
-
-#collection #browser #album ol {
+#collection #browser #album .album ol {
   list-style: decimal;
   padding-left: 28px;
 }
