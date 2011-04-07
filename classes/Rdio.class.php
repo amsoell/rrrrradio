@@ -88,6 +88,7 @@ class Rdio {
   public function log($arguments, $return) {
       $db = new Db();
   
+      if (array_key_exists('force', $arguments)) unset($arguments['force']);
       $db->query("INSERT INTO api_usage (user, api, executed, params, `return`) VALUES ('".addslashes($user)."', 'rdio', UNIX_TIMESTAMP(NOW()), '".addslashes(json_encode($arguments))."', '".addslashes($return)."')");
   }
 
