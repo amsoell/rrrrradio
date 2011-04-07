@@ -18,13 +18,18 @@
 
     case "queue":
       // add a requested track to the queue
+      $track = new Track($_REQUEST['key']);     
       if ($q->isComingUp($_REQUEST['key'])) { 
         $response = "Track is already in upcoming queue";
       } elseif (!$rdio->loggedIn()) {
         $response = "You are not logged in to Rdio";
       } else {
-        $track = new Track($_REQUEST['key']);
-        $q->push($track, true, $_SESSION['user']->key);
+        $e = $q->isRequestable($track);
+        if ($e instanceof QueueError) {
+          $response = $e->errorMessage;
+        } else {
+          $q->push($track, true, $_SESSION['user']->key);
+        }
       }
     case 'getqueue':
 

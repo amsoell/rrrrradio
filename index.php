@@ -37,6 +37,10 @@
     </div>
     <div id="api_swf"></div>
     <div class="hidden">
+      <div id="error">
+        <div id="message"></div>
+      </div>
+      <a href="#error" id="errorlink"></a>
 <?php
   if (!$rdio->loggedIn()) : ?>    
       <div id="welcome">
