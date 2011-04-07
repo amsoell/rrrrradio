@@ -92,11 +92,11 @@
       if ($this->isComingUp($track->key)) return false;
             
       // ONLY TWO REQUESTS FROM A SPECIFIC ALBUM WITHIN AN HOUR
-      $rs = $db->query("SELECT COUNT(albumKey) AS fromAlbum FROM queue WHERE albumKey='".$track->album."' AND userKey='".$_SESSION['user']->key."' AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))");
+      $rs = $db->query("SELECT COUNT(albumKey) AS fromAlbum FROM queue WHERE albumKey='".$track->album."' AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))");
       if (($rec = mysql_fetch_array($rs)) && ($rec['fromAlbum']>=$c->requests_per_album_per_hour)) return new QueueError('This album has already been played from '.$c->requests_per_album_per_hour.' times in the last hour');
 
       // ONLY THREE REQUESTS FROM A SPECIFIC ARTIST WITHIN TWO HOURS      
-      $rs = $db->query("SELECT COUNT(artistKey) AS fromArtist FROM queue WHERE artistKey='".$track->artist."' AND userKey='".$_SESSION['user']->key."' AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 2 HOUR))");
+      $rs = $db->query("SELECT COUNT(artistKey) AS fromArtist FROM queue WHERE artistKey='".$track->artist."' AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 2 HOUR))");
       if (($rec = mysql_fetch_array($rs)) && ($rec['fromArtist']>=$c->requests_per_artist_per_hour)) return new QueueError('This artist has already been played '.$c->requests_per_artist_per_hour.' times in the last hour');;
 
       // IF QUEUE LENGTH IS SHORT ENOUGH, EVALUATE TO TRUE AT THIS POINT
