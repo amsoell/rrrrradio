@@ -60,6 +60,30 @@ dd {
   font-size: 12px;
 }
 
+.profile img {
+  padding: 1px;
+  border: 1px solid #CCC;
+  margin: 0 5px 5px 0;
+}
+
+.profile h1 {
+  font-size: 14px;
+  font-weight: bold;
+  padding-bottom: 0;
+}
+
+.profile h2 {
+  font-size: 10px;
+  padding-top: 3px;
+  font-weight: normal;
+}
+
+.profile h3 {
+  font-size:: 12px;
+  font-weight: bold;
+}
+
+
 #toolbar {
   padding: 5px 0;
   width: 100%;
@@ -293,12 +317,12 @@ dd {
   height: 120px;
 }
 
-#collection #browser #album .album ol {
+#collection #browser #album .album ol, .profile ol {
   list-style: decimal;
   padding-left: 28px;
 }
 
-#collection #browser #album ol li {
+#collection #browser #album ol li, .profile ol li {
   cursor: pointer;
   list-style: decimal;
 }

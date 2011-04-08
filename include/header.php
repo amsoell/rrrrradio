@@ -1,19 +1,5 @@
 <?php
-  session_start();  
-
-  include("configuration.php");
-  include("classes/Db.class.php");
-  include("classes/Rdio.class.php");
-  include("classes/User.class.php");
-  include("classes/Track.class.php");
-  include("classes/Queue.class.php");  
-  include("classes/Collection.class.php");    
-  include("include/functions.php");
-  
-  $c = new Config();
-  $db = new Db();
-  $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
-  authenticate();
+  include("libs.php");
   $token = $rdio->getPlaybackToken(array("domain"=>$c->app_domain));  
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -34,9 +20,11 @@
     <script src="js/controller.js"></script>   
     <script src="/theme/<?php print $c->theme; ?>/js/controller.js"></script>    
     <script src="/js/jquery.fancybox-1.3.4.pack.js"></script>       
+    <script src="/js/jquery.qtip.pack.js"></script>          
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2r1/build/reset/reset-min.css">    
     <link type="text/css" rel="stylesheet" href="/theme/<?php print $c->theme; ?>/css/style.css" /> 
     <link type="text/css" rel="stylesheet" href="/css/jquery.fancybox-1.3.4.css" />     
+    <link type="text/css" rel="stylesheet" href="/css/jquery.qtip.min.css" />         
     <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
   </head>
   <body onload="$('.autoclick').trigger('click')">

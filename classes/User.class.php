@@ -50,6 +50,36 @@
 
       $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()) WHERE `key`='".$this->key."' LIMIT 1");
     }
+    
+    function getTopArtists($count=10) {
+      $db = new Db();
+      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+      
+      $rs = $db->query("SELECT artistKey, count(id) AS requestCount FROM queue WHERE userKey='".$this->key."' GROUP BY artistKey ORDER BY requestCount DESC LIMIT $count");
+      $a = array();
+      while ($rec = mysql_fetch_array($rs)) {
+        $key = $rec['artistKey'];
+        $tmp = $rdio->get(array("keys"=>$rec['artistKey']));
+        $a[] = $tmp->result->$key;
+      }
+      
+      return $a;
+    }
+    
+    function getTopTracks($count=10) {
+      $db = new Db();
+      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+      
+      $rs = $db->query("SELECT trackKey, count(id) AS requestCount FROM queue WHERE userKey='".$this->key."' GROUP BY trackKey ORDER BY requestCount DESC LIMIT $count");
+      $a = array();
+      while ($rec = mysql_fetch_array($rs)) {
+        $key = $rec['trackKey'];
+        $tmp = $rdio->get(array("keys"=>$rec['trackKey']));
+        $a[] = $tmp->result->$key;
+      }
+      
+      return $a;
+    }    
   
   }
 ?>
