@@ -102,6 +102,9 @@
       // IF QUEUE LENGTH IS SHORT ENOUGH, EVALUATE TO TRUE AT THIS POINT
       if ($this->freeQueue()) return true;
       
+      // IF USER IS THE ONLY LISTENER, LET THEM REQUEST
+      if (count(User::getCurrentListeners())<=1) return true;
+      
       // QUEUE IS GREATER THAN LIMIT & USER IS OUT OF REQUESTS
       $rs = $db->query("SELECT COUNT(userKey) AS fromUser FROM queue WHERE userKey='".$_SESSION['user']->key."' AND free=0 AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))");
       if (($rec = mysql_fetch_array($rs)) && ($rec['fromUser']>=$c->requests_per_hour)) return new QueueError('You are out of requests');
