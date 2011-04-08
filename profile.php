@@ -6,7 +6,7 @@
 ?>
 <div class="profile">
   <img src="<?php print $u->icon; ?>" width="64" height="64" align="left"/>
-  <h1><?php print $u->firstName." ".$u->lastName; ?>
+  <h1><?php print $u->firstName." ".$u->lastName; ?></h1>
   <h2>aka: <?php print $u->username; ?></h2>
   <br style="clear: both;" />
   <br />
