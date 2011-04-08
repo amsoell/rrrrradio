@@ -8,6 +8,8 @@
 <dd>Rdio does have a <b>ton</b> of music. And while that's a great thing when you're listening to music alone, it can be a great detriment when a lot of people with different tastes are trying to listen. At the moment, the music available for request here is a subset in the indie rock / alternative genre. In the future, we may expand and create several new stations with different genres.</dd>
 <dt>Sometimes a song will skip or repeat. What's that about?</dt>
 <dd>Our streaming algorithm isn't quite perfect at this point, and sometimes one user's player will get out of sync with everyone elses. Occasionally the system will "course correct" to get everyone back at approximately the same place. This can present itself in the form of either skipped or repeated tracks.</dd>
+<dt>OK, but sometimes when I first log in I hear a bunch of noise / static instead of what should be playing. What's <i>that</i> about.</dt>
+<dd>We're aware of that issue and are looking into it. All we can suggest right now is that you reload the browser and it should fix itself.</dd>
 <?php
   include("include/footer.php");
 ?>

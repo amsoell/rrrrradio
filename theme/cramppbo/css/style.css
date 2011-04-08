@@ -458,6 +458,11 @@ br.clear {
   padding: 5px 0;
 }
 
+#footer a {
+  text-decoration: none;
+  color: #FFF;
+}
+
 #footer .details {
   margin-top: 3px;
   padding-left: 10px;
