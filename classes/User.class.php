@@ -80,6 +80,30 @@
       
       return $a;
     }    
+    
+    function requestsLeft() {
+      $db = new Db();
+      $c = new Config();
+      
+      $rs = $db->query("SELECT COUNT(userKey) AS requests, DATE_ADD(FROM_UNIXTIME(MIN(added)), INTERVAL 1 HOUR) AS newRequests FROM queue WHERE userKey='".$this->key."' AND free=0 AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))");
+      if ($rec = mysql_fetch_array($rs)) {
+        return ($c->requests_per_hour - $rec['requests']);
+      } else {
+        return $c->requests_per_hour;
+      }
+    }
+    
+    function requestsRenew() {
+      $db = new Db();
+      $c = new Config();
+      
+      $rs = $db->query("SELECT COUNT(userKey) AS requests, DATE_ADD(FROM_UNIXTIME(MIN(added)), INTERVAL 1 HOUR) AS newRequests FROM queue WHERE userKey='".$this->key."' AND free=0 AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))");
+      if ($rec = mysql_fetch_array($rs)) {
+        return strtotime($rec['newRequests']);
+      } else {
+        return time();
+      }    
+    }
   
   }
 ?>

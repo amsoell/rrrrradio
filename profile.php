@@ -27,6 +27,18 @@
   }  
 ?>
   </ol>
+  <br /><br />
+  <p>Requests available: 
+<?php  
+  $left = $u->requestsLeft(); 
+
+  print $left;
+  
+  if ($left<=0) {
+    print " (renew in ".intval(($u->requestsRenew()-time())/60)." minutes)";
+  }  
+  
+?></p>
 </div>
 <?php
   }
