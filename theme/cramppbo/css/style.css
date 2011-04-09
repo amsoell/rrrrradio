@@ -363,10 +363,6 @@ dd {
 #queue .track:first-child {
 }
 
-#queue .track:hover {
-  cursor: pointer;
-}
-
 #queue .track .title {
   padding: 5px 10px 5px 10px;
   height: 35px;
@@ -378,6 +374,7 @@ dd {
   top: 155px;
   width: 180px;
   background: url('/theme/cramppbo/images/trackbg.png');
+  z-index: 51;
 }
 
 #queue .track .title .trackname {
@@ -396,6 +393,37 @@ dd {
   font-weight: normal;
 }
 
+#queue .track .detail {
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  background: url('/theme/cramppbo/images/trackbg.png');
+  display: none;
+  z-index: 50;
+  color: #FFF;
+  font-size: 11px;
+}
+
+#queue .track .detail .like, #queue .track .detail .dislike {
+  position: absolute;
+  top: 130px;
+  cursor: pointer;
+}
+
+#queue .track .detail .like {
+  left: 20px;
+}
+
+#queue .track .detail .dislike {
+  left: 110px;
+}
+
+#queue .track .detail .like img, #queue .track .detail .dislike img {
+  padding-right: 7px;
+  height: 10px;
+  width: 10px;
+}
+
 #queue .track .userpic {
   position: absolute;
   top: 4px;
@@ -412,6 +440,7 @@ dd {
   background: url('/theme/cramppbo/images/trackbg.png');
   position: absolute;
   display: none;
+  z-index: 51;
 }
 
 #queue .track .user .username {

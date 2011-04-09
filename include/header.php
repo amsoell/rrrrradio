@@ -12,6 +12,7 @@
     <script type="text/javascript">
     
       var loggedIn = <?php print $rdio->loggedIn()?'true':'false'; ?>;
+      var autoplay = <?php print $c->autoplay?'true':'false'; ?>;
       var api_swf = "http://www.rdio.com/api/swf/";
       var playbackToken = "<?php print $token->result; ?>";
       var domain = "<?php print $c->app_domain; ?>";
