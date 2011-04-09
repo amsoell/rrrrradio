@@ -40,6 +40,14 @@
       $rs = $db->query("SELECT `key` FROM track WHERE `key`='$key'");
       return (mysql_num_rows($rs)>0);
     }
+    
+    function mark($val) {
+      $db = new Db();
+      
+      if (isset($_SESSION['user']) && property_exists($_SESSION['user'], 'key')) {
+        $db->query("REPLACE INTO mark (userKey, trackKey, mark) VALUES ('".$_SESSION['user']->key."', '".$this->key."', $val)");
+      }
+    }
   }
   
   class QueueTrack extends Track {

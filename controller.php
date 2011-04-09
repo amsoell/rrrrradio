@@ -15,7 +15,11 @@
   authenticate();
   
   switch (strtolower($_REQUEST['r'])) {
-
+    case "mark":
+      $track = new Track($_REQUEST['key']);
+      $track->mark($_REQUEST['val']);
+      
+      break;
     case "queue":
       // add a requested track to the queue
       $track = new Track($_REQUEST['key']);     
