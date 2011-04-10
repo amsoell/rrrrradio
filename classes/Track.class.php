@@ -45,7 +45,11 @@
       $db = new Db();
       
       if (isset($_SESSION['user']) && property_exists($_SESSION['user'], 'key')) {
-        $db->query("REPLACE INTO mark (userKey, trackKey, mark) VALUES ('".$_SESSION['user']->key."', '".$this->key."', $val)");
+        if ($val==0) {
+          $db->query("DELETE FROM mark  WHERE userKey='".$_SESSION['user']->key."' AND trackKey='".$this->key."' LIMIT 1");
+        } else {
+          $db->query("REPLACE INTO mark (userKey, trackKey, mark) VALUES ('".$_SESSION['user']->key."', '".$this->key."', $val)");
+        }
       }
     }
   }
@@ -54,5 +58,6 @@
     public $startplay;
     public $endplay;
     public $user;
+    public $mark;
   }
 ?>

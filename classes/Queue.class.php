@@ -12,7 +12,12 @@
     function getQueue() {
       $db = new Db();
 
-      $rs = $db->query("SELECT trackKey, userKey, startplay, endplay FROM queue WHERE endplay>=UNIX_TIMESTAMP(NOW()) ORDER BY startplay");    
+      $sqlx = " SELECT queue.trackKey, queue.userKey, queue.startplay, queue.endplay, mark.mark FROM queue LEFT JOIN mark ON queue.trackKey=mark.trackKey WHERE endplay>=UNIX_TIMESTAMP(NOW())";
+      if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
+        $sqlx .= "AND (mark.userKey='".$_SESSION['user']->key."' OR mark.userKey IS NULL) ";
+      }
+      $sqlx .= "ORDER BY startplay";
+      $rs = $db->query($sqlx);
       $tracks = Array();
 
       while ($rec = mysql_fetch_array($rs)) {
@@ -22,6 +27,7 @@
         $t->startplay = $rec['startplay'];
         $t->endplay = $rec['endplay'];
         $t->duration = $rec['endplay']-$rec['startplay'];
+        $t->mark = $rec['mark'];
         if (!is_null($rec['userKey'])) {
           $t->user = new User($rec['userKey']);
         }

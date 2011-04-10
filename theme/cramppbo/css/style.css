@@ -404,21 +404,24 @@ dd {
   font-size: 11px;
 }
 
-#queue .track .detail .like, #queue .track .detail .dislike {
+#queue .track .detail .markstatus, #queue .track .detail .like, #queue .track .detail .dislike, #queue .track .detail .unmark {
   position: absolute;
   top: 130px;
+}
+
+#queue .track .detail .like, #queue .track .detail .dislike, #queue .track .detail .unmark {
   cursor: pointer;
 }
 
-#queue .track .detail .like {
+#queue .track .detail .markstatus, #queue .track .detail .like {
   left: 20px;
 }
 
-#queue .track .detail .dislike {
+#queue .track .detail .dislike, #queue .track .detail .unmark {
   left: 110px;
 }
 
-#queue .track .detail .like img, #queue .track .detail .dislike img {
+#queue .track .detail .markstatus img, #queue .track .detail .like img, #queue .track .detail .dislike img, #queue .track .detail .unmark img {
   padding-right: 7px;
   height: 10px;
   width: 10px;
