@@ -28,6 +28,15 @@
     $tracks = $tracks->result;
 
     print json_encode($tracks);
+  } elseif (array_key_exists('t', $_REQUEST)) {
+    // GET TRACK DETAIL AND RETURN VIA JSON OBJECT
+    $key = $_REQUEST['t'];
+    $args = array("keys"=>$_REQUEST['t'], "extras"=>"trackNum");
+    if (array_key_exists('force', $_REQUEST)) $args['force'] = 1;
+    $tracks = $rdio->get($args);    
+    $tracks = $tracks->result->$key;
+
+    print json_encode($tracks);
   }
 
   function albumsort($a, $b) { 

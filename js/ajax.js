@@ -50,6 +50,32 @@ function updateQueue() {
   return true;
 }
 
+function queueTrack(trackKey) {
+  $.ajax({
+    url: '/controller.php',
+    dataType: 'json',
+    data: 'r=queue&key='+trackKey,
+    beforeSend: function() {
+      $('#queue').append($('<div></div>').addClass('track placeholder'));
+    },
+    success: function(d) {  
+      if ("response" in d) {
+        if (window.fluid) {
+          fluid.showGrowlNotification({
+            title: "Oops...",
+            description: d.response
+          })
+        } else {
+          display(d.response);
+        }
+      } else {
+        display('Track successfully added to queue');
+      }
+      updateQueue();
+    }      
+  });
+}
+
 function setmark(key, val) {
   $.ajax({
     url: '/controller.php',

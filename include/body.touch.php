@@ -3,7 +3,7 @@
     <h1>rrrrradio</h1>
     <a href="#" class="refresh button leftButton refresh">refresh</a>
 <?php if ($rdio->loggedIn()) : ?>
-    <a href="#collection" class="button add flip">+</a>
+    <a href="#" class="addtrack button add flip">+</a>
 <?php else: ?>
     <a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login" rel="external" class="button flip">login</a>
 <?php endif; ?>
@@ -54,7 +54,8 @@
     <h1></h1>
     <a href="#" class="back">Tracks</a>
   </div>
+  <h2></h2>
   <ul class="individual rounded">
-    <li><a href="#" id="request">Request</a></li>
+    <li><a href="#" class="request" id="">Request</a></li>
   </ul>
 </div>
