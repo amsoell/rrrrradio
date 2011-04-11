@@ -19,6 +19,7 @@
     </script>
     <script src="js/musicqueue.class.js"></script>  
     <script src="js/controller.js"></script>   
+    <script src="js/ajax.js"></script>       
     <script src="/theme/<?php print $c->theme; ?>/js/controller.js"></script>    
     <script src="/js/jquery.fancybox-1.3.4.pack.js"></script>       
     <script src="/js/jquery.qtip.pack.js"></script>          
