@@ -1,8 +1,8 @@
 <div id="home" class="current">
   <div class="toolbar">
     <h1>rrrrradio</h1>
-<?php if ($rdio->loggedIn()) : ?>
     <a href="#" class="refresh button leftButton refresh">refresh</a>
+<?php if ($rdio->loggedIn()) : ?>
     <a href="#collection" class="button add flip">+</a>
 <?php else: ?>
     <a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login" rel="external" class="button flip">login</a>
