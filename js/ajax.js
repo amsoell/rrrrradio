@@ -1,3 +1,9 @@
+var cb = {};
+var _QUEUE = new musicQueue();
+var skip;
+var playerstate = 2;
+var muting = 0;
+
 // Gets the latest queue from the server and passes it on to the JS:Queue object
 // May be redundant with the existance of the updateQueue function.
 // Consider combining in the future.

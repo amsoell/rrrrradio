@@ -1,5 +1,3 @@
-      </div>
-    </div>
     <div id="footer">
       <div class="details">
         &copy; 2011 rrrrradio | 

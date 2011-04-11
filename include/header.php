@@ -10,7 +10,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
     <script type="text/javascript">
-    
       var loggedIn = <?php print $rdio->loggedIn()?'true':'false'; ?>;
       var autoplay = <?php print $c->autoplay?'true':'false'; ?>;
       var api_swf = "http://www.rdio.com/api/swf/";
@@ -18,8 +17,31 @@
       var domain = "<?php print $c->app_domain; ?>";
     </script>
     <script src="js/musicqueue.class.js"></script>  
-    <script src="js/controller.js"></script>   
     <script src="js/ajax.js"></script>       
+<?php  if (strpos($_SERVER['HTTP_USER_AGENT'],"iPhone")): ?>
+    <link type="text/css" rel="stylesheet" href="/css/jqtouch.min.css" />     
+    <link type="text/css" rel="stylesheet" href="/css/jqtouch.themes/jqt/theme.min.css" />         
+    <link type="text/css" rel="stylesheet" href="/css/style.touch.css" /> 
+    <script src="/js/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script> 
+    <script type="text/javascript" charset="utf-8"> 
+        var jQT = new $.jQTouch({
+            icon: 'jqtouch.png',
+            addGlossToIcon: false,
+            startupScreen: 'jqt_startup.png',
+            statusBar: 'black',
+            preloadImages: [
+                '../../themes/jqt/img/back_button.png',
+                '../../themes/jqt/img/back_button_clicked.png',
+                '../../themes/jqt/img/button_clicked.png',
+                '../../themes/jqt/img/grayButton.png',
+                '../../themes/jqt/img/whiteButton.png',
+                '../../themes/jqt/img/loading.gif'
+                ]
+        });
+    </script> 
+    <script src="js/controller.touch.js"></script>       
+<?php  else: ?>
+    <script src="js/controller.js"></script>   
     <script src="/theme/<?php print $c->theme; ?>/js/controller.js"></script>    
     <script src="/js/jquery.fancybox-1.3.4.pack.js"></script>       
     <script src="/js/jquery.qtip.pack.js"></script>          
@@ -27,28 +49,7 @@
     <link type="text/css" rel="stylesheet" href="/theme/<?php print $c->theme; ?>/css/style.css" /> 
     <link type="text/css" rel="stylesheet" href="/css/jquery.fancybox-1.3.4.css" />     
     <link type="text/css" rel="stylesheet" href="/css/jquery.qtip.min.css" />         
+<?php endif; ?>    
     <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
   </head>
   <body onload="$('.autoclick').trigger('click')">
-    <div id="wrapper">
-      <div id="toolbar">
-        <div id="tools">      
-          <div id="nowplaying">
-            <span class="song_title"></span> : <span class="song_artist"></span>
-  
-          </div>
-          <div id="ops">
-            <img class="player_mute" src="/theme/cramppbo/images/tools/sound_high.png" />
-            <span id="volume">
-              <img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="1" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="2" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="3" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="4" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="5" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="6" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="7" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="8" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="9" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="10" />
-            </span>
-<!--
-            <img src="/theme/cramppbo/images/tools/heart.png" />
-            <img src="/theme/cramppbo/images/tools/cancel.png" />
--->
-          </div>
-          <span class="nowlistening"><span class="listeners"></span></span>                      
-        </div>
-        <div class="progress"><div class="slider"></div></div>                  
-      </div>
-      <div id="page">
