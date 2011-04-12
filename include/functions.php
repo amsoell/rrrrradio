@@ -5,6 +5,7 @@
     $db = new Db();
     
     if (isset($_SESSION['access_key']) && isset($_SESSION['access_secret'])) {
+      $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()) WHERE `key`='".addslashes($_SESSION['user']->key)."'");    
       return true;
     } elseif (isset($_COOKIE['rrrrr_userkey']) && isset($_COOKIE['rrrrr_token'])) {
       $rs = $db->query("SELECT `key`, token, secret FROM user WHERE `key`='".$_COOKIE['rrrrr_userkey']."' AND token='".addslashes($_COOKIE['rrrrr_token'])."' LIMIT 1");
