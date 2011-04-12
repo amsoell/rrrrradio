@@ -3,6 +3,7 @@
   include("classes/Db.class.php");
   include("classes/Rdio.class.php");
   include("classes/User.class.php");
+  include("classes/Collection.class.php");
   include("include/functions.php");
   
   $c = new Config();
@@ -19,6 +20,13 @@
     $albums = $albums->result;
 
     usort($albums, "albumsort");
+    
+    $randomables = Collection::getRandomables();
+    for ($i=0; $i<count($albums); $i++) {
+      for ($j=0; $j<count($albums[$i]->tracks); $j++) {
+        $albums[$i]->tracks[$j]->randomable = in_array($albums[$i]->tracks[$j]->key, $randomables)?"1":"0";
+      }
+    }
     print json_encode($albums);
   } elseif (array_key_exists('a', $_REQUEST)) {
     // GET TRACKS FROM A SPECIFIED ALBUM AND RETURN VIA JSON OBJECT

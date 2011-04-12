@@ -9,6 +9,21 @@
 
       return $artists;
     }
+    
+    function getRandomables() {
+      $db = new Db();
+      
+      $db->query("SET SESSION GROUP_CONCAT_MAX_LEN = 30000");
+      $rs = $db->query("SELECT GROUP_CONCAT(DISTINCT trackKey) AS randomables FROM queue");
+      
+      if ($rec = mysql_fetch_array($rs)) {
+        $tracks = explode(',',$rec['randomables']);
+      } else {
+        $tracks = array();
+      }
+      
+      return $tracks;
+    }
 
     function getRandomTrack($includeQueued=false, $includeAll=false, $lastplaythreshold=10800) {
       $db = new Db();

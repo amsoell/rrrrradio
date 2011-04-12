@@ -327,6 +327,10 @@ dd {
   list-style: decimal;
 }
 
+#collection #browser #album li.randomable {
+  font-weight: bold;
+}
+
 #queue {
   background: url('/theme/cramppbo/images/queuebg.gif');
   left: 330px;
