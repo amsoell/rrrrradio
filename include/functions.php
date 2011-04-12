@@ -4,6 +4,19 @@
     $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
     $db = new Db();
     
+    if (isset($_SESSION['access_key']) && isset($_SESSION['access_secret'])) {
+      return true;
+    } elseif (isset($_COOKIE['rrrrr_userkey']) && isset($_COOKIE['rrrrr_token'])) {
+      $rs = $db->query("SELECT `key`, token, secret FROM user WHERE `key`='".$_COOKIE['rrrrr_userkey']."' AND token='".addslashes($_COOKIE['rrrrr_token'])."' LIMIT 1");
+      
+      if ($rec = mysql_fetch_array($rs)) {
+        $u = $rdio->get(array("keys"=>$rec['key'], "extras"=>"username"));
+        $_SESSION['user'] = $u->result->$rec['key'];
+        $_SESSION['access_key'] = $rec['token'];
+        $_SESSION['access_secret'] = $rec['secret'];
+      }
+    }
+    
     $op = $_GET["op"];
     if($op == "login") {
       $callback_url = $c->rdio_callback_url . '?op=login-callback';
@@ -18,7 +31,9 @@
     }  
     
     if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
-      $db->query("REPLACE INTO user (`key`, lastseen) VALUES ('".addslashes($_SESSION['user']->key)."', UNIX_TIMESTAMP(NOW()))");
+      setcookie("rrrrr_userkey", $_SESSION['user']->key, time()+60*60*24*30);
+      setcookie("rrrrr_token", $_SESSION['access_key'], time()+60*60*24*30);
+      $db->query("REPLACE INTO user (`key`, state, token, secret, lastseen) VALUES ('".addslashes($_SESSION['user']->key)."', 2, '".addslashes($_SESSION['access_key'])."', '".addslashes($_SESSION['access_secret'])."', UNIX_TIMESTAMP(NOW()))");
     }    
   }
 
