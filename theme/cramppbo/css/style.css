@@ -416,9 +416,14 @@ dd {
 
 #queue .track #playbutton {
   position: absolute;
-  left: 68px;
-  top: 68px;
+  left: 59px;
+  top: 49px;
   cursor: pointer;
+}
+
+#queue .track #playbutton:hover {
+  top: 50px;
+  left: 60px;
 }
 
 #queue .track .detail div {
