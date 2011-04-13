@@ -402,10 +402,31 @@ dd {
   height: 200px;
   width: 200px;
   background: url('/theme/cramppbo/images/trackbg.png');
-  display: none;
   z-index: 50;
   color: #FFF;
+  font-size: 11px;  
+}
+
+#queue.playing .track .detail {
+  background: url('/theme/cramppbo/images/trackbg.png');
+  display: none;
+  color: #FFF;
   font-size: 11px;
+}
+
+#queue .track #playbutton {
+  position: absolute;
+  left: 68px;
+  top: 68px;
+  cursor: pointer;
+}
+
+#queue .track .detail div {
+  display: none;
+}
+
+#queue.playing .track .detail div {
+  display: inherit;
 }
 
 #queue .track .detail .markstatus, #queue .track .detail .like, #queue .track .detail .dislike, #queue .track .detail .unmark {

@@ -7,7 +7,7 @@ var muting = 0;
 // Gets the latest queue from the server and passes it on to the JS:Queue object
 // May be redundant with the existance of the updateQueue function.
 // Consider combining in the future.
-function getQueue() {
+function getQueue($play) {
   $.ajax({
     url: '/controller.php',
     dataType: 'json',
@@ -16,17 +16,17 @@ function getQueue() {
     success: function(d) {
       _QUEUE.init(d.queue);
       skip = d.timestamp - d.queue[0].startplay;      
-      if (loggedIn && autoplay) {
-        player().rdio_play(_QUEUE.getNext().key);
-      } else {
-        _QUEUE.updateQueue(d.queue);
-        if (window.fluid) { 
-          window.fluid.dockBadge = _QUEUE.length();
-        }
-        refreshQueueDisplay();  
-        refreshListeners(d.listeners);         
-      }
 
+      _QUEUE.updateQueue(d.queue);
+
+      if (window.fluid) { 
+        window.fluid.dockBadge = _QUEUE.length();
+      }
+      refreshQueueDisplay();  
+      refreshListeners(d.listeners);  
+      _QUEUE.ptr = -1;
+
+      if ($play) player().rdio_play(_QUEUE.getNext().key);      
     }
   });
 }
