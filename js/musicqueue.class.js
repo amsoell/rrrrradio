@@ -27,8 +27,8 @@ function musicQueue() {
         q = [];
         
         q[0] = this.q[i];
-        for (i=1;i<tracks.length;i++) {
-          q[i] = tracks[i];
+        for (j=1;j<tracks.length;j++) {
+          q[j] = tracks[j];
         }
         
         this.q = q;
