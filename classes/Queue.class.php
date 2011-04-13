@@ -12,11 +12,13 @@
     function getQueue() {
       $db = new Db();
 
-      $sqlx = " SELECT queue.trackKey, queue.userKey, queue.startplay, queue.endplay, mark.mark FROM queue LEFT JOIN mark ON queue.trackKey=mark.trackKey WHERE endplay>=UNIX_TIMESTAMP(NOW())";
+      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.startplay, queue.endplay ";
       if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
-        $sqlx .= "AND (mark.userKey='".$_SESSION['user']->key."' OR mark.userKey IS NULL) ";
+        $sqlx .= ", mark.mark FROM queue LEFT JOIN mark on queue.trackKey=mark.trackKey AND queue.userKey=mark.userKey ";
+      } else {
+        $sqlx .= "FROM queue ";
       }
-      $sqlx .= "ORDER BY startplay";
+      $sqlx .= "WHERE endplay>=UNIX_TIMESTAMP(NOW()) ORDER BY startplay";
       $rs = $db->query($sqlx);
       $tracks = Array();
 
