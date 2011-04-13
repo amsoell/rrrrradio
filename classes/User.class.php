@@ -45,6 +45,19 @@
       return $l;
     }
     
+    function getBlockedTracks() {
+      $db = new Db();
+      
+      $t = array();
+      $rs = $db->query("SELECT GROUP_CONCAT(trackKey) AS blockedTracks FROM mark WHERE userKey='".$this->key."' AND mark=-1");
+      
+      if ($rec = mysql_fetch_array($rs)) {
+        $t = explode(",", $rec['blockedTracks']);
+      }
+      
+      return $t;
+    }
+    
     function ping() {
       $db = new Db();
 

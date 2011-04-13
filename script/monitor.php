@@ -17,7 +17,7 @@
   
   $length = $q->length();
   for (;$length<=3;$length++) {
-    $track = Collection::getRandomTrack(false, false);
+    $track = Collection::getRandomTrack(false, User::getCurrentListeners());
     $q->push($track);
   }
 ?>

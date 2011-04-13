@@ -25,42 +25,36 @@
       return $tracks;
     }
 
-    function getRandomTrack($includeQueued=false, $includeAll=false, $lastplaythreshold=10800) {
+    function getRandomTrack($includeQueued=false, $excludeBlocked=array()) {
       $db = new Db();
       $q = new Queue();
+      
+      $randomables = Collection::getRandomables();
 
       if (!$includeQueued) {
         // get currently queued tracks to exclude from selection
-        $queuetracks = array();
-        foreach ($q->getQueue() as $track) {
-          $queuetracks[] = $track->key;
-        }
-      } else {
-        $queuetracks = array("");
+        foreach ($q->getQueue() as $track) unset($randomables[array_search($track->key, $randomables)]);
       }
       
-      if (!$includeAll) {
-        $requestedBit = "requested=1 AND ";
-      }
-      
-      $rs = $db->query("SELECT FLOOR(RAND()*COUNT(DISTINCT trackKey)) AS offset FROM queue WHERE endplay-startplay<=360");
-      if ($rec = mysql_fetch_array($rs)) {
-        $offset = $rec['offset'];
-
-        $rs = $db->query("SELECT DISTINCT trackKey, albumKey, artistKey, endplay-startplay AS duration FROM queue WHERE endplay-startplay<=360 LIMIT $offset, 1");
-        if ($rec = mysql_fetch_array($rs)) {
-          $t = new Track($rec['trackKey']);
+      if (is_array($excludeBlocked)) {
+        // remove tracks blocked by selected users
+        foreach ($excludeBlocked as $user) {
+          if ($user instanceof User) {
+            $u = $user;
+          } else {
+            $u = new User($userKey);
+          }
           
-          // Make sure track is streamable
-          if ($t->canStream!=1) $t = Collection::getRandomTrack($includeQueued, $includeAll, $lastplaythreshold);
-
-          return $t;
-        } else {
-          return false;
+          foreach ($u->getBlockedTracks as $trackKey) unset($randomables[array_search($trackKey, $randomables)]);
         }
-      } else {
-        return false;
       }
+      
+      $t = new Track($randomables[rand(0, count($randomables)-1)]);
+
+      // Make sure track is streamable
+      if ($t->canStream!=1) $t = Collection::getRandomTrack($includeQueued, $includeAll, $lastplaythreshold);
+
+      return $t;
     }
     
     function addTrack($track) {
