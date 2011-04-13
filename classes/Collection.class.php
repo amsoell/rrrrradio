@@ -45,7 +45,7 @@
             $u = new User($userKey);
           }
           
-          foreach ($u->getBlockedTracks as $trackKey) unset($randomables[array_search($trackKey, $randomables)]);
+          foreach ($u->getBlockedTracks() as $trackKey) unset($randomables[array_search($trackKey, $randomables)]);
         }
       }
       
