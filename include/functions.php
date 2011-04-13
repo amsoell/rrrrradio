@@ -2,7 +2,7 @@
   function authenticate($cb=null) {
     $c = new Config();
     
-    if (!is_nul($cb)) $c->rdio_callback_url = $cb;
+    if (!is_null($cb)) $c->rdio_callback_url = $cb;
     $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
     $db = new Db();
     
