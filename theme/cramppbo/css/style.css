@@ -431,6 +431,11 @@ dd {
   cursor: pointer;
 }
 
+#queue .track #playbutton.ready {
+  display: inherit;
+}
+
+
 #queue .track #playbutton:hover {
   top: 50px;
   left: 60px;
