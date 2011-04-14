@@ -424,7 +424,6 @@ dd {
 }
 
 #queue .track #playbutton {
-  display: none;
   position: absolute;
   left: 59px;
   top: 49px;
