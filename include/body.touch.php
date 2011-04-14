@@ -14,6 +14,9 @@
   <h2>Coming Up</h2>
   <ul id="queue" class="rounded">
   </ul>
+  <h2>Now Listening</h2>
+  <ul id="listeners" class="rounded">
+  </ul>
 </div>
 <div class="form" id="collection">
   <div class="toolbar">

@@ -60,6 +60,11 @@ class Rdio {
   public function __call($method, $arguments) {
     $db = new Db();
     
+    if (is_array($arguments) && array_key_exists('ttl', $arguments)) {
+      $ttl = $arguments['ttl'];
+      unset($arguments['ttl']);
+    }
+    
     // build the request
     if (count($arguments) > 0) {
       $params = $arguments[0];
