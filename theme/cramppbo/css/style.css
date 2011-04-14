@@ -60,6 +60,10 @@ dd {
   font-size: 12px;
 }
 
+.quicklink {
+  cursor: pointer;
+}
+
 .profile img {
   padding: 1px;
   border: 1px solid #CCC;

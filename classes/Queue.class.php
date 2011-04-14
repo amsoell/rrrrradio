@@ -12,7 +12,7 @@
     function getQueue() {
       $db = new Db();
 
-      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.startplay, queue.endplay ";
+      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.albumKey, queue.artistKey, queue.startplay, queue.endplay ";
       if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
         $sqlx .= ", mark.mark FROM queue LEFT JOIN mark on queue.trackKey=mark.trackKey AND queue.userKey=mark.userKey ";
       } else {
@@ -26,6 +26,8 @@
         $t = new QueueTrack();
 
         $t->key = $rec['trackKey'];
+        $t->albumKey = $rec['albumKey'];
+        $t->artistKey = $rec['artistKey'];
         $t->startplay = $rec['startplay'];
         $t->endplay = $rec['endplay'];
         $t->duration = $rec['endplay']-$rec['startplay'];

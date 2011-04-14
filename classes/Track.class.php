@@ -4,6 +4,8 @@
     public $name;
     public $album;    
     public $artist;
+    public $albumKey;
+    public $artistKey;
     public $icon;    
     public $duration;
     public $trackNum;
