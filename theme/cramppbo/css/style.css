@@ -355,6 +355,11 @@ dd {
   position: relative;
 }
 
+#queue .track a {
+  color: #FFF;
+  text-decoration: none;
+}
+
 #queue .track.placeholder {
   background: url('/theme/cramppbo/images/ajax-loader-large.gif') no-repeat center center #dfdfdf;
   background-postion: center;
