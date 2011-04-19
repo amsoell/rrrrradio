@@ -71,6 +71,7 @@
       $results[] = $r;
     }
     
+    // GET ARTISTS/ALBUMS FROM RDIO API
     $res = $rdio->search(array('query'=>$_REQUEST['term'], 'types'=>'Artist,Album', 'never_or'=>true, 'count'=>10));
     $res = $res->result->results;
 
@@ -91,7 +92,7 @@
           break;
       }
       
-      $results[] = $r;
+//      $results[] = $r;
     }
     
     usort($results, "searchresultsort");

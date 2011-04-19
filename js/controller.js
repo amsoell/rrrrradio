@@ -320,7 +320,7 @@
           success: function(d) {
             $('#collection #browser #album').empty();
             for (i=0; i<d.length; i++) {
-              if (d[i].canStream) {
+              if ((d[i]!=undefined) && (d[i].canStream)) {
                 $a = $('<div></div>').addClass('album').attr('id', d[i].key);
                 $a.append($('<img>').attr('src',d[i].icon).attr('width','125').attr('height','125'));
                 
@@ -346,7 +346,7 @@
             $('.ajax-loader').remove();
           },
           complete: function() {
-            if (targetInfo.length>0) {
+            if ((targetInfo!=undefined) && (targetInfo.length>0)) {
               albumKey = targetInfo[0];
               tinfo = targetInfo.slice(1);
               
@@ -438,6 +438,8 @@
         at: "right bottom",
         collision: "none"
       }
+    }).parent().bind('submit', function () {
+      return false;
     });
   
     $('.player_mute').live('click', function() {
