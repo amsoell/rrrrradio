@@ -519,6 +519,51 @@
       player().rdio_setMute(0);
       $(this).attr('src','/theme/cramppbo/images/tools/sound_high.png').addClass('player_mute').removeClass('player_unmute');    
     });
+    
+    $('.export').bind('click', function() {
+      $content = $('<div></div>').html('Export the current queue to your Rdio account?<br /><br />')
+        .append($('<form></form>').bind('submit', function() { return false; })
+          .append($('<label></label>').attr('for', 'rdio_playlist').html('Playlist name'))
+          .append($('<input>').attr('name', 'playlist').attr('id','rdio_playlist'))
+          );
+      display($('<div>').append($content.clone()).remove().html(), {
+        save: function() {
+          $.ajax({
+            url: '/controller.php',
+            dataType: 'json',
+            data: 'r=save&name='+$('#rdio_playlist').val(),
+            async: false,
+            success: function(d) {
+              display("The current queue has been saved to your Rdio account as playlist '"+$('#rdio_playlist').val() + "'", {
+                ok: function() {
+                  $.fancybox.close();
+                }
+              });            
+            }
+          });
+        },
+        cancel: function() {
+          $.fancybox.close();
+        }
+      })
+    }).qtip({
+      content: {
+        text: "Export the current queue to an Rdio playlist for offline listening"
+      },
+      position: {
+        my: 'top center',
+        adjust: {
+          x: -8,
+          y: 10
+        }          
+      },
+      show: {
+        delay: 1000
+      },
+      style: {
+          classes: 'ui-tooltip-dark ui-tooltip-shadow ui-tooltip-rounded'
+      }
+    });
   
     
     $('#volume img').click(function() {

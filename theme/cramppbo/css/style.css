@@ -181,6 +181,18 @@ dd {
   padding: 1px;
 }
 
+#toolbar .advanced {
+  position: absolute;
+  top: 0;
+  left: 145px;
+  border-left: 1px dashed #333;
+  padding-left: 15px;
+}
+
+#toolbar .advanced img {
+  cursor: pointer;
+}
+
 #toolbar #volume img {
   border: 0;
   width: 8px;
@@ -642,4 +654,8 @@ br.clear {
 
 #error .button {
   padding: 0 5px;
+}
+
+label {
+  padding-right: 10px;
 }
