@@ -590,9 +590,29 @@ br.clear {
   overflow-y: auto;
 }
 
+.ui-autocomplete .ui-autocomplete-category {
+  text-align: left;
+	font-weight: bold;
+	padding: .4em 0 .2em .4em;
+	margin-top: .4em;
+	line-height: 1.5;
+	clear: both;
+	background: #999;
+	color: #FFF;
+}
+
+.ui-autocomplete .ui-autocomplete-category:first-child {
+  margin-top: 0;
+}
+
+
 .ui-autocomplete .ui-menu-item {
   padding-bottom: 5px !important;
   height: 64px;
+}
+
+.ui-autocomplete .ui-menu-item._r {
+  height: 20px;
 }
 
 .ui-autocomplete .ui-menu-item a{
@@ -613,4 +633,9 @@ br.clear {
 .ui-autocomplete .ui-menu-item .main {
   font-weight: bold;
   font-size: 13px;
+}
+
+.highlight {
+  background: #FF6;
+  padding: 2px;
 }

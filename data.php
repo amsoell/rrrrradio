@@ -70,7 +70,31 @@
       $r->type = 'a';
       $results[] = $r;
     }
-  
+    
+    $res = $rdio->search(array('query'=>$_REQUEST['term'], 'types'=>'Artist,Album', 'never_or'=>true, 'count'=>10));
+    $res = $res->result->results;
+
+    
+    foreach ($res as $item) {
+      switch ($item->type) {
+        case 'r':
+          $r = new SearchResult($item->key);
+          $r->artist = $item->name;
+          $r->type = '_r';
+          break;
+        case 'a':
+          $r = new SearchResult($item->artistKey.'/'.$item->key);
+          $r->artist = $item->artist;
+          $r->album = $item->name;          
+          $r->icon = $item->icon;      
+          $r->type = '_a';          
+          break;
+      }
+      
+      $results[] = $r;
+    }
+    
+    usort($results, "searchresultsort");
     
     print json_encode($results);
   }
@@ -78,4 +102,9 @@
   function albumsort($a, $b) { 
     if ($a->releaseDate==$b->releaseDate) return 0; 
     return (($a->releaseDate < $b->releaseDate) ? 1 : -1); 
+  }
+  
+  function searchresultsort($a, $b) {
+    if ($a->type==$b->type) return 0;
+    return (($a->type < $b->type) ? 1 : -1);
   }

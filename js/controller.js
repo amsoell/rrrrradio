@@ -197,7 +197,7 @@
     
       $t = $('<div></div>').attr('id', track.key).addClass('track').css('background-image', 'url('+track.icon+')');
       $title = $('<div></div>').addClass('title');
-      $track = $('<div></div>').addClass('trackname').append($('<a></a>').attr('href', '#!/'+track.artistKey+"/"+track.albumKey).html(track.name));
+      $track = $('<div></div>').addClass('trackname').append($('<a></a>').attr('href', '#!/'+track.artistKey+"/"+track.albumKey+"/"+track.key).html(track.name));
       $artist = $('<div></div>').addClass('artist').append($('<a></a>').attr('href', '#!/'+track.artistKey).html(track.artist));
       $title.append($track).append($artist);
       
@@ -304,7 +304,7 @@
     });
   
     $('li.artist').live({
-      click: function(event, albumKey) {
+      click: function(event, targetInfo) {
         node = $(this);
     
         $.ajax({
@@ -313,6 +313,8 @@
           data: 'r='+$(this).attr('id'),
           async: true,
           beforeSend: function() {
+            $('#collection #browser .artist.highlight').removeClass('highlight');
+            node.addClass('highlight');          
             $('#collection #browser #album').empty().append($('<img>').addClass('loading').attr('src', '/theme/cramppbo/images/ajax-loader-bar.gif'));       
           },
           success: function(d) {
@@ -340,12 +342,20 @@
                 $('#collection #browser #album').append($a.append($d));
               }
             }
-            bind();
+            
             $('.ajax-loader').remove();
           },
           complete: function() {
-            //alert($('#'+albumKey).position().top);
-            if (albumKey.length>0) $('#collection #browser #album').scrollTo('#'+albumKey+' .detail', 400);
+            if (targetInfo.length>0) {
+              albumKey = targetInfo[0];
+              tinfo = targetInfo.slice(1);
+              
+              $('#collection #browser #album').scrollTo('#'+albumKey+' .detail', 400);
+              if (tinfo.length>0) {
+                $('#collection #album .track.highlight').removeClass('highlight');
+                $('#'+albumKey+' #'+tinfo[0]).addClass('highlight');
+              }
+            }
           }      
         })
       },
@@ -368,7 +378,6 @@
               $a.append($('<p></p>').html(d[i].name));
               $('#collection #browser #album').append($a);
             }
-            bind();
             $('.ajax-loader').remove();
           }      
         });
@@ -380,7 +389,48 @@
       queueTrack($(this).attr('id'));
     });
       
-    $('#search').autocomplete({
+    $.widget( "custom.catcomplete", $.ui.autocomplete, {
+  		_renderMenu: function( ul, items ) {
+  			var self = this,
+  				currentCategory = "";
+  			$.each( items, function( index, item ) {
+  				if ( item.type != currentCategory ) {
+  				  switch (item.type) {
+  				    case 'r':
+  				      type = 'Artists';
+  				      break;
+  				    case 'a':
+  				      type = 'Albums';
+  				      break;
+  				    case 't':
+  				      type = 'Songs';
+  				      break;
+  				    case '_r':
+  				      type = 'More Artists...';
+  				      break;
+  				    case '_a':
+  				      type = 'More Albums...';
+  				      break;
+  				  }
+  					ul.append( "<li class='ui-autocomplete-category'>" + type + "</li>" );
+  					currentCategory = item.type;
+  				}
+  				self._renderItem( ul, item );
+  			});
+  		},
+      _renderItem: function( ul, item ) {
+        $result = $( "<li></li>" ).addClass(item.type).data( "item.autocomplete", item )
+    		  .append($("<a></a>").addClass('name').attr('href','#!/'+item.key)
+    		    .append((item.type!='_r') ? $('<img>').attr('src',item.icon).attr('width',64).attr('height',64) : null)
+    		    .append( $("<span></span>").addClass('track main').html(item.name))		    
+    		    .append( $("<span></span>").addClass('artist').html(item.artist))
+    		    .append( $("<span></span>").addClass('album').html(item.album)))		    
+    		  .appendTo( ul );
+    		return $result;
+      }		
+  	});
+	    
+    $('#search').catcomplete({
       source: "/data.php", 
       minLength: 2,
       position: {
@@ -388,16 +438,7 @@
         at: "right bottom",
         collision: "none"
       }
-    }).data( "autocomplete" )._renderItem = function( ul, item ) {
-  			$result = $( "<li></li>" ).data( "item.autocomplete", item )
-  			  .append($("<a></a>").addClass('name').attr('href','#!/'+item.key)
-  		      .append($('<img>').attr('src',item.icon).attr('width',64).attr('height',64))
-  		      .append( $("<span></span>").addClass('track main').html(item.name))		    
-  		      .append( $("<span></span>").addClass('artist').html(item.artist))
-  		      .append( $("<span></span>").addClass('album').html(item.album)))		    
-  				.appendTo( ul );
-  		  return $result;
-    }
+    });
   
     $('.player_mute').live('click', function() {
       player().rdio_setMute(1);
@@ -421,7 +462,11 @@
     $('#collection .header').click(function(event) {
       if ($(event.target).attr('id')!='search') {
         $('#collection #browser').slideToggle(400, function() {
-          $('#collection #search').attr('value','').fadeToggle();
+          if ($(this).is(':visible')) {
+            $('#collection #search').attr('value','').fadeIn();
+          } else {
+            $('#collection #search').attr('value','').fadeOut();
+          }
         });
       }
     });
@@ -453,12 +498,18 @@
   
   function scrollTo(linkInfo) {
     linkInfo = linkInfo.split('/');
+    link = linkInfo[0];
+    if (linkInfo.length>1) {
+      linfo = linkInfo.slice(1);
+    } else {
+      linfo = array();
+    }
     
     $('#collection #album').empty();
     $('#collection #browser').slideDown(400, function() {
-      $(this).children('#music').scrollTo('#'+linkInfo[0], 800, {
+      $(this).children('#music').scrollTo('#'+link, 800, {
         onAfter: function() { 
-          $('#'+linkInfo[0]).trigger('click', [linkInfo[1]]);
+          $('#'+link).trigger('click', [linfo]);
         }
       });
     });    
