@@ -28,6 +28,19 @@ CREATE TABLE `queue` (
   PRIMARY KEY  (`id`)
 );
 
+CREATE TABLE `searchindex` (
+  `trackKey` varchar(12) NOT NULL default '',
+  `albumKey` varchar(12) NOT NULL default '',
+  `artistKey` varchar(12) NOT NULL default '',
+  `name` varchar(100) default NULL,
+  `album` varchar(100) default NULL,
+  `artist` varchar(100) default NULL,
+  `icon` varchar(200) default NULL,
+  PRIMARY KEY  (`trackKey`,`albumKey`,`artistKey`),
+  KEY `name` (`name`),
+  FULLTEXT KEY `name_2` (`name`),
+);
+
 CREATE TABLE `user` (
   `key` varchar(10) NOT NULL,
   `state` smallint(6) default '0',
@@ -35,11 +48,4 @@ CREATE TABLE `user` (
   `secret` varchar(64) default NULL,
   `lastseen` int(11) default NULL,
   PRIMARY KEY  (`key`)
-);
-
-CREATE TABLE `vote` (
-  `userKey` varchar(10) NOT NULL default '',
-  `trackKey` varchar(10) NOT NULL default '',
-  `vote` int(11) default NULL,
-  PRIMARY KEY  (`userKey`,`trackKey`)
 );
