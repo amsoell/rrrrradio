@@ -95,7 +95,7 @@
   }
   
   function display(msg, buttons) {
-    if ((buttons!=null) && window.fluid) {
+    if ((buttons.length<=0) && window.fluid) {
       window.fluid.showGrowlNotification({
           title: 'rrrrradio', 
           description: msg
