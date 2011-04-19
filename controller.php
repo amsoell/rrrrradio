@@ -59,11 +59,19 @@
     case 'request':
       $item = $rdio->get(array('keys'=>$_REQUEST['item']));
       
+      $headers  = "Organization: rrrrradio\r\n";
+      $headers .= "MIME-Version: 1.0\r\n";
+      $headers .= "Content-type: text/plain; charset=iso-8859-1\r\n";
+      $headers .= "X-Priority: 3\r\n";
+      $headers .= "X-Mailer: PHP". phpversion() ."\r\n";
+      $headers .= "From: ".$c->sitename." <admin@".$c->app_domain.">\r\n";
+      $headers .= "Reply-to: ".$c->admin_email;
+      
       mail($c->admin_email, $c->sitename." request", "The following has been requested for addition to the ".$c->sitename." station:\n\n".
         "Artist: ".$item->result->$_REQUEST['item']->artist."\n".
-        "Album: ".$item->result->$_REQUEST['item']->key."\n".
+        "Album: ".$item->result->$_REQUEST['item']->name."\n".
         "URL: ".$item->result->$_REQUEST['item']->shortUrl."\n".
-        "Requested By: ".$_SESSION['user']->firstName." ".$_SESSION['user']->lastName, "Reply-To: ".$c->sitename." <".$c->admin_email.">\r\nX-Mailer: PHP/".phpversion());
+        "Requested By: ".$_SESSION['user']->firstName." ".$_SESSION['user']->lastName, $headers);
       break;
     case 'finishedTrack':
       break;
