@@ -94,15 +94,26 @@
     return $('#api_swf').get(0);
   }
   
-  function display(msg) {
-    if (window.fluid) {
+  function display(msg, buttons) {
+    if ((buttons!=undefined) && window.fluid) {
       window.fluid.showGrowlNotification({
           title: 'rrrrradio', 
           description: msg
       });
     } else {
-      $close = $('<br /><br /><a href="javascript:;" onClick="$.fancybox.close();">ok</a>');
-      $('#error #message').html(msg).append($close);  
+      $('#error #message').html(msg);    
+      
+      if (buttons!=undefined) {
+        for (var key in buttons) {
+          $button = $('<a href="javascript:;"></a>').addClass('button').html(key).bind('click', buttons[key]);
+          $('#error #message').append($button);
+        }
+
+      } else {
+        $close = $('<br /><br /><a href="javascript:;" onClick="$.fancybox.close();">ok</a>');      
+        $('#error #message').append($close);  
+      }
+
       $('#errorlink').trigger('click')
     }
   }
@@ -277,6 +288,59 @@
       return false;
     });
     
+    $('a[href^="#_"]').live('click', function() {
+      linkInfo = $(this).attr('href').substr(3).split('/');
+
+      switch (linkInfo.length) {
+        case 2: // album
+          $.ajax({
+            url: '/data.php',
+            dataType: 'json',
+            data: 'a='+linkInfo[1]+'&all=true',
+            async: false,
+            success: function(d) {
+              $content = $('<div></div>').addClass('album').attr('id', d[linkInfo[1]].key)
+                          .append($('<img>').attr('src', d[linkInfo[1]].icon).attr('width',125).attr('height',125))
+                          .append($('<div></div>').addClass('detail')
+                            .append($('<h1></h1>').html(d[linkInfo[1]].artist + ": " + d[linkInfo[1]].name)));
+            }
+          });
+          break;
+        case 1: // artist
+          $.ajax({
+            url: '/data.php',
+            dataType: 'json',
+            data: 'r='+linkInfo[1]+'&all=true',
+            async: false,
+            success: function(d) {
+              $content = $('<div></div>').addClass('album').attr('id', d[linkInfo[1]].key)
+                          .append($('<img>').attr('src', d[linkInfo[1]].icon).attr('width',125).attr('height',125))
+                          .append($('<div></div>').addClass('detail')
+                            .append($('<h1></h1>').html(d[linkInfo[1]].artist + ": " + d[linkInfo[1]].name)));
+            }
+          });
+          break;
+      }
+      display("The selected item is not in the rrrrradio collection.<br />Would you like to request that it be added?<br /><br />"+$('<div>').append($content.clone()).remove().html(), {
+        yes: function() {
+          $.ajax({
+            url: '/controller.php',
+            dataType: 'json',
+            data: 'r=request&item='+$(this).siblings('.album').attr('id'),
+            async: false,
+            success: function(d) {
+              display("The selected item has been submitted for consideration");            
+            }
+          });
+        },
+        no: function() {
+          $.fancybox.close();
+        }
+      });
+      
+      return false;
+    });
+    
     $('input[title!=""]').live({
       blur: function() {
         if ($(this).val()=='') $(this).val($(this).attr('title')).addClass('empty');
@@ -420,7 +484,7 @@
   		},
       _renderItem: function( ul, item ) {
         $result = $( "<li></li>" ).addClass(item.type).data( "item.autocomplete", item )
-    		  .append($("<a></a>").addClass('name').attr('href','#!/'+item.key)
+    		  .append($("<a></a>").addClass('name').attr('href',(item.type.substring(0,1)=='_'?'#_/':'#!/')+item.key)
     		    .append((item.type!='_r') ? $('<img>').attr('src',item.icon).attr('width',64).attr('height',64) : null)
     		    .append( $("<span></span>").addClass('track main').html(item.name))		    
     		    .append( $("<span></span>").addClass('artist').html(item.artist))

@@ -56,6 +56,15 @@
 
       print $return;
       break;
+    case 'request':
+      $item = $rdio->get(array('keys'=>$_REQUEST['item']));
+      
+      mail($c->admin_email, $c->sitename." request", "The following has been requested for addition to the ".$c->sitename." station:\n\n".
+        "Artist: ".$item->result->$_REQUEST['item']->artist."\n".
+        "Album: ".$item->result->$_REQUEST['item']->key."\n".
+        "URL: ".$item->result->$_REQUEST['item']->shortUrl."\n".
+        "Requested By: ".$_SESSION['user']->firstName." ".$_SESSION['user']->lastName, "Reply-To: ".$c->sitename." <".$c->admin_email.">\r\nX-Mailer: PHP/".phpversion());
+      break;
     case 'finishedTrack':
       break;
     case 'getrandomtrack':

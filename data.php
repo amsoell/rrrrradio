@@ -17,7 +17,11 @@
     // GET ALBUMS FROM A SPECIFIED ARTIST AND RETURN VIA JSON OBJECT  
     $args = array("artist"=>$_REQUEST['r'], "user"=>$c->rdio_collection_userkey);
     if (array_key_exists('force', $_REQUEST)) $args['force'] = 1;
-    $albums = $rdio->getAlbumsForArtistInCollection($args);
+    if (array_key_exists('all', $_REQUEST)) {
+      $albums = $rdio->getAlbumsForArtist($args);
+    } else {    
+      $albums = $rdio->getAlbumsForArtistInCollection($args);
+    }
     $albums = $albums->result;
 
     usort($albums, "albumsort");
@@ -33,7 +37,13 @@
     // GET TRACKS FROM A SPECIFIED ALBUM AND RETURN VIA JSON OBJECT
     $args = array("album"=>$_REQUEST['a'], "extras"=>"trackNum", "user"=>$c->rdio_collection_userkey);
     if (array_key_exists('force', $_REQUEST)) $args['force'] = 1;
-    $tracks = $rdio->getTracksForAlbumInCollection($args);    
+    if (array_key_exists('all', $_REQUEST)) {
+      unset($args['user']);
+      $args['keys'] = $_REQUEST['a'];
+      $tracks = $rdio->get($args);   
+    } else {
+      $tracks = $rdio->getTracksForAlbumInCollection($args);   
+    }
     $tracks = $tracks->result;
 
     print json_encode($tracks);
@@ -72,7 +82,7 @@
     }
     
     // GET ARTISTS/ALBUMS FROM RDIO API
-    $res = $rdio->search(array('query'=>$_REQUEST['term'], 'types'=>'Artist,Album', 'never_or'=>true, 'count'=>10));
+    $res = $rdio->search(array('query'=>$_REQUEST['term'], 'types'=>'Album', 'never_or'=>true, 'count'=>10));
     $res = $res->result->results;
 
     
@@ -92,7 +102,7 @@
           break;
       }
       
-//      $results[] = $r;
+      $results[] = $r;
     }
     
     usort($results, "searchresultsort");

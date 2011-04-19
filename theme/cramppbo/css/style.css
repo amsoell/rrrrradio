@@ -639,3 +639,7 @@ br.clear {
   background: #FF9;
   padding: 2px;
 }
+
+#error .button {
+  padding: 0 5px;
+}
