@@ -17,7 +17,12 @@
       </div>
       <div id="page">
         <div id="collection">
-          <div class="header">Request a song</div>
+          <div class="header">  
+            Request a song
+            <form action="<?php print $_SERVER['PHP_SELF']; ?>" method="GET">
+              <input name="q" id="search" title="search" value="search" class="empty" />
+            </form>
+          </div>
           <div id="browser">
             <ul id="music">
 <?php

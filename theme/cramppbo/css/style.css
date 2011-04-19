@@ -27,6 +27,20 @@ p {
   font-size: 12px;
 }
 
+form, input { 
+  display: inline;
+}
+
+input.empty {
+  color: #333;
+  font-style: italic;
+  font-size: 10px;
+}
+
+input.ui-autocomplete-input {
+  text-align: right;
+}
+
 .hidden {
   display: none;
 }
@@ -41,6 +55,17 @@ p {
   height: 11px;
   width: 16px;
   background: url('/theme/cramppbo/images/ajax-loader.gif') no-repeat;
+}
+
+img.loading {
+  display: block;
+  width: 220px;
+  height: 19px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-top: 150px;
 }
 
 h1 {
@@ -253,6 +278,15 @@ dd {
   padding: 5px;
   height: 15px;
   cursor: pointer;
+  position: relative;
+}
+
+#collection .header #search {
+  position: absolute;
+  width: 175px;
+  top: 3px;
+  left: 430px;
+  display: none;
 }
 
 #collection #browser {
@@ -548,4 +582,35 @@ br.clear {
 #footer .rdio { 
   padding-right: 10px;
   float: right;
+}
+
+.ui-autocomplete {
+  width: 350px;
+  max-height: 430px;
+  overflow-y: auto;
+}
+
+.ui-autocomplete .ui-menu-item {
+  padding-bottom: 5px !important;
+  height: 64px;
+}
+
+.ui-autocomplete .ui-menu-item a{
+  overflow-y: auto;
+}
+
+.ui-autocomplete .ui-menu-item img {
+  float: left;
+  padding-right: 5px;
+}
+
+.ui-autocomplete .ui-menu-item span {
+  font-size: 11px;
+  text-align: left;
+  display: block;
+}
+
+.ui-autocomplete .ui-menu-item .main {
+  font-weight: bold;
+  font-size: 13px;
 }

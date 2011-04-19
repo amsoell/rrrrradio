@@ -3,6 +3,7 @@
   include("classes/Db.class.php");
   include("classes/Rdio.class.php");
   include("classes/User.class.php");
+  include("classes/SearchResult.class.php");  
   include("classes/Collection.class.php");
   include("include/functions.php");
   
@@ -45,6 +46,33 @@
     $tracks = $tracks->result->$key;
 
     print json_encode($tracks);
+  } elseif (array_key_exists('term', $_REQUEST)) {
+    $rs = $db->query("SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon FROM searchindex WHERE name LIKE '%".addslashes($_REQUEST['term'])."%' UNION SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon FROM searchindex WHERE MATCH(name) AGAINST ('".addslashes($_REQUEST['term'])."')");
+    
+    $results = array();
+    while ($rec = mysql_fetch_array($rs)) {
+      $r = new SearchResult($rec['key']);
+      $r->name = $rec['name'];
+      $r->album = $rec['album'];
+      $r->artist = $rec['artist'];
+      $r->icon = $rec['icon'];
+      $r->type = 't';
+
+      $results[] = $r;
+    }
+
+    $rs = $db->query("SELECT DISTINCT CONCAT(artistKey,'/',albumKey) AS `key`, album, artist, icon FROM searchindex WHERE album LIKE '%".addslashes($_REQUEST['term'])."%'");
+    while ($rec = mysql_fetch_array($rs)) {
+      $r = new SearchResult($rec['key']);
+      $r->album = $rec['album'];
+      $r->artist = $rec['artist'];
+      $r->icon = $rec['icon'];      
+      $r->type = 'a';
+      $results[] = $r;
+    }
+  
+    
+    print json_encode($results);
   }
 
   function albumsort($a, $b) { 

@@ -20,7 +20,7 @@
     <script src="js/ajax.js"></script>       
 <?php  if (strpos($_SERVER['HTTP_USER_AGENT'],"iPhone")): ?>
     <link type="text/css" rel="stylesheet" href="/css/jqtouch.min.css" />     
-    <link type="text/css" rel="stylesheet" href="/css/jqtouch.themes/jqt/theme.min.css" />         
+    <link type="text/css" rel="stylesheet" href="/css/jqtouch.themes/apple/theme.min.css" />         
     <link type="text/css" rel="stylesheet" href="/css/style.touch.css" /> 
     <script src="/js/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script> 
     <script type="text/javascript" charset="utf-8"> 
@@ -39,16 +39,17 @@
                 ]
         });
     </script> 
-    <script src="js/controller.touch.js"></script>       
+    <script src="/js/controller.touch.js"></script>       
 <?php  else: ?>
-    <script src="js/controller.js"></script>   
-    <script src="/theme/<?php print $c->theme; ?>/js/controller.js"></script>    
+    <script src="/js/controller.js"></script>   
     <script src="/js/jquery.fancybox-1.3.4.pack.js"></script>       
+    <script src="/js/jquery-ui-1.8.11.custom.min.js"></script>  
     <script src="/js/jquery.qtip.pack.js"></script>          
     <script src="/js/jquery.scrollTo-1.4.2-min.js"></script>              
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2r1/build/reset/reset-min.css">    
     <link type="text/css" rel="stylesheet" href="/theme/<?php print $c->theme; ?>/css/style.css" /> 
     <link type="text/css" rel="stylesheet" href="/css/jquery.fancybox-1.3.4.css" />     
+    <link type="text/css" rel="stylesheet" href="/css/ui-lightness/jquery-ui-1.8.11.custom.css" />          
     <link type="text/css" rel="stylesheet" href="/css/jquery.qtip.min.css" />         
 <?php endif; ?>    
     <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
