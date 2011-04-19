@@ -95,15 +95,14 @@
   }
   
   function display(msg, buttons) {
-    if ((buttons.length<=0) && window.fluid) {
+    if ((arguments.length==1) && window.fluid) {
       window.fluid.showGrowlNotification({
           title: 'rrrrradio', 
           description: msg
       });
     } else {
       $('#error #message').html(msg);    
-      
-      if (buttons!=undefined) {
+      if (arguments.length>1) {
         for (var key in buttons) {
           $button = $('<a href="javascript:;"></a>').addClass('button').html(key).bind('click', buttons[key]);
           $('#error #message').append($button);
@@ -329,7 +328,11 @@
             data: 'r=request&item='+$(this).siblings('.album').attr('id'),
             async: false,
             success: function(d) {
-              display("The selected item has been submitted for consideration");            
+              display("The selected item has been submitted for consideration", {
+                ok: function() {
+                  $.fancybox.close();
+                }
+              });            
             }
           });
         },
