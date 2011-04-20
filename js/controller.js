@@ -616,7 +616,7 @@
     if (linkInfo.length>1) {
       linfo = linkInfo.slice(1);
     } else {
-      linfo = array();
+      linfo = new Array();
     }
     
     $('#collection #album').empty();
