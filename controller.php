@@ -15,6 +15,12 @@
   authenticate();
   
   switch (strtolower($_REQUEST['r'])) {
+    case "refresh":
+      // clear API cache for artist/album requests
+      $db->query("DELETE FROM api_usage WHERE params LIKE '%getArtistsInCollection%'");
+      $db->query("DELETE FROM api_usage where params LIKE '%getAlbumsForArtist%'");
+      
+      break;
     case "mark":
       $track = new Track($_REQUEST['key']);
       $track->mark($_REQUEST['val']);
@@ -84,7 +90,11 @@
         "Artist: ".$item->result->$_REQUEST['item']->artist."\n".
         "Album: ".$item->result->$_REQUEST['item']->name."\n".
         "URL: ".$item->result->$_REQUEST['item']->shortUrl."\n".
-        "Requested By: ".$_SESSION['user']->firstName." ".$_SESSION['user']->lastName, $headers);
+        "iPhone: ".str_replace("http://","rdio://",$item->result->$_REQUEST['item']->shortUrl)."\n".
+        "Requested By: ".$_SESSION['user']->firstName." ".$_SESSION['user']->lastName."\n\n".
+        "Once the item has been added to the collection, flush the API cache with this link:\n".
+        "http://".$c->app_domain."/controller.php?r=refresh", $headers);
+        
       break;
     case 'finishedTrack':
       break;
