@@ -57,9 +57,10 @@
 
     print json_encode($tracks);
   } elseif (array_key_exists('term', $_REQUEST)) {
-    $rs = $db->query("SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon FROM searchindex WHERE name LIKE '%".addslashes($_REQUEST['term'])."%' UNION SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon FROM searchindex WHERE MATCH(name) AGAINST ('".addslashes($_REQUEST['term'])."')");
-    
     $results = array();
+
+    // GET MATCHING TRACKS
+    $rs = $db->query("SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon FROM searchindex WHERE name LIKE '%".addslashes($_REQUEST['term'])."%' UNION SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon FROM searchindex WHERE MATCH(name) AGAINST ('".addslashes($_REQUEST['term'])."')");
     while ($rec = mysql_fetch_array($rs)) {
       $r = new SearchResult($rec['key']);
       $r->name = $rec['name'];
@@ -71,6 +72,7 @@
       $results[] = $r;
     }
 
+    // GET MATCHING ALBUMS
     $rs = $db->query("SELECT DISTINCT CONCAT(artistKey,'/',albumKey) AS `key`, album, artist, icon FROM searchindex WHERE album LIKE '%".addslashes($_REQUEST['term'])."%'");
     while ($rec = mysql_fetch_array($rs)) {
       $r = new SearchResult($rec['key']);
@@ -78,6 +80,15 @@
       $r->artist = $rec['artist'];
       $r->icon = $rec['icon'];      
       $r->type = 'a';
+      $results[] = $r;
+    }
+    
+    // GET MATCHING ARTISTS
+    $rs = $db->query("SELECT DISTINCT CONCAT(artistKey) AS `key`, artist FROM searchindex WHERE artist LIKE '%".addslashes($_REQUEST['term'])."%'");
+    while ($rec = mysql_fetch_array($rs)) {
+      $r = new SearchResult($rec['key']);
+      $r->artist = $rec['artist'];
+      $r->type = 'r';
       $results[] = $r;
     }
     

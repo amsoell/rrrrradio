@@ -623,7 +623,7 @@ br.clear {
   height: 64px;
 }
 
-.ui-autocomplete .ui-menu-item._r {
+.ui-autocomplete .ui-menu-item._r, .ui-autocomplete .ui-menu-item.r {
   height: 20px;
 }
 

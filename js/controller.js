@@ -488,7 +488,7 @@
       _renderItem: function( ul, item ) {
         $result = $( "<li></li>" ).addClass(item.type).data( "item.autocomplete", item )
     		  .append($("<a></a>").addClass('name').attr('href',(item.type.substring(0,1)=='_'?'#_/':'#!/')+item.key)
-    		    .append((item.type!='_r') ? $('<img>').attr('src',item.icon).attr('width',64).attr('height',64) : null)
+    		    .append((item.type.substr(-1)!='r') ? $('<img>').attr('src',item.icon).attr('width',64).attr('height',64) : null)
     		    .append( $("<span></span>").addClass('track main').html(item.name))		    
     		    .append( $("<span></span>").addClass('artist').html(item.artist))
     		    .append( $("<span></span>").addClass('album').html(item.album)))		    
