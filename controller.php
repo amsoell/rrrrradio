@@ -15,12 +15,6 @@
   authenticate();
   
   switch (strtolower($_REQUEST['r'])) {
-    case "refresh":
-      // clear API cache for artist/album requests
-      $db->query("DELETE FROM api_usage WHERE params LIKE '%getArtistsInCollection%'");
-      $db->query("DELETE FROM api_usage where params LIKE '%getAlbumsForArtist%'");
-      
-      break;
     case "mark":
       $track = new Track($_REQUEST['key']);
       $track->mark($_REQUEST['val']);
@@ -78,7 +72,7 @@
     case 'request':
       $item = $rdio->get(array('keys'=>$_REQUEST['item']));
       
-      $db->query("INSERT INTO request (shortUrl, userKey, requested) VALUES ('".addslashes(substr(strrchr($item->result->$_REQUEST['item']->shortUrl, '/'),1))."', '".$_SESSION['user']->key."', UNIX_TIMESTAMP(NOW()))");
+      $db->query("INSERT INTO request (albumKey, userKey, requested) VALUES ('".$_REQUEST['item']."', '".$_SESSION['user']->key."', UNIX_TIMESTAMP(NOW()))");
       
       $headers  = "Organization: rrrrradio\r\n";
       $headers .= "MIME-Version: 1.0\r\n";
@@ -97,6 +91,29 @@
         "Once the item has been added to the collection, flush the API cache with this link:\n".
         "http://".$c->app_domain."/controller.php?r=refresh", $headers);
         
+      break;
+    case "deny":
+      $db->query("DELETE FROM request WHERE albumKey='".$_REQUEST['a']."' LIMIT 1");
+      
+      break;
+    case "approve":
+      $rs = $rdio->get(array('keys'=>$_REQUEST['a'], 'extras'=>'trackKeys'));
+      
+      $keys = array();
+      foreach ($rs->result->$_REQUEST['a']->trackKeys as $trackKey) {
+        $keys[] = $trackKey;
+      }
+      
+      $rdio->addToCollection(array('keys'=>implode(',',$keys)));
+      
+      $db->query("UPDATE request SET approved=UNIX_TIMESTAMP(NOW()) WHERE albumKey='".$_REQUEST['a']."'");
+      
+      // break intentionally omitted.
+    case "refresh":
+      // clear API cache for artist/album requests
+      $db->query("DELETE FROM api_usage WHERE params LIKE '%getArtistsInCollection%'");
+      $db->query("DELETE FROM api_usage where params LIKE '%getAlbumsForArtist%'");
+      
       break;
     case 'finishedTrack':
       break;

@@ -10,9 +10,14 @@
             <span id="volume">
               <img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="1" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="2" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="3" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="4" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="5" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="6" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="7" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="8" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="9" /><img src="/theme/cramppbo/images/volnotch.gif" alt="" rel="10" />
             </span>
+<?php if (isset($_SESSION['user'])) : ?>            
             <span class="advanced">
               <img class="export" src="/theme/cramppbo/images/tools/doc_export.png" />
+<?php   if ($_SESSION['user']->isCurator) : ?>              
+              <img class="requests" src="/theme/cramppbo/images/tools/star.png" />
+<?php   endif; ?>              
             </span>
+<?php endif; ?>
           </div>
           <span class="nowlistening"><span class="listeners"></span></span>                      
         </div>

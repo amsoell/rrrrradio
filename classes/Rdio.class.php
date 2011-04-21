@@ -114,6 +114,8 @@ class Rdio {
   }
 
   public function complete_authentication($verifier) {
+    $db = new Db();
+    
     $oauth = $this->_getOAuth();
     $pieces = $oauth->getAccessToken(RDIO_ACCESS_TOKEN, '', $verifier);
     
@@ -122,6 +124,8 @@ class Rdio {
     $_SESSION['access_secret'] = $pieces['oauth_token_secret'];
     
     $_SESSION['user'] = $this->currentUser()->result;
+    $rs = $db->query("SELECT curator FROM user WHERE `key`='".$_SESSION['user']->key."'");
+    if ($rec = mysql_fetch_array($rs)) $_SESSION['user']->isCurator = true;
     
     // clear the request token
     unset($_SESSION['request_key']);

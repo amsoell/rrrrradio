@@ -185,11 +185,14 @@ dd {
   position: absolute;
   top: 0;
   left: 145px;
+  width: 200px;
   border-left: 1px dashed #333;
   padding-left: 15px;
 }
 
 #toolbar .advanced img {
+  display: inline;
+  padding-right: 10px;
   cursor: pointer;
 }
 
@@ -654,6 +657,12 @@ br.clear {
 
 #error .button {
   padding: 0 5px;
+  cursor: pointer;
+}
+
+#error #message {
+  overflow: auto;
+  zoom:1;
 }
 
 label {

@@ -352,6 +352,42 @@
         if ($(this).val()==$(this).attr('title')) $(this).val('').removeClass('empty');
       }
     });  
+    
+    $('.approveRequest').live('click', function() {
+      node = $(this);
+      
+      $.ajax({
+        url: '/controller.php',
+        dataType: 'json',
+        data: 'r=approve&a='+$(this).attr('rel'),
+        async: false,
+        beforeSend: function() {
+          $('#message .album.'+node.attr('rel')+' .button').remove();
+        },
+        success: function(d) {
+          $('#message .album.'+node.attr('rel')).fadeOut(800, function() { $(this).remove() });    
+        }
+      });    
+    });
+    
+    $('.denyRequest').live('click', function () {
+      node = $(this);
+
+      $.ajax({
+        url: '/controller.php',
+        dataType: 'json',
+        data: 'r=deny&a='+$(this).attr('rel'),
+        async: false,
+        beforeSend: function() {
+          $('#message .album.'+node.attr('rel')+' .button').remove();
+        },        
+        success: function(d) {
+          $('#message .album.'+node.attr('rel')).fadeOut(800, function() { $(this).remove() });    
+        }
+      });
+      
+
+    })
   
     $('#toolbar').live({
       mouseenter: function() {
@@ -553,7 +589,7 @@
       position: {
         my: 'top center',
         adjust: {
-          x: -8,
+          x: -16,
           y: 10
         }          
       },
@@ -564,6 +600,56 @@
           classes: 'ui-tooltip-dark ui-tooltip-shadow ui-tooltip-rounded'
       }
     });
+    
+    $('.requests').bind('click', function() {
+      $.ajax({
+        url: '/data.php',
+        dataType: 'json',
+        data: 'v=requests',
+        async: false,
+        success: function(d) {
+
+          $content = $('<div></div>').css('text-align','center').html('The following albums have been suggested for addition<br /><br />');
+          
+          for (var i in d[0]) {
+            $content.append($('<div></div>').addClass('album '+d[0][i].key).css('width','150px').css('height', '230px').css('float','left').attr('id', d[0][i].key)
+                        .append($('<img>').attr('src', d[0][i].icon).attr('width',125).attr('height',125))
+                        .append($('<div></div>').addClass('detail')
+                          .append($('<h1></h1>').html(d[0][i].artist + ": " + d[0][i].name)))
+                        .append($('<span></span>').attr('rel', d[0][i].key).addClass('approveRequest button').html('yes'))
+                        .append($('<span></span>').attr('rel', d[0][i].key).addClass('denyRequest button').html('no'))
+                          
+                        );
+
+          };
+
+          
+          display($('<div>').append($content.clone()).remove().html(), {
+            ok: function() {
+              $.fancybox.close();
+            }
+          });            
+        }
+      });    
+
+    }).qtip({
+      content: {
+        text: "Review albums have have been suggested for addition"
+      },
+      position: {
+        my: 'top center',
+        adjust: {
+          x: -16,
+          y: 10
+        }          
+      },
+      show: {
+        delay: 1000
+      },
+      style: {
+          classes: 'ui-tooltip-dark ui-tooltip-shadow ui-tooltip-rounded'
+      }
+    });    
   
     
     $('#volume img').click(function() {

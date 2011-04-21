@@ -119,6 +119,14 @@
     usort($results, "searchresultsort");
     
     print json_encode($results);
+  } elseif ($_REQUEST['v']=='requests') {
+    $rs = $db->query("SELECT GROUP_CONCAT(albumKey) as albumKeys FROM request WHERE approved IS NULL");
+    
+    if ($rec = mysql_fetch_array($rs)) {
+      $requests[] = $rdio->get(array("keys"=>$rec['albumKeys']))->result;
+    }
+    
+    print json_encode($requests);
   }
 
   function albumsort($a, $b) { 

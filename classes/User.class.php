@@ -9,6 +9,7 @@
     private $state;
     private $token;
     private $secret;
+    public $isCurator;
     
     function __construct($key) {
       $db = new Db();
