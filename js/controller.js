@@ -612,14 +612,16 @@
           $content = $('<div></div>').css('text-align','center').html('The following albums have been suggested for addition<br /><br />');
           
           for (var i in d[0]) {
-            $content.append($('<div></div>').addClass('album '+d[0][i].key).css('width','150px').css('height', '230px').css('float','left').attr('id', d[0][i].key)
-                        .append($('<img>').attr('src', d[0][i].icon).attr('width',125).attr('height',125))
-                        .append($('<div></div>').addClass('detail')
-                          .append($('<h1></h1>').html(d[0][i].artist + ": " + d[0][i].name)))
-                        .append($('<span></span>').attr('rel', d[0][i].key).addClass('approveRequest button').html('yes'))
-                        .append($('<span></span>').attr('rel', d[0][i].key).addClass('denyRequest button').html('no'))
-                          
-                        );
+            if (d[0][i].canStream) {
+              $content.append($('<div></div>').addClass('album '+d[0][i].key).css('width','150px').css('height', '230px').css('float','left').attr('id', d[0][i].key)
+                          .append($('<img>').attr('src', d[0][i].icon).attr('width',125).attr('height',125))
+                          .append($('<div></div>').addClass('detail')
+                            .append($('<h1></h1>').html(d[0][i].artist + ": " + d[0][i].name)))
+                          .append($('<span></span>').attr('rel', d[0][i].key).addClass('approveRequest button').html('yes'))
+                          .append($('<span></span>').attr('rel', d[0][i].key).addClass('denyRequest button').html('no'))
+                            
+                          );
+            }
 
           };
 

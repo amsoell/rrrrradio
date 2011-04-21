@@ -6,6 +6,5 @@
     include("include/body.php");
   }
   include("include/footer.php");
-  print_r($_SESSION);
 ?>
     
