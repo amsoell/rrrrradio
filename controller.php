@@ -78,6 +78,8 @@
     case 'request':
       $item = $rdio->get(array('keys'=>$_REQUEST['item']));
       
+      $db->query("INSERT INTO request (shortUrl, userKey, requested) VALUES ('".addslashes(substr(strrchr($item->result->$_REQUEST['item']->shortUrl, '/'),1))."', '".$_SESSION['user']->key."', UNIX_TIMESTAMP(NOW()))");
+      
       $headers  = "Organization: rrrrradio\r\n";
       $headers .= "MIME-Version: 1.0\r\n";
       $headers .= "Content-type: text/plain; charset=iso-8859-1\r\n";
