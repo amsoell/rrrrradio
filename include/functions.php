@@ -10,18 +10,17 @@
       $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()) WHERE `key`='".addslashes($_SESSION['user']->key)."'");    
       return true;
     } 
-/*
     elseif (isset($_COOKIE['rrrrr_userkey']) && isset($_COOKIE['rrrrr_token'])) {
-      $rs = $db->query("SELECT `key`, token, secret FROM user WHERE `key`='".$_COOKIE['rrrrr_userkey']."' AND token='".addslashes($_COOKIE['rrrrr_token'])."' LIMIT 1");
+      $rs = $db->query("SELECT `key`, token, secret, curator FROM user WHERE `key`='".$_COOKIE['rrrrr_userkey']."' AND token='".addslashes($_COOKIE['rrrrr_token'])."' LIMIT 1");
       
       if ($rec = mysql_fetch_array($rs)) {
         $u = $rdio->get(array("keys"=>$rec['key'], "extras"=>"username"));
         $_SESSION['user'] = $u->result->$rec['key'];
+        $_SESSION['user']->isCurator = ($rec['curator']==1?true:false);
         $_SESSION['access_key'] = $rec['token'];
         $_SESSION['access_secret'] = $rec['secret'];
       }
     }
-*/
     
     $op = $_GET["op"];
     if($op == "login") {
@@ -39,7 +38,7 @@
     if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
       setcookie("rrrrr_userkey", $_SESSION['user']->key, time()+60*60*24*30);
       setcookie("rrrrr_token", $_SESSION['access_key'], time()+60*60*24*30);
-      $db->query("REPLACE INTO user (`key`, state, token, secret, lastseen) VALUES ('".addslashes($_SESSION['user']->key)."', 2, '".addslashes($_SESSION['access_key'])."', '".addslashes($_SESSION['access_secret'])."', UNIX_TIMESTAMP(NOW()))");
+      $db->query("REPLACE INTO user (`key`, state, token, secret, lastseen, curator) VALUES ('".addslashes($_SESSION['user']->key)."', 2, '".addslashes($_SESSION['access_key'])."', '".addslashes($_SESSION['access_secret'])."', UNIX_TIMESTAMP(NOW()), ".($_SESSION['user']->isCurator?1:0).")");
     }    
   }
 

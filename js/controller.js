@@ -103,9 +103,9 @@
     } else {
       $('#error #message').html(msg);    
       if (arguments.length>1) {
+        $('#error #message').append($('<div></div>').addClass('buttons'));      
         for (var key in buttons) {
-          $button = $('<a href="javascript:;"></a>').addClass('button').html(key).bind('click', buttons[key]);
-          $('#error #message').append($button);
+          $('<a href="javascript:;"></a>').addClass('button').html(key).bind('click', buttons[key]).appendTo('#error #message .buttons');
         }
 
       } else {
@@ -281,6 +281,13 @@
     })
   }
 
+  function refreshRequestBadge(num) {
+    $('#tools .nowlistening .indicators .requests').remove();
+    if (num>0) {
+      $('#tools .nowlistening .indicators').append($('<img>').addClass('requests').attr('src', '/theme/cramppbo/images/tools/doc_new.png'));    
+    }
+  }
+
   $(document).ready(function() {
     $('a[href^="#!/"]').live('click', function() {
       scrollTo($(this).attr('href').substr(3));
@@ -325,7 +332,7 @@
           $.ajax({
             url: '/controller.php',
             dataType: 'json',
-            data: 'r=request&item='+$(this).siblings('.album').attr('id'),
+            data: 'r=request&item='+$(this).parent().siblings('.album').attr('id'),
             async: false,
             success: function(d) {
               display("The selected item has been submitted for consideration", {
@@ -601,57 +608,68 @@
       }
     });
     
-    $('.requests').bind('click', function() {
+    $('.requests').live('click', function() {
+      $('.qtip').qtip('hide'); 
+      node = $(this);   
+      
+      orig = node.attr('src');
+      node.attr('src','/theme/cramppbo/images/ajax-loader-indicator.gif');
+      
       $.ajax({
         url: '/data.php',
         dataType: 'json',
         data: 'v=requests',
-        async: false,
+        async: true,
         success: function(d) {
 
           $content = $('<div></div>').css('text-align','center').html('The following albums have been suggested for addition<br /><br />');
           
           for (var i in d[0]) {
-            if (d[0][i].canStream) {
-              $content.append($('<div></div>').addClass('album '+d[0][i].key).css('width','150px').css('height', '230px').css('float','left').attr('id', d[0][i].key)
+            $content.append($('<div></div>').css('display','inline-block').css('margin','auto').addClass('album '+d[0][i].key).css('width','150px').css('height', '230px').attr('id', d[0][i].key)
+                        .append($('<span></span>').attr('rel', d[0][i].key).addClass('approveRequest button').html('Approve'))
+                        .append($('<span></span>').attr('rel', d[0][i].key).addClass('denyRequest button').html('Deny'))
+                        .append($('<a></a>').attr('href',d[0][i].shortUrl).attr('target', '_blank')
                           .append($('<img>').attr('src', d[0][i].icon).attr('width',125).attr('height',125))
                           .append($('<div></div>').addClass('detail')
-                            .append($('<h1></h1>').html(d[0][i].artist + ": " + d[0][i].name)))
-                          .append($('<span></span>').attr('rel', d[0][i].key).addClass('approveRequest button').html('yes'))
-                          .append($('<span></span>').attr('rel', d[0][i].key).addClass('denyRequest button').html('no'))
-                            
-                          );
-            }
+                            .append($('<h1></h1>').html(d[0][i].artist + "<br />" + d[0][i].name)))
+                          )
+                        );
+            if (!d[0][i].canStream) $content.find('.detail').append($('<h2></h2>').html('Unstreamable'));
 
           };
-
           
           display($('<div>').append($content.clone()).remove().html(), {
-            ok: function() {
+            close: function() {
               $.fancybox.close();
             }
           });            
+          
+          node.attr('src',orig);
         }
       });    
 
-    }).qtip({
-      content: {
-        text: "Review albums have have been suggested for addition"
-      },
-      position: {
-        my: 'top center',
-        adjust: {
-          x: -16,
-          y: 10
-        }          
-      },
-      show: {
-        delay: 1000
-      },
-      style: {
-          classes: 'ui-tooltip-dark ui-tooltip-shadow ui-tooltip-rounded'
-      }
-    });    
+    }).live('mouseover', function(event) {
+      $(this).qtip({
+        overwrite: false,
+        content: {
+          text: "Review albums have have been suggested for addition"
+        },
+        position: {
+          my: 'top right',
+          adjust: {
+            x: -8,
+            y: 10
+          }          
+        },
+        show: {
+          event: event.type,
+          ready: true
+        },
+        style: {
+            classes: 'ui-tooltip-dark ui-tooltip-shadow ui-tooltip-rounded'
+        }
+      }, event)
+    }); 
   
     
     $('#volume img').click(function() {

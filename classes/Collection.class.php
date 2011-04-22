@@ -95,6 +95,18 @@
       
     }
     
+    function getPendingRequests() {
+      $db = new Db();
+      
+      $requests = array();
+      $rs = $db->query("SELECT albumKey, userKey FROM request WHERE approved IS NULL ORDER BY REQUESTED DESC");
+      while ($rec = mysql_fetch_array($rs)) {
+        $requests[] = $rec['albumKey'];
+      }
+      
+      return $requests;
+    }
+    
     function trackExists($key) {
       $db = new Db();
       

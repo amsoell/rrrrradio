@@ -45,6 +45,10 @@ input.ui-autocomplete-input {
   display: none;
 }
 
+#fancybox-outer {
+  border: 2px solid #666;
+}
+
 #fancybox-content {
   font-size: 12px;
   border: 1px solid #666;
@@ -146,9 +150,21 @@ dd {
   margin-right: auto;
   display: block;
   top: 0;
-  width: 630px;
+  width: 500px;
   text-align: right;
   position: relative;
+  float: right;
+}
+
+#toolbar .indicators {
+  float: right;
+  position: relative;
+  top: 2px;
+  height: 20px;
+}
+
+#toolbar .indicators img {
+  cursor: pointer;
 }
 
 #toolbar .listeners .container {
@@ -655,14 +671,26 @@ br.clear {
   padding: 2px;
 }
 
+#error .buttons {
+  padding-top: 5px;
+  clear: both;
+}
+
 #error .button {
   padding: 0 5px;
+  color: #C70;  
   cursor: pointer;
 }
 
 #error #message {
   overflow: auto;
   zoom:1;
+}
+
+#error #message .album {
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
 }
 
 label {

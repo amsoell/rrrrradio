@@ -13,13 +13,10 @@
 <?php if (isset($_SESSION['user'])) : ?>            
             <span class="advanced">
               <img class="export" src="/theme/cramppbo/images/tools/doc_export.png" />
-<?php   if ($_SESSION['user']->isCurator) : ?>              
-              <img class="requests" src="/theme/cramppbo/images/tools/star.png" />
-<?php   endif; ?>              
             </span>
 <?php endif; ?>
           </div>
-          <span class="nowlistening"><span class="listeners"></span></span>                      
+          <span class="nowlistening"><span class="indicators"></span><span class="listeners"></span></span>                      
         </div>
         <div class="progress"><div class="slider"></div></div>                  
       </div>

@@ -35,6 +35,8 @@
           $q->push($track, true, $_SESSION['user']->key);
         }
       }
+      
+      // break intentionally omitted
     case 'getqueue':
 
       $tracks = $q->getQueue();      
@@ -48,11 +50,15 @@
         $tracks[$i]->canStream = intval($detail->result->$key->canStream);
       }
       
-      $listeners = User::getCurrentListeners();      
+      $listeners = User::getCurrentListeners(); 
+      
+           
       
       $return  = '{ ';
       if (strlen($response)>0) $return .= '"response": '.json_encode($response).', ';
-      $return .='"timestamp" : '.time().', "queue" : '.json_encode($tracks).', "listeners" : '.json_encode($listeners).' }';
+      $return .='"timestamp" : '.time().', "queue" : '.json_encode($tracks).', "listeners" : '.json_encode($listeners);
+      if ($_SESSION['user']->isCurator) $return .= ', "pendingRequests": '.count(Collection::getPendingRequests()); 
+      $return .= ' }';
 
       print $return;
       break;

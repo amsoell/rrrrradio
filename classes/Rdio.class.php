@@ -125,7 +125,7 @@ class Rdio {
     
     $_SESSION['user'] = $this->currentUser()->result;
     $rs = $db->query("SELECT curator FROM user WHERE `key`='".$_SESSION['user']->key."'");
-    if ($rec = mysql_fetch_array($rs)) $_SESSION['user']->isCurator = true;
+    if (($rec = mysql_fetch_array($rs)) && ($rec['curator']==1)) $_SESSION['user']->isCurator = true;
     
     // clear the request token
     unset($_SESSION['request_key']);

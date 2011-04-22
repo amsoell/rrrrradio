@@ -19,11 +19,11 @@ function getQueue($play) {
 
       _QUEUE.updateQueue(d.queue);
 
-      if (window.fluid) { 
-        window.fluid.dockBadge = _QUEUE.length();
-      }
+      if (window.fluid) window.fluid.dockBadge = _QUEUE.length();
       refreshQueueDisplay();  
       refreshListeners(d.listeners);  
+      refreshRequestBadge(d.pendingRequests);
+      
       _QUEUE.ptr = -1;
 
       if ($play) player().rdio_play(_QUEUE.getNext().key);      
@@ -77,6 +77,7 @@ function queueTrack(trackKey) {
 }
 
 function setmark(key, val) {
+  $('.qtip').qtip('hide');
   $.ajax({
     url: '/controller.php',
     dataType: 'json',
