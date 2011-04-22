@@ -44,6 +44,7 @@ function updateQueue() {
       }
       refreshQueueDisplay();  
       refreshListeners(d.listeners);    
+      refreshRequestBadge(d.pendingRequests);      
     }
   });
   
