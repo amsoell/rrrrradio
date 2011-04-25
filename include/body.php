@@ -44,7 +44,7 @@
         </div>
         <div id="queue">
 <?php if ($rdio->loggedIn()): ?>
-          <div id="nowplaying">
+          <div id="now_playing">
             <div id="song"><span class="song_title"></span> - <span class="song_artist"></span></div>
             <div id="album">From the album <span class="song_album"></span></div>
           </div>

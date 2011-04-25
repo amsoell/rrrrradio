@@ -258,7 +258,7 @@ dd {
   border: 1px solid #a9a9a9;
 }
 
-#queue #nowplaying, #queue #intro {
+#queue #now_playing, #queue #intro {
   position: relative;
   padding: 15px;
   width:382px;
@@ -269,7 +269,7 @@ dd {
   float: left;  
 }
 
-#queue #nowplaying #album {
+#queue #now_playing #album {
   font-size: 11px;
 }
 
