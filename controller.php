@@ -38,11 +38,10 @@
       
       // break intentionally omitted
     case 'getqueue':
-
-      $tracks = $q->getQueue();      
+      $tracks = $q->getQueue();  
       for ($i=0; $i<count($tracks); $i++) {
         $key = $tracks[$i]->key;
-        $detail = $rdio->get(array("keys"=>$key));
+        $detail = $rdio->get(array("keys"=>$key, "extras"=>"trackNum"));
         $tracks[$i]->name = $detail->result->$key->name;
         $tracks[$i]->icon = $detail->result->$key->icon;  
         $tracks[$i]->artist = $detail->result->$key->artist;
@@ -52,8 +51,6 @@
       
       $listeners = User::getCurrentListeners(); 
       
-           
-      
       $return  = '{ ';
       if (strlen($response)>0) $return .= '"response": '.json_encode($response).', ';
       $return .='"timestamp" : '.time().', "queue" : '.json_encode($tracks).', "listeners" : '.json_encode($listeners);
@@ -61,6 +58,7 @@
       $return .= ' }';
 
       print $return;
+
       break;
     case 'save':
       if ($rdio->loggedIn()) {

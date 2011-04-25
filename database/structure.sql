@@ -5,7 +5,8 @@ CREATE TABLE `api_usage` (
   `executed` int(11) default NULL,
   `params` varchar(200) default NULL,
   `return` mediumtext,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `params` (`params`)
 );
 
 CREATE TABLE `mark` (
@@ -28,6 +29,15 @@ CREATE TABLE `queue` (
   PRIMARY KEY  (`id`)
 );
 
+CREATE TABLE `request` (
+  `id` int(11) NOT NULL auto_increment,
+  `albumKey` varchar(50) default NULL,
+  `userKey` varchar(12) default NULL,
+  `requested` int(11) default NULL,
+  `approved` int(11) default NULL,
+  PRIMARY KEY  (`id`)
+);
+
 CREATE TABLE `searchindex` (
   `trackKey` varchar(12) NOT NULL default '',
   `albumKey` varchar(12) NOT NULL default '',
@@ -38,7 +48,7 @@ CREATE TABLE `searchindex` (
   `icon` varchar(200) default NULL,
   PRIMARY KEY  (`trackKey`,`albumKey`,`artistKey`),
   KEY `name` (`name`),
-  FULLTEXT KEY `name_2` (`name`),
+  FULLTEXT KEY `name_2` (`name`)
 );
 
 CREATE TABLE `user` (
@@ -46,6 +56,7 @@ CREATE TABLE `user` (
   `state` smallint(6) default '0',
   `token` varchar(64) default NULL,
   `secret` varchar(64) default NULL,
+  `curator` tinyint(4) NOT NULL default '0',
   `lastseen` int(11) default NULL,
   PRIMARY KEY  (`key`)
 );
