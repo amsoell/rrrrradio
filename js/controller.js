@@ -314,6 +314,28 @@
       $('#tools .nowlistening .indicators').append($('<img>').addClass('requests').attr('src', '/theme/cramppbo/images/tools/doc_new.png'));    
     }
   }
+  
+  function scrollTo(linkInfo) {
+    $.fancybox.close();
+    
+    linkInfo = linkInfo.split('/');
+    link = linkInfo[0];
+    if (linkInfo.length>1) {
+      linfo = linkInfo.slice(1);
+    } else {
+      linfo = new Array();
+    }
+    
+    $('#collection #album').empty();
+    $('#collection #browser').slideDown(400, function() {
+      $(this).children('#music').scrollTo('#'+link, 800, {
+        onAfter: function() { 
+          $('#'+link).trigger('click', [linfo]);
+        }
+      });
+    });    
+  }
+  
 
   $(document).ready(function() {
     $('a[href^="#!/"]').live('click', function() {
@@ -738,26 +760,10 @@
   
     getQueue();
     
+    scrollTo(window.location.href.substring(window.location.href.indexOf('#!/')+3));
+    
   });
   
-  function scrollTo(linkInfo) {
-    linkInfo = linkInfo.split('/');
-    link = linkInfo[0];
-    if (linkInfo.length>1) {
-      linfo = linkInfo.slice(1);
-    } else {
-      linfo = new Array();
-    }
-    
-    $('#collection #album').empty();
-    $('#collection #browser').slideDown(400, function() {
-      $(this).children('#music').scrollTo('#'+link, 800, {
-        onAfter: function() { 
-          $('#'+link).trigger('click', [linfo]);
-        }
-      });
-    });    
-  }
   
   
   if (window.fluid) {

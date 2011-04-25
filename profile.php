@@ -17,7 +17,7 @@
     <h3>Top Artists</h3>    
 <?php
   foreach ($u->getTopArtists() as $artist) {
-    print "<li>".$artist->name."</li>\n";
+    print '<li><a href="#!/'.$artist->key.'">'.$artist->name."</a></li>\n";
   }  
 ?>
     <li class="export">&nbsp;</li>
@@ -30,7 +30,7 @@
   $trackKeys = Array();
   foreach ($rs as $key=>$track) {
     $trackKeys[] = $track->key;
-    print "<li>".$track->name." - ".$track->artist."</li>\n";
+    print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'">'.$track->name." - ".$track->artist."</a></li>\n";
   }  
 ?>
     <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Create playlist from these songs</li>
@@ -43,7 +43,7 @@
   $trackKeys = Array();
   foreach ($rs->result as $key=>$track) {
     $trackKeys[] = $track->key;
-    print "<li>".$track->name." - ".$track->artist."</li>\n";
+    print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'">'.$track->name." - ".$track->artist."</a></li>\n";
   }  
 ?>
     <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Create playlist from these songs</li>

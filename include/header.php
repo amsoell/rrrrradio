@@ -40,12 +40,12 @@
         });
     </script> 
     <script src="/js/controller.touch.js"></script>       
-<?php  else: ?>
-    <script src="/js/controller.js"></script>   
+<?php  else: ?> 
     <script src="/js/jquery.fancybox-1.3.4.pack.js"></script>       
     <script src="/js/jquery-ui-1.8.11.custom.min.js"></script>  
     <script src="/js/jquery.qtip.pack.js"></script>          
     <script src="/js/jquery.scrollTo-1.4.2-min.js"></script>                  
+    <script src="/js/controller.js"></script>      
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.2r1/build/reset/reset-min.css">    
     <link type="text/css" rel="stylesheet" href="/theme/<?php print $c->theme; ?>/css/style.css" /> 
     <link type="text/css" rel="stylesheet" href="/css/jquery.fancybox-1.3.4.css" />     
