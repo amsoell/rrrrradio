@@ -95,25 +95,39 @@
   }
   
   function display(msg, buttons) {
-    if ((arguments.length==1) && window.fluid) {
-      window.fluid.showGrowlNotification({
-          title: 'rrrrradio', 
-          description: msg
+    $('.qtip').qtip('hide');
+    
+    if (typeof msg == 'object') {
+      $('#error #message').css('width', msg.width+'px').html('Loading user profile...<br /><img src="/theme/cramppbo/images/ajax-loader-bar.gif" />');
+      $('#errorlink').trigger('click');
+      
+      $.ajax({
+        url: msg.url,
+        success: function(d) {
+          $('#error #message').html(d);
+        }
       });
     } else {
-      $('#error #message').html(msg);    
-      if (arguments.length>1) {
-        $('#error #message').append($('<div></div>').addClass('buttons'));      
-        for (var key in buttons) {
-          $('<a href="javascript:;"></a>').addClass('button').html(key).bind('click', buttons[key]).appendTo('#error #message .buttons');
-        }
-
+      if ((arguments.length==1) && window.fluid) {
+        window.fluid.showGrowlNotification({
+            title: 'rrrrradio', 
+            description: msg
+        });
       } else {
-        $close = $('<br /><br /><a href="javascript:;" onClick="$.fancybox.close();">ok</a>');      
-        $('#error #message').append($close);  
+        $('#error #message').html(msg);    
+        if (arguments.length>1) {
+          $('#error #message').append($('<div></div>').addClass('buttons'));      
+          for (var key in buttons) {
+            $('<a href="javascript:;"></a>').addClass('button').html(key).bind('click', buttons[key]).appendTo('#error #message .buttons');
+          }
+  
+        } else {
+          $close = $('<br /><br /><a href="javascript:;" onClick="$.fancybox.close();">ok</a>');      
+          $('#error #message').append($close);  
+        }
+  
+        $('#errorlink').trigger('click')
       }
-
-      $('#errorlink').trigger('click')
     }
   }
 
@@ -256,7 +270,7 @@
   function refreshListeners(listeners) {
     $('#toolbar .listeners').empty();
     $.each(listeners, function(i, listener) {
-      $l = $('<img>').attr('src', listener.icon).attr('alt', listener.username).attr('title', listener.username).qtip({
+      $l = $('<img>').attr('rel', listener.key).attr('src', listener.icon).attr('alt', listener.username).attr('title', listener.username).qtip({
         content: {
           text: 'Loading...',
           ajax: {
@@ -276,6 +290,11 @@
         style: {
           classes: 'ui-tooltip-dark ui-tooltip-shadow ui-tooltip-rounded'
         }
+      }).click(function() {
+        display({
+          url: '/profile.php?key='+$(this).attr('rel')+'&view=full',
+          width: 500
+        })
       });
       $('#toolbar .listeners').append($l);
     })
@@ -563,27 +582,26 @@
       $(this).attr('src','/theme/cramppbo/images/tools/sound_high.png').addClass('player_mute').removeClass('player_unmute');    
     });
     
-    $('.export').bind('click', function() {
-      $content = $('<div></div>').html('Export the current queue to your Rdio account?<br /><br />')
+    $('.export').live('click', function() {
+      $content = $('<div></div>').html($(this).attr('title')+'<br /><br />')
         .append($('<form></form>').bind('submit', function() { return false; })
           .append($('<label></label>').attr('for', 'rdio_playlist').html('Playlist name'))
           .append($('<input>').attr('name', 'playlist').attr('id','rdio_playlist'))
+          .append($('<input>').attr('name', 'tracks').attr('id', 'rdio_tracks').attr('type','hidden').val($(this).attr('rel')))
           );
       display($('<div>').append($content.clone()).remove().html(), {
         save: function() {
-          $.ajax({
-            url: '/controller.php',
-            dataType: 'json',
-            data: 'r=save&name='+$('#rdio_playlist').val(),
-            async: false,
-            success: function(d) {
-              display("The current queue has been saved to your Rdio account as playlist '"+$('#rdio_playlist').val() + "'", {
-                ok: function() {
-                  $.fancybox.close();
-                }
-              });            
-            }
-          });
+          if ($('#rdio_tracks').val()=='livequeue') {
+            q = new Array();
+            $.each(_QUEUE.q, function(i, v){
+              q.push(v.key);
+            });
+            
+            tracks = q.join(',');
+          } else {
+            tracks = $('#rdio_tracks').val();
+          }
+          exportToPlaylist($('#rdio_playlist').val(), tracks);
         },
         cancel: function() {
           $.fancybox.close();

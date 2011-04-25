@@ -62,13 +62,7 @@
       break;
     case 'save':
       if ($rdio->loggedIn()) {
-        $tracks = $q->getQueue();
-        $t = array();
-        for ($i=0;$i<count($tracks);$i++) {
-          $t[] = $tracks[$i]->key;
-        }
-      
-        $rdio->createPlaylist(array('name'=>$_REQUEST['name'], 'description'=>'Exported from '.$c->sitename.' on '.date('F j, Y'), 'tracks'=>implode(",",$t)));
+        $rdio->createPlaylist(array('name'=>$_REQUEST['name'], 'description'=>'Exported from '.$c->sitename.' on '.date('F j, Y'), 'tracks'=>$_REQUEST['tracks']));
       } else {
         print "Not logged in";
       }

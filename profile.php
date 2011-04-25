@@ -4,28 +4,49 @@
   if (isset($_REQUEST['key'])) {
     $u = new User($_REQUEST['key']);
 ?>
-<div class="profile">
+<div class="profile <?php print $_REQUEST['view']; ?>">
   <img src="<?php print $u->icon; ?>" width="64" height="64" align="left"/>
   <h1><?php print $u->firstName." ".$u->lastName; ?></h1>
   <h2>aka: <?php print $u->username; ?></h2>
   <br style="clear: both;" />
+<?php 
+    if ($_REQUEST['view']=='full') { 
+?>  
   <br />
-  <h3>Top Artists</h3>
   <ol>
+    <h3>Top Artists</h3>    
 <?php
   foreach ($u->getTopArtists() as $artist) {
     print "<li>".$artist->name."</li>\n";
   }  
 ?>
+    <li class="export">&nbsp;</li>
   </ol>
-  <br /><br />
-  <h3>Top Songs</h3>
   <ol>
+    <h3>Top Songs</h3>    
 <?php
-  foreach ($u->getTopTracks() as $track) {
+  $rs = $u->getTopTracks();
+  
+  $trackKeys = Array();
+  foreach ($rs as $key=>$track) {
+    $trackKeys[] = $track->key;
     print "<li>".$track->name." - ".$track->artist."</li>\n";
   }  
 ?>
+    <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Create playlist from these songs</li>
+  </ol>
+  <ol>
+    <h3>Favorite Songs</h3>    
+<?php
+  $rs = $rdio->get(array('keys'=>implode(',',$u->getFavoriteTracks())));
+  
+  $trackKeys = Array();
+  foreach ($rs->result as $key=>$track) {
+    $trackKeys[] = $track->key;
+    print "<li>".$track->name." - ".$track->artist."</li>\n";
+  }  
+?>
+    <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Create playlist from these songs</li>
   </ol>
   <br /><br />
   <p>Requests available: 
@@ -41,5 +62,8 @@
 ?></p>
 </div>
 <?php
+    }
   }
+  
+
 ?>

@@ -46,6 +46,19 @@
       return $l;
     }
     
+    function getFavoriteTracks() {
+      $db = new Db();
+      
+      $t = array();
+      $rs = $db->query("SELECT GROUP_CONCAT(trackKey) AS favoriteTracks FROM mark WHERE userKey='".$this->key."' AND mark=1");
+      
+      if ($rec = mysql_fetch_array($rs)) {
+        $t = explode(",", $rec['favoriteTracks']);
+      }
+      
+      return $t;
+    }
+    
     function getBlockedTracks() {
       $db = new Db();
       

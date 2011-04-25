@@ -12,7 +12,7 @@
             </span>
 <?php if (isset($_SESSION['user'])) : ?>            
             <span class="advanced">
-              <img class="export" src="/theme/cramppbo/images/tools/doc_export.png" />
+              <img class="export" src="/theme/cramppbo/images/tools/doc_export.png" rel="livequeue" title="Export the current queue to your Rdio account"/>
             </span>
 <?php endif; ?>
           </div>

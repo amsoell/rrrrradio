@@ -386,14 +386,28 @@ dd {
   height: 120px;
 }
 
+.profile {
+  text-align: left;
+}
+
 #collection #browser #album .album ol, .profile ol {
   list-style: decimal;
-  padding-left: 28px;
+  padding-bottom: 15px;
+}
+
+.profile ol h3 {
+  margin-left: 10px;
 }
 
 #collection #browser #album ol li, .profile ol li {
   cursor: pointer;
   list-style: decimal;
+  margin-left: 28px;
+}
+
+.profile ol {
+  display: inline-block;
+  padding-right: 15px;
 }
 
 #collection #browser #album li.randomable {
@@ -695,4 +709,14 @@ br.clear {
 
 label {
   padding-right: 10px;
+}
+
+.userlists {
+  vertical-align: top;
+}
+
+.export {
+  padding-top: 5px;
+  list-style: none !important;
+  cursor: pointer !important;
 }

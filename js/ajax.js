@@ -31,6 +31,22 @@ function getQueue($play) {
   });
 }
 
+function exportToPlaylist(playlistName, tracks) {
+  $.ajax({
+    url: '/controller.php',
+    dataType: 'json',
+    data: 'r=save&name='+playlistName+'&tracks='+tracks,
+    async: false,
+    success: function(d) {
+      display("Playlist saved as '"+$('#rdio_playlist').val() + "'", {
+        ok: function() {
+          $.fancybox.close();
+        }
+      });            
+    }
+  });
+}
+
 // Get the latest queue from the server and pass it on to the JS:Queue object for processing.
 function updateQueue() {
   $.ajax({
