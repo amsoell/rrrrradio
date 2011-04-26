@@ -98,19 +98,24 @@
     $('.qtip').qtip('hide');
     
     if (typeof msg == 'object') {
-      $('#error #message').html('<img src="/theme/cramppbo/images/ajax-loader-bar.gif" />').css({
-        width: '500px',
-        height: '500px'
-      });
-      $('#errorlink').trigger('click').css('width','auto');
-      
-      $.ajax({
-        url: msg.url+'&view=full',
-        success: function(d) {
-          $('#error #message').html(d);
-          $.fancybox.resize();
-        }
-      })
+      if (typeof msg.url != 'undefined') {
+        $('#error #message').html('<img src="/theme/cramppbo/images/ajax-loader-bar.gif" />').css({
+          width: '500px',
+          height: '500px'
+        });
+        $('#errorlink').trigger('click').css('width','auto');
+        
+        $.ajax({
+          url: msg.url+'&view=full',
+          success: function(d) {
+            $('#error #message').html(d);
+            $.fancybox.resize();
+          }
+        })
+      } else if (typeof msg.iframe != 'undefined') {
+        $('#error #message').css({ width: '500px', height: '500px' }).append($('<iframe></iframe>').attr('width',500).attr('height', 500).attr('frameborder', 0).attr('src', msg.iframe));
+        $('#errorlink').trigger('click').css('width','auto');        
+      }
     } else {
       if ((arguments.length==1) && window.fluid) {
         window.fluid.showGrowlNotification({
@@ -138,10 +143,82 @@
     }
   }
 
+  function displayArtistWorks(d) {
+    $('#collection #browser #album').empty();
+    for (i=0; i<d.length; i++) {
+      if ((d[i]!=undefined) && (d[i].canStream)) {
+        $a = $('<div></div>').addClass('album').attr('id', d[i].key);
+        $a.append($('<img>').attr('src',d[i].icon).attr('width','125').attr('height','125'));
+        
+        $d = $('<div></div>').addClass('detail');
+        $d.append($('<h1></h1>').html(d[i].name));
+        
+        $tracks = $('<ol></ol>');
+        $prevtrack = 0;
+        for (j=0; j<d[i].tracks.length; j++) {
+          if (d[i].tracks[j].canStream && (d[i].tracks[j].trackNum!=$prevtrack)) {
+            $t = $('<li></li>').addClass('track').attr('id', d[i].tracks[j].key).attr('value', d[i].tracks[j].trackNum).html(d[i].tracks[j].name);
+            if (d[i].tracks[j].randomable==1) $t.addClass('randomable');
+            $tracks.append($t);
+          }
+          $prevtrack = d[i].tracks[j].trackNum;
+        }
+        $d.append($tracks);
+        
+        $('#collection #browser #album').append($a.append($d));
+      }
+    }  
+  }
 
   function getMarkButtons(key) {
     $d = $('<div></div>');
     $d.append(
+      $('<div></div>').attr('rel', key).addClass('buytrack').html('Buy track').prepend($('<img>').attr('src','/theme/cramppbo/images/tools/cur_dollar.png')).qtip({
+        content: {
+          text: "Buy this track from Rdio now."
+        },
+        position: {
+          target: 'mouse',
+          my: 'bottom center',
+          adjust: {
+            y: -15
+          }          
+        },
+        show: {
+          delay: 1000
+        },
+        style: {
+          classes: 'ui-tooltip-light ui-tooltip-shadow ui-tooltip-rounded'
+        }
+        
+      }).click(function() { 
+        $('.qtip').qtip('hide');
+        window.open('/purchase.php?key='+$(this).attr('rel'), '_newtab');
+      })    
+    ).append(
+      $('<div></div>').attr('rel', key).addClass('buyalbum').html('Buy album').prepend($('<img>').attr('src','/theme/cramppbo/images/tools/cur_dollar.png')).qtip({
+        content: {
+          text: "Buy this album from Rdio now."
+        },
+        position: {
+          target: 'mouse',
+          my: 'bottom center',
+          adjust: {
+            y: -15
+          }          
+        },
+        show: {
+          delay: 1000
+        },
+        style: {
+          classes: 'ui-tooltip-light ui-tooltip-shadow ui-tooltip-rounded'
+        }
+        
+      }).click(function() { 
+        $('.qtip').qtip('hide');
+        window.open('/purchase.php?trackKey='+$(this).attr('rel'), '_newtab');
+      })    
+    ).append(
       $('<div></div>').attr('rel', key).addClass('like').html('Love it!').prepend($('<img>').attr('src','/theme/cramppbo/images/heart.png')).qtip({
         content: {
           text: "Mark this song as a favorite. In the future, you will be able to reference your favorite tracks for easy queueing."
@@ -475,30 +552,7 @@
             $('#collection #browser #album').empty().append($('<img>').addClass('loading').attr('src', '/theme/cramppbo/images/ajax-loader-bar.gif'));       
           },
           success: function(d) {
-            $('#collection #browser #album').empty();
-            for (i=0; i<d.length; i++) {
-              if ((d[i]!=undefined) && (d[i].canStream)) {
-                $a = $('<div></div>').addClass('album').attr('id', d[i].key);
-                $a.append($('<img>').attr('src',d[i].icon).attr('width','125').attr('height','125'));
-                
-                $d = $('<div></div>').addClass('detail');
-                $d.append($('<h1></h1>').html(d[i].name));
-                
-                $tracks = $('<ol></ol>');
-                $prevtrack = 0;
-                for (j=0; j<d[i].tracks.length; j++) {
-                  if (d[i].tracks[i].canStream && (d[i].tracks[j].trackNum!=$prevtrack)) {
-                    $t = $('<li></li>').addClass('track').attr('id', d[i].tracks[j].key).attr('value', d[i].tracks[j].trackNum).html(d[i].tracks[j].name);
-                    if (d[i].tracks[j].randomable==1) $t.addClass('randomable');
-                    $tracks.append($t);
-                  }
-                  $prevtrack = d[i].tracks[j].trackNum;
-                }
-                $d.append($tracks);
-                
-                $('#collection #browser #album').append($a.append($d));
-              }
-            }
+            displayArtistWorks(d);
             
             $('.ajax-loader').remove();
           },
@@ -528,13 +582,7 @@
             node.append($('<div class="ajax-loader"></div>'));        
           },
           success: function(d) {
-            $('#collection #browser #album').empty();
-            for (i=0; i<d.length; i++) {
-              $a = $('<div></div>').addClass('album closed').attr('id', d[i].key);
-              $a.append($('<img>').attr('src',d[i].icon).attr('width','125').attr('height','125'));
-              $a.append($('<p></p>').html(d[i].name));
-              $('#collection #browser #album').append($a);
-            }
+            displayArtistWorks(d);
             $('.ajax-loader').remove();
           }      
         });
