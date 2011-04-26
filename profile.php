@@ -8,6 +8,17 @@
   <img src="<?php print $u->icon; ?>" width="64" height="64" align="left"/>
   <h1><?php print $u->firstName." ".$u->lastName; ?></h1>
   <h2>aka: <?php print $u->username; ?></h2>
+  <h2>Requests available: 
+<?php  
+  $left = $u->requestsLeft(); 
+
+  print $left;
+  
+  if ($left<=0) {
+    print " (renew in ".intval(($u->requestsRenew()-time())/60)." minutes)";
+  }  
+  
+?></h2>  
   <br style="clear: both;" />
 <?php 
     if ($_REQUEST['view']=='full') { 
@@ -33,7 +44,20 @@
     print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'">'.$track->name." - ".$track->artist."</a></li>\n";
   }  
 ?>
-    <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Create playlist from these songs</li>
+    <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Export these songs to an Rdio playlist</li>
+  </ol>
+  <ol>
+    <h3>Recent Requests</h3>    
+<?php
+  $rs = $rdio->get(array('keys'=>implode(',',$u->getRecentRequests())));
+  
+  $trackKeys = Array();
+  foreach ($rs->result as $key=>$track) {
+    $trackKeys[] = $track->key;
+    print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'">'.$track->name." - ".$track->artist."</a></li>\n";
+  }  
+?>
+    <li class="export" rel="<?php print implode(',',array_reverse($trackKeys)); ?>" title="Save this as an Rdio playlist">Export these songs to an Rdio playlist</li>
   </ol>
   <ol>
     <h3>Favorite Songs</h3>    
@@ -46,20 +70,8 @@
     print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'">'.$track->name." - ".$track->artist."</a></li>\n";
   }  
 ?>
-    <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Create playlist from these songs</li>
+    <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Export these songs to an Rdio playlist</li>
   </ol>
-  <br /><br />
-  <p>Requests available: 
-<?php  
-  $left = $u->requestsLeft(); 
-
-  print $left;
-  
-  if ($left<=0) {
-    print " (renew in ".intval(($u->requestsRenew()-time())/60)." minutes)";
-  }  
-  
-?></p>
 </div>
 <?php
     }

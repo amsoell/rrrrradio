@@ -59,6 +59,18 @@
       return $t;
     }
     
+    function getRecentRequests($num=15) {
+      $db = new Db();
+      
+      $rs = $db->query("SELECT trackKey FROM queue WHERE userKey='".$this->key."' ORDER BY added DESC LIMIT ".$num);
+      $t = Array();
+      while ($rec = mysql_fetch_array($rs)) {
+        $t[] = $rec['trackKey'];
+      }
+      
+      return $t;
+    }    
+    
     function getBlockedTracks() {
       $db = new Db();
       
