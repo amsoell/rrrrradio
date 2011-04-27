@@ -81,14 +81,15 @@
     }
 
     // GET MATCHING ALBUMS
-    $rs = $db->query("SELECT DISTINCT CONCAT(artistKey,'/',albumKey) AS `key`, album, artist, icon FROM searchindex WHERE album LIKE '%".addslashes($_REQUEST['term'])."%'");
+    $rs = $db->query("SELECT DISTINCT CONCAT(artistKey,'/',albumKey) AS `key`, album, artist, icon, 10 AS confidence FROM searchindex WHERE album LIKE '%".addslashes($_REQUEST['term'])."%' UNION ".
+                     "SELECT DISTINCT CONCAT(artistKey,'/',albumKey) AS `key`, album, artist, icon, 9 AS confidence FROM searchindex WHERE artist LIKE '%".addslashes($_REQUEST['term'])."%' ORDER BY confidence DESC");
     while ($rec = mysql_fetch_array($rs)) {
       $r = new SearchResult($rec['key']);
       $r->album = $rec['album'];
       $r->artist = $rec['artist'];
       $r->icon = $rec['icon'];      
       $r->type = 'a';
-      $r->confidence = 10;
+      $r->confidence = $rec['confidence'];
       if (!array_key_exists($rec['key'], $results_albums)) $results_albums[$rec['key']] = $r;
     }
     
