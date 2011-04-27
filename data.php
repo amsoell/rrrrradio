@@ -111,25 +111,27 @@
     
     
     foreach ($res as $item) {
-      unset($r);
-      switch ($item->type) {
-        case 'r':
-          $r = new SearchResult($item->key);
-          $r->artist = $item->name;
-          $r->type = '_r';
-          break;
-        case 'a':
-          if (!array_key_exists($item->artistKey.'/'.$item->key, $results)) {        
-            $r = new SearchResult($item->artistKey.'/'.$item->key);
-            $r->artist = $item->artist;
-            $r->album = $item->name;          
-            $r->icon = $item->icon;      
-            $r->type = '_a';          
-          }
-          break;
+      if ($item->canStream) {
+        unset($r);
+        switch ($item->type) {
+          case 'r':
+            $r = new SearchResult($item->key);
+            $r->artist = $item->name;
+            $r->type = '_r';
+            break;
+          case 'a':
+            if (!array_key_exists($item->artistKey.'/'.$item->key, $results)) {        
+              $r = new SearchResult($item->artistKey.'/'.$item->key);
+              $r->artist = $item->artist;
+              $r->album = $item->name;          
+              $r->icon = $item->icon;      
+              $r->type = '_a';          
+            }
+            break;
+        }
+        
+        if (isset($r)) $results[] = $r;
       }
-      
-      if (isset($r)) $results[] = $r;
     }
     
     usort($results, "searchresultsort");

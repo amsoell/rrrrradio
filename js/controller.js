@@ -590,8 +590,8 @@
     });
     
     $('li.track').live('click', function() {
-      node = $(this);
       queueTrack($(this).attr('id'));
+      $(this).addClass('randomable');
     });
       
     $.widget( "custom.catcomplete", $.ui.autocomplete, {
