@@ -91,12 +91,37 @@
       }
     }
     
-    function isRequestable($track) {
+    function isRandomable($track) {
+      // RESTRICTIONS ON RANDOMLY QUEUED TRACKS
+      $db = new Db();
+      $c = new Config();
+      
+      //IF A USER CAN'T REQUEST IT, IT CANT COE UP RANDOMLY EITHER
+      if (!$this->isRequestable($track, false)) return false;
+      
+      $sqlx  = "SELECT GROUP_CONCAT(DISTINCT trackKey) AS trackKeys FROM queue WHERE ";
+      // Nothing that's played in the past x number of hours
+      $sqlx .= "startPlay>=DATE_SUB(NOW(), INTERVAL ".$c->random_rotation." HOUR) OR ";
+      // Nothing longer than y number of seconds
+      $sqlx .= "endPlay-startPlay>".$c->random_max_length;
+      
+      $rs = $db->query($sqlx);
+      if ($rec = mysql_fetch_array($rs)) {
+        $tracks = explode(',', $rec['trackKeys']);
+        if (in_array($track->key, $tracks)) return false;
+      }
+      
+      return true;
+    }
+    
+    function isRequestable($track, $requireAuthentication=true) {
+      // RESTRICTIONS ON USER QUEUED TRACKS
+      
       $db = new Db();
       $c = new Config();
       
       // CANNOT GET USER INFO. NO USER INFO, NO REQUEST
-      if (strlen($_SESSION['user']->key)<=0) return false; 
+      if ($requireAuthentication && (strlen($_SESSION['user']->key)<=0)) return false; 
       
       // TRACK IS ALREADY IN QUEUE
       if ($this->isComingUp($track->key)) return false;
@@ -112,12 +137,14 @@
       // IF QUEUE LENGTH IS SHORT ENOUGH, EVALUATE TO TRUE AT THIS POINT
       if ($this->freeQueue()) return true;
       
-      // IF USER IS THE ONLY LISTENER, LET THEM REQUEST
-      if (count(User::getCurrentListeners())<=1) return true;
-      
-      // QUEUE IS GREATER THAN LIMIT & USER IS OUT OF REQUESTS
-      $rs = $db->query("SELECT COUNT(userKey) AS fromUser FROM queue WHERE userKey='".$_SESSION['user']->key."' AND free=0 AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))");
-      if (($rec = mysql_fetch_array($rs)) && ($rec['fromUser']>=$c->requests_per_hour)) return new QueueError('You are out of requests');
+      if ($requireAuthentication) {
+        // IF USER IS THE ONLY LISTENER, LET THEM REQUEST
+        if (count(User::getCurrentListeners())<=1) return true;
+        
+        // QUEUE IS GREATER THAN LIMIT & USER IS OUT OF REQUESTS
+        $rs = $db->query("SELECT COUNT(userKey) AS fromUser FROM queue WHERE userKey='".$_SESSION['user']->key."' AND free=0 AND added>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))");
+        if (($rec = mysql_fetch_array($rs)) && ($rec['fromUser']>=$c->requests_per_hour)) return new QueueError('You are out of requests');
+      }
       
       
       return true;

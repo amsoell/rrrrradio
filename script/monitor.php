@@ -17,11 +17,11 @@
   $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);    
  
   $length = $q->length();
-  for (;$length<=3;$length++) {
+  while ($q->length()<=3) {
     $track = Collection::getRandomTrack(false, User::getCurrentListeners());
     
     // force Rdio request so data is cached for XHR calls
     $rdio->get(array("keys"=>$track->key, "extras"=>"trackNum"));
-    $q->push($track);
+    if ($q->isRandomable($track)) $q->push($track);
   }
 ?>
