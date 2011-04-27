@@ -58,18 +58,26 @@
     print json_encode($tracks);
   } elseif (array_key_exists('term', $_REQUEST)) {
     $results = array();
+    $results_tracks = array();
+    $results_albums = array();
+    $results_artists = array();
 
     // GET MATCHING TRACKS
-    $rs = $db->query("SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon FROM searchindex WHERE name LIKE '%".addslashes($_REQUEST['term'])."%' UNION SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon FROM searchindex WHERE MATCH(name) AGAINST ('".addslashes($_REQUEST['term'])."')");
-    while ($rec = mysql_fetch_array($rs)) {
+    $sqlx = "SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon, 10 AS confidence FROM searchindex WHERE name LIKE '%".addslashes($_REQUEST['term'])."%' UNION ";
+    $sqlx .= "SELECT CONCAT(artistKey,'/',albumKey,'/',trackKey) AS `key`, name, album, artist, icon, MATCH(name) AGAINST ('".addslashes($_REQUEST['term'])."') AS confidence FROM searchindex WHERE MATCH(name) AGAINST ('".addslashes($_REQUEST['term'])."') ORDER BY confidence DESC";
+    
+    $rs = $db->query($sqlx);
+    while (($rec = mysql_fetch_array($rs)) && ($rec['confidence']>($maxconfidence*(3/5)))) {
+      if (!isset($maxconfidence)) $maxconfidence = $rec['confidence'];
       $r = new SearchResult($rec['key']);
       $r->name = $rec['name'];
       $r->album = $rec['album'];
       $r->artist = $rec['artist'];
       $r->icon = $rec['icon'];
       $r->type = 't';
+      $r->confidence = $rec['confidence'];
 
-      $results[] = $r;
+      if (!array_key_exists($rec['key'], $results_tracks)) $results_tracks[$rec['key']] = $r;
     }
 
     // GET MATCHING ALBUMS
@@ -80,24 +88,30 @@
       $r->artist = $rec['artist'];
       $r->icon = $rec['icon'];      
       $r->type = 'a';
-      $results[] = $r;
+      $r->confidence = 10;
+      if (!array_key_exists($rec['key'], $results_albums)) $results_albums[$rec['key']] = $r;
     }
     
     // GET MATCHING ARTISTS
-    $rs = $db->query("SELECT DISTINCT CONCAT(artistKey) AS `key`, artist FROM searchindex WHERE artist LIKE '%".addslashes($_REQUEST['term'])."%'");
+    $rs = $db->query("SELECT DISTINCT CONCAT(artistKey) AS `key`, artist FROM searchindex WHERE artist LIKE '%".addslashes($_REQUEST['term'])."%'");    
     while ($rec = mysql_fetch_array($rs)) {
       $r = new SearchResult($rec['key']);
       $r->artist = $rec['artist'];
       $r->type = 'r';
-      $results[] = $r;
+      $r->confidence = 10;
+      if (!array_key_exists($rec['key'], $results_artists)) $results_artists[$rec['key']] = $r;
     }
+    
+    // ORDER RESULT GROUPS WITH HIGHEST MATCH AT TOP
+    $results = array_merge($results_artists, $results_tracks, $results_albums);
     
     // GET ARTISTS/ALBUMS FROM RDIO API
     $res = $rdio->search(array('query'=>$_REQUEST['term'], 'types'=>'Album', 'never_or'=>true, 'count'=>10));
     $res = $res->result->results;
-
+    
     
     foreach ($res as $item) {
+      unset($r);
       switch ($item->type) {
         case 'r':
           $r = new SearchResult($item->key);
@@ -105,15 +119,17 @@
           $r->type = '_r';
           break;
         case 'a':
-          $r = new SearchResult($item->artistKey.'/'.$item->key);
-          $r->artist = $item->artist;
-          $r->album = $item->name;          
-          $r->icon = $item->icon;      
-          $r->type = '_a';          
+          if (!array_key_exists($item->artistKey.'/'.$item->key, $results)) {        
+            $r = new SearchResult($item->artistKey.'/'.$item->key);
+            $r->artist = $item->artist;
+            $r->album = $item->name;          
+            $r->icon = $item->icon;      
+            $r->type = '_a';          
+          }
           break;
       }
       
-      $results[] = $r;
+      if (isset($r)) $results[] = $r;
     }
     
     usort($results, "searchresultsort");
@@ -135,6 +151,14 @@
   }
   
   function searchresultsort($a, $b) {
-    if ($a->type==$b->type) return 0;
-    return (($a->type < $b->type) ? 1 : -1);
+    $sortOrder = array("r"=>1, "t"=>2, "a"=>3, "_a"=>4);
+      
+    if ($sortOrder[$a->type]==$sortOrder[$b->type]) {
+      if ($a->confidence==$b->confidence) return 0;
+      
+      return (($a->confidence < $b->confidence) ? 1 : -1);
+    }
+    
+
+    return (($sortOrder[$a->type] > $sortOrder[$b->type]) ? 1 : -1);
   }
