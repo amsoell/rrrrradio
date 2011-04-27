@@ -5,7 +5,7 @@
     $info = $rdio->get(array("keys"=>$_REQUEST['key']));
     
     if (count($info->result->$_REQUEST['key'])>0) {
-      $url = $info->result->$_REQUEST['key']->shortUrl;
+      $url = "http://www.rdio.com".$info->result->$_REQUEST['key']->url;
     }
   } elseif (isset($_REQUEST['trackKey'])) {
     $info = $rdio->get(array("keys"=>$_REQUEST['trackKey']));
@@ -18,5 +18,5 @@
     }
   }
   
-  if (isset($url)) header("Location: ".$url.'?'.$c->affiliate_link_suffix);
+  if (isset($url)) header("Location: ".$c->affiliate_link_prefix.urlencode($url));
 ?>
