@@ -1,12 +1,12 @@
 
   function playerMute() {
-    player().rdio_setMute(1);
+    RdioPlayer().rdio_setMute(1);
     window.fluid.removeDockMenuItem('Mute');
     window.fluid.addDockMenuItem('Unmute', function() { playerUnmute() });
   }
   
   function playerUnmute() {
-    player().rdio_setMute(0);
+    RdioPlayer().rdio_setMute(0);
     window.fluid.removeDockMenuItem('Unmute');
     window.fluid.addDockMenuItem('Mute', function() { playerMute() });
   }
@@ -16,69 +16,6 @@
     getQueue(true);
   }
    
-  ///////////////////////////////////////////
-  // Rdio SWF callback function assignments
-  ///////////////////////////////////////////
-  cb.ready = function() {
-    var pb = document.getElementById('playbutton');
-    pb.className = "ready";
-  }
-  
-  cb.playingTrackChanged = function(newTrack) {
-    $('.song_title').html(newTrack.name);
-    $('.song_artist').html(newTrack.artist);
-    $('.song_album').html(newTrack.album);
-  }
-  
-  
-  cb.playStateChanged = function(state) {
-    if (state==1) { // PLAY
-      if (playerstate!=1) {
-        if ((skip>0) && autoplay) {
-          // delay necessary to avoid Rdio track skipping bug
-          setTimeout("player().rdio_seek("+skip+")", 1000);
-          skip = -1;
-        }  
-  
-        updateQueue();
-        playerstate=1;
-      }
-    } else
-    if (state==2) { // STOP
-      if (playerstate!=2) {
-        playerstate=2;
-        player().rdio_play(_QUEUE.getNext().key);
-      }
-    } else 
-    if (state==4) { // PAUSED -- USUALLY ONLY HAPPENS WHEN RDIO IS DOWN
-      if (playerstate!=4) {
-        display("Rdio appears to be down. Please check back soon!");
-        playerstate = 4;
-      }
-    }
-  }
-  
-  cb.playingSomewhereElse = function() {
-    display("Sorry, you're streaming Rdio somewhere else");
-  }
-  
-  cb.positionChanged = function(pos) {
-    $('.progress').each(function() {
-      progress = $(this);
-      slider = progress.children('.slider');
-      slider.css('width', parseInt(progress.width()*(pos/_QUEUE.currentTrack().duration))+'px');
-      progress.find('.time_current').html(parseInt(pos/60)+':'+('0'+parseInt(pos%60)).substr(-2,2));
-      progress.find('.time_total').html(parseInt(_QUEUE.currentTrack().duration/60)+':'+('0'+parseInt(_QUEUE.currentTrack().duration%60)).substr(-2,2))
-    });
-  }
-  
-  cb.volumeChanged = function(level) {
-    if (muting!=1) {
-      setVolumeIndicator(level);
-    } else {
-      muting = 0;
-    }
-  }
   
   function setVolumeIndicator(level) {
     $('#volume').children().each(function(i, e) {
@@ -90,13 +27,30 @@
     });
   }
   
-  function player() {
-    return $('#api_swf').get(0);
+  function RdioPlayer() {
+    return $('#RdioStream').get(0);
+  }
+  
+  function RdioPreviewer() {
+    return $('#RdioPreview').get(0);
+  }
+  
+  function playPreview(trackKey) {
+    if (playerstate==1) {
+      playerstate = 2;
+      RdioPlayer().rdio_setMute(1);
+    }
+    setTimeout("RdioPlayer().rdio_stop();RdioPlayer().rdio_setMute(0);RdioPreviewer().rdio_play('"+trackKey+"')", 1000);
+  }
+  
+  function stopPreview() {
+    RdioPreviewer().rdio_setMute(1);
+    setTimeout("RdioPreviewer().rdio_stop();RdioPreviewer().rdio_setMute(0);if ((playerstate==2) && (skip==-1)) getQueue(true);", 1000);  
   }
   
   function display(msg, buttons) {
     $('.qtip').qtip('hide');
-    
+
     if (typeof msg == 'object') {
       if (typeof msg.url != 'undefined') {
         $('#error #message').html('<img src="/theme/cramppbo/images/ajax-loader-bar.gif" />').css({
@@ -115,6 +69,10 @@
       } else if (typeof msg.iframe != 'undefined') {
         $('#error #message').css({ width: '500px', height: '500px' }).append($('<iframe></iframe>').attr('width',500).attr('height', 500).attr('frameborder', 0).attr('src', msg.iframe));
         $('#errorlink').trigger('click').css('width','auto');        
+      } else {
+        // must be a jquery object. Let's display the contents
+        $('#error #message').html($('<div>').append(msg.clone()).remove().html());
+        $('#errorlink').trigger('click');
       }
     } else {
       if ((arguments.length==1) && window.fluid) {
@@ -589,9 +547,39 @@
       }
     });
     
-    $('li.track').live('click', function() {
-      queueTrack($(this).attr('id'));
-      $(this).addClass('randomable');
+    var clicks = 0;
+    $('li.track').live({
+      click: function() {
+        node = $(this);
+        clicks++;
+        if (clicks == 1) {
+          setTimeout(function() {
+            if(clicks == 1) {
+              queueTrack(node.attr('id'));
+              $(this).addClass('randomable');
+            } else {
+              $.ajax({
+                url: '/data.php',
+                dataType: 'json',
+                data: 't='+node.attr('id'),
+                success: function(d) {
+                  $detail = $('<div></div>').addClass('trackPreview')
+                    .append($('<img>').addClass('coverart').attr('src',d.icon))
+                    .append($('<div></div>').addClass('detail')
+                      .append($('<h2></h2>').html(d.name))
+                      .append($('<h3></h3>').html(d.artist+' - '+d.album))
+                      .append($('<div></div>').html(parseInt(d.duration / 60)+':'+(String('0'+d.duration %60, -2).substr(-2,2))))
+                      .append($('<div><div>').addClass('preview').attr('rel', node.attr('id')).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.jpg')))
+                    )
+                  display($detail);
+                }
+              });
+            }
+            clicks = 0;
+          }, 500);
+        }
+      }      
+      
     });
       
     $.widget( "custom.catcomplete", $.ui.autocomplete, {
@@ -648,14 +636,21 @@
     });
   
     $('.player_mute').live('click', function() {
-      player().rdio_setMute(1);
+      RdioPlayer().rdio_setMute(1);
       $(this).attr('src','/theme/cramppbo/images/tools/sound_mute.png').addClass('player_unmute').removeClass('player_mute');
     });
     
     $('.player_unmute').live('click', function() {
       muting = 1;
-      player().rdio_setMute(0);
+      RdioPlayer().rdio_setMute(0);
       $(this).attr('src','/theme/cramppbo/images/tools/sound_high.png').addClass('player_mute').removeClass('player_unmute');    
+    });
+    
+    $('.catchup').live('click', function() {
+      if (skip>0) {
+        RdioPlayer().rdio_seek(skip+currentPosition)
+        skip = -1;
+      }
     });
     
     $('.export').live('click', function() {
@@ -700,6 +695,17 @@
       style: {
           classes: 'ui-tooltip-dark ui-tooltip-shadow ui-tooltip-rounded'
       }
+    });
+    
+    $('.preview').live('click', function() {
+      if ($(this).hasClass('playing')) {
+        stopPreview();
+        $(this).removeClass('playing').html('Preview this song').prepend($('<img>'));
+      } else {
+        playPreview($(this).attr('rel'));
+        $(this).addClass('playing').html('Stop preview').prepend($('<img>'));
+      }
+
     });
     
     $('.requests').live('click', function() {
@@ -769,7 +775,7 @@
     $('#volume img').click(function() {
       level = $(this).attr('rel');
       volume = $(this).parent();
-      player().rdio_setVolume($(this).attr('rel')/10);
+      RdioPlayer().rdio_setVolume($(this).attr('rel')/10);
       setVolumeIndicator(level);
     })
   
@@ -791,20 +797,29 @@
     });
     
     $('#errorlink').fancybox({
-      'width': 300,
-      'showCloseButton': false
+      width: 300,
+      showCloseButton: false,
+      onCleanup: function() {
+        if (playerstate==2) stopPreview();
+      }
     })
   
     var flashvars = {
       'playbackToken': playbackToken,
       'domain': domain,
-      'listener': 'cb'
+      'listener': 'RdioStream'
       };
+    var flashvarsPreview = {
+      'playbackToken': playbackToken,
+      'domain': domain,
+      'listener': 'RdioPreview'
+      };      
     var params = {
       'allowScriptAccess': 'always'
     };
     var attributes = {};
-    swfobject.embedSWF(api_swf, 'api_swf', 1, 1, '9.0.0', 'expressInstall.swf', flashvars, params, attributes);
+    swfobject.embedSWF(api_swf, 'RdioStream', 1, 1, '9.0.0', 'expressInstall.swf', flashvars, params, attributes);
+    swfobject.embedSWF(api_swf, 'RdioPreview', 1, 1, '9.0.0', 'expressInstall.swf', flashvarsPreview, params, attributes);
   
     getQueue();
     

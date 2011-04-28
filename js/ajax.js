@@ -1,8 +1,8 @@
-var cb = {};
 var _QUEUE = new musicQueue();
 var skip;
 var playerstate = 2;
 var muting = 0;
+var currentPosition = 0;
 
 // Gets the latest queue from the server and passes it on to the JS:Queue object
 // May be redundant with the existance of the updateQueue function.
@@ -26,7 +26,7 @@ function getQueue($play) {
       
       _QUEUE.ptr = -1;
 
-      if ($play) player().rdio_play(_QUEUE.getNext().key);      
+      if ($play) RdioPlayer().rdio_play(_QUEUE.getNext().key);      
     }
   });
 }

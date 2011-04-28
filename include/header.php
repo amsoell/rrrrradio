@@ -16,6 +16,8 @@
       var playbackToken = "<?php print $token->result; ?>";
       var domain = "<?php print $c->app_domain; ?>";
     </script>
+    <script src="js/RdioStream.class.js"></script>     
+    <script src="js/RdioPreview.class.js"></script>         
     <script src="js/musicqueue.class.js"></script>  
     <script src="js/ajax.js"></script>       
 <?php  if (strpos($_SERVER['HTTP_USER_AGENT'],"iPhone")): ?>
