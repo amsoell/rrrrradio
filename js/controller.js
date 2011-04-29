@@ -179,7 +179,7 @@
     ).append(
       $('<div></div>').attr('rel', key).addClass('like').html('Love it!').prepend($('<img>').attr('src','/theme/cramppbo/images/heart.png')).qtip({
         content: {
-          text: "Mark this song as a favorite. In the future, you will be able to reference your favorite tracks for easy queueing."
+          text: "Mark this song as a favorite."
         },
         position: {
           target: 'mouse',
@@ -202,7 +202,7 @@
     ).append(
       $('<div></div>').attr('rel', key).addClass('dislike').html('Hate it!').prepend($('<img>').attr('src','/theme/cramppbo/images/cancel.png')).qtip({
         content: {
-          text: "Mark this song as 'disliked.' In the future, this song will play less often when you're listening."
+          text: "Mark this song as 'disliked.' Disliked songs will not come up randomly while you are listening."
         },
         position: {
           target: 'mouse',

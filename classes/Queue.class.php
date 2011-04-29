@@ -99,9 +99,10 @@
       //IF A USER CAN'T REQUEST IT, IT CANT COE UP RANDOMLY EITHER
       if (!$this->isRequestable($track, false)) return false;
       
+      $db->query("SET SESSION GROUP_CONCAT_MAX_LEN = 30000");      
       $sqlx  = "SELECT GROUP_CONCAT(DISTINCT trackKey) AS trackKeys FROM queue WHERE ";
       // Nothing that's played in the past x number of hours
-      $sqlx .= "startPlay>=DATE_SUB(NOW(), INTERVAL ".$c->random_rotation." HOUR) OR ";
+      $sqlx .= "startPlay>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL ".$c->random_rotation." HOUR)) OR ";
       // Nothing longer than y number of seconds
       $sqlx .= "endPlay-startPlay>".$c->random_max_length;
       
