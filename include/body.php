@@ -13,9 +13,6 @@
 <?php if (isset($_SESSION['user'])) : ?>            
             <span class="advanced">
               <img class="export" src="/theme/cramppbo/images/tools/doc_export.png" rel="livequeue" title="Export the current queue to your Rdio account"/>
-<?php   if ($_SESSION['user']->username='amsoell') : ?>
-              <img class="catchup" src="/theme/cramppbo/images/tools/target.png" title="Sync up the stream" />
-<?php   endif; ?>
             </span>
 <?php endif; ?>
           </div>
