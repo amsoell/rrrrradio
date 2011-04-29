@@ -37,15 +37,14 @@
   
   function playPreview(trackKey) {
     if (playerstate==1) {
-      playerstate = 2;
       RdioPlayer().rdio_setMute(1);
     }
-    setTimeout("RdioPlayer().rdio_stop();RdioPlayer().rdio_setMute(0);RdioPreviewer().rdio_play('"+trackKey+"')", 1000);
+    setTimeout("RdioPreviewer().rdio_play('"+trackKey+"')", 1000);
   }
   
   function stopPreview() {
     RdioPreviewer().rdio_setMute(1);
-    setTimeout("RdioPreviewer().rdio_stop();RdioPreviewer().rdio_setMute(0);if ((playerstate==2) && (skip==-1)) getQueue(true);", 1000);  
+    setTimeout("RdioPreviewer().rdio_stop();RdioPreviewer().rdio_setMute(0);if ((playerstate==1) && (skip==-1)) RdioPlayer().rdio_setMute(0);", 1000);  
   }
   
   function display(msg, buttons) {
@@ -276,28 +275,37 @@
       }
       
       $details = $('<div></div>').addClass('detail');
-      if (playerstate==1) {
+      if (skip==-1) {
         if (track.mark==null) {
           $details.append(getMarkButtons(track.key));
         } else {
           $details.append(getMarkStatus(track.key, track.mark));
         }
-      } else if (i==0) {
-        $details.append($('<img>').attr('src', '/theme/cramppbo/images/play_button_overlay.png').attr('id', 'playbutton').click(function() {
-          $(this).attr('src', '/theme/cramppbo/images/ajax-loader-large-dark.gif').delay(2000).fadeOut(500, function() {
-            radioplay()
-          });
-        }));
+      } else if ((i==0)) {
+        if (loggedIn) {
+          $details.append($('<img>').attr('src', '/theme/cramppbo/images/play_button_overlay.png').attr('id', 'playbutton').click(function() {
+            $(this).attr('src', '/theme/cramppbo/images/ajax-loader-large-dark.gif').delay(2000).fadeOut(500, function() {
+              RdioPlayer().rdio_seek(currentPosition + skip);
+              RdioPlayer().rdio_setMute(0);
+              $('#queue').addClass('playing');
+              skip = -1;
+              
+              refreshQueueDisplay();
+            });
+          }));
+        }
       }
       
       $t.append($details).append($title);
-      if (playerstate==1) {
+      if ((playerstate==1)) {
         $t.hover(function() {
           $('.request[rel='+$(this).attr('rel')+']').find('.user').fadeIn();
           $(this).children('.detail').fadeIn();        
         }, function() {
-          $(this).children('.detail').fadeOut();      
-          $('.request[rel='+$(this).attr('rel')+']').find('.user').fadeOut();
+          if (skip==-1) {
+            $(this).children('.detail').fadeOut();      
+            $('.request[rel='+$(this).attr('rel')+']').find('.user').fadeOut();
+          }
         });
       }
   
@@ -800,7 +808,7 @@
       width: 300,
       showCloseButton: false,
       onCleanup: function() {
-        if (playerstate==2) stopPreview();
+        stopPreview();
       }
     })
   

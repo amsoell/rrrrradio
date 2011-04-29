@@ -7,7 +7,7 @@ var currentPosition = 0;
 // Gets the latest queue from the server and passes it on to the JS:Queue object
 // May be redundant with the existance of the updateQueue function.
 // Consider combining in the future.
-function getQueue($play) {
+function getQueue($play, $seek) {
   $.ajax({
     url: '/controller.php',
     dataType: 'json',
@@ -26,7 +26,9 @@ function getQueue($play) {
       
       _QUEUE.ptr = -1;
 
-      if ($play) RdioPlayer().rdio_play(_QUEUE.getNext().key);      
+      if ($play && loggedIn) {
+        RdioPlayer().rdio_play(_QUEUE.getNext().key);      
+      }
     }
   });
 }

@@ -6,6 +6,9 @@ var RdioStream = {
   ready: function() {
     var pb = document.getElementById('playbutton');
     pb.className = "ready";
+    
+    RdioPlayer().rdio_setMute(1);
+    getQueue(true);
   },
 
   playingTrackChanged: function(newTrack) {
@@ -41,13 +44,15 @@ var RdioStream = {
   
   positionChanged: function(pos) {
     currentPosition = pos;
-    $('.progress').each(function() {
-      progress = $(this);
-      slider = progress.children('.slider');
-      slider.css('width', parseInt(progress.width()*(pos/_QUEUE.currentTrack().duration))+'px');
-      progress.find('.time_current').html(parseInt(pos/60)+':'+('0'+parseInt(pos%60)).substr(-2,2));
-      progress.find('.time_total').html(parseInt(_QUEUE.currentTrack().duration/60)+':'+('0'+parseInt(_QUEUE.currentTrack().duration%60)).substr(-2,2))
-    });
+    if (skip==-1) {
+      $('.progress').each(function() {
+        progress = $(this);
+        slider = progress.children('.slider');
+        slider.css('width', parseInt(progress.width()*(pos/_QUEUE.currentTrack().duration))+'px');
+        progress.find('.time_current').html(parseInt(pos/60)+':'+('0'+parseInt(pos%60)).substr(-2,2));
+        progress.find('.time_total').html(parseInt(_QUEUE.currentTrack().duration/60)+':'+('0'+parseInt(_QUEUE.currentTrack().duration%60)).substr(-2,2))
+      });
+    }
   },
   
   volumeChanged: function(level) {

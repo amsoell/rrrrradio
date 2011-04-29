@@ -423,18 +423,22 @@ dd {
   margin: 10px 0 10px 0;
 }
 
-#queue .track {
+#queue .track, #message .track {
   width: 200px;
   height: 200px;
   border: solid 1px #dfdfdf;
   background: #dfdfdf;
-  margin: 0 10px 10px 0;
   padding: 0;
   float: left;
   position: relative;
+  text-align: left;
 }
 
-#queue .track a {
+#queue .track {
+  margin: 0 10px 10px 0;
+}
+
+#queue .track a, #message .track a {
   color: #FFF;
   text-decoration: none;
 }
@@ -455,28 +459,55 @@ dd {
 #queue .track:first-child {
 }
 
-#queue .track .title {
+#queue .track .title, #message .track .title {
   padding: 5px 10px 5px 10px;
-  height: 35px;
   font-family:"Century Gothic";
   font-size: 14px;
   font-weight: bold;
   color: #FFF;
   position: absolute;
-  top: 155px;
   width: 180px;
   background: url('/theme/cramppbo/images/trackbg.png');
   z-index: 51;
 }
 
-#queue .track .title .trackname {
+#queue .track .title {
+  top: 155px;
+  height: 35px;  
+}
+
+
+#message .track .title {
+  top: 125px;
+  height: 65px;
+}
+
+#queue .track .title .trackname, #message .track .title .trackname {
   overflow: hidden;
   margin: 0;
   padding: 0;
   height: 20px;
 }
 
-#queue .track .title .artist {
+#queue .track .title .artist, #message .track .title .artist {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 15px;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+#message .track .title .duration {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 15px;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+#message .track .title .preview {
   overflow: hidden;
   margin: 0;
   padding: 0;

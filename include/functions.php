@@ -10,6 +10,7 @@
       $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()) WHERE `key`='".addslashes($_SESSION['user']->key)."'");    
       return true;
     } 
+/*
     elseif (isset($_COOKIE['rrrrr_userkey']) && isset($_COOKIE['rrrrr_token'])) {
       $rs = $db->query("SELECT `key`, token, secret, curator FROM user WHERE `key`='".$_COOKIE['rrrrr_userkey']."' AND token='".addslashes($_COOKIE['rrrrr_token'])."' LIMIT 1");
       
@@ -21,6 +22,7 @@
         $_SESSION['access_secret'] = $rec['secret'];
       }
     }
+*/
     
     $op = $_GET["op"];
     if($op == "login") {
