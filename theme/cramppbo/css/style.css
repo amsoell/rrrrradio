@@ -720,23 +720,23 @@ br.clear {
   padding: 2px;
 }
 
-#error .buttons {
+#popup .buttons {
   padding-top: 5px;
   clear: both;
 }
 
-#error .button {
+#popup .button {
   padding: 0 5px;
   color: #C70;  
   cursor: pointer;
 }
 
-#error #message {
+#popup #message {
   overflow: auto;
   zoom:1;
 }
 
-#error #message .album {
+#popup #message .album {
   margin-left: auto;
   margin-right: auto;
   width: 150px;
@@ -783,5 +783,13 @@ label {
   overflow: hidden;
   width: 12px;
   height: 12px;
+  padding-right: 5px;
+}
+
+.trackPreview .request {
+  cursor: pointer;
+}
+
+.trackPreview .request img {
   padding-right: 5px;
 }

@@ -88,6 +88,7 @@ function queueTrack(trackKey) {
           display(d.response);
         }
       } else {
+        $('#album #'+trackKey).addClass('randomable');
         display('Track successfully added to queue');
       }
       updateQueue();

@@ -15,7 +15,7 @@ var RdioPreview = {
       RdioPreviewer().rdio_seek(30);      
       setTimeout("RdioPreviewer().rdio_setMute(0)", 1000);
     } else if (state==2) {
-      $('.preview img').attr('src', '/theme/cramppbo/images/preview.play.jpg');
+      $('.preview img').attr('src', '/theme/cramppbo/images/preview.play.png');
     } else {
       RdioPreviewer().rdio_setMute(1);
       $('.preview img').attr('src', '/theme/cramppbo/images/ajax-loader.gif');

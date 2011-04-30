@@ -52,26 +52,26 @@
 
     if (typeof msg == 'object') {
       if (typeof msg.url != 'undefined') {
-        $('#error #message').html('<img src="/theme/cramppbo/images/ajax-loader-bar.gif" />').css({
+        $('#popup #message').html('<img src="/theme/cramppbo/images/ajax-loader-bar.gif" />').css({
           width: '500px',
           height: '500px'
         });
-        $('#errorlink').trigger('click').css('width','auto');
+        $('#popuplink').trigger('click').css('width','auto');
         
         $.ajax({
           url: msg.url+'&view=full',
           success: function(d) {
-            $('#error #message').html(d);
+            $('#popup #message').html(d);
             $.fancybox.resize();
           }
         })
       } else if (typeof msg.iframe != 'undefined') {
-        $('#error #message').css({ width: '500px', height: '500px' }).append($('<iframe></iframe>').attr('width',500).attr('height', 500).attr('frameborder', 0).attr('src', msg.iframe));
-        $('#errorlink').trigger('click').css('width','auto');        
+        $('#popup #message').css({ width: '500px', height: '500px' }).append($('<iframe></iframe>').attr('width',500).attr('height', 500).attr('frameborder', 0).attr('src', msg.iframe));
+        $('#popuplink').trigger('click').css('width','auto');        
       } else {
         // must be a jquery object. Let's display the contents
-        $('#error #message').html($('<div>').append(msg.clone()).remove().html());
-        $('#errorlink').trigger('click');
+        $('#popup #message').html($('<div>').append(msg.clone()).remove().html());
+        $('#popuplink').trigger('click');
       }
     } else {
       if ((arguments.length==1) && window.fluid) {
@@ -80,22 +80,22 @@
             description: msg
         });
       } else {
-        $('#error #message').css({
+        $('#popup #message').css({
           width: 'auto',
           height: 'auto'
         }).html(msg);    
         if (arguments.length>1) {
-          $('#error #message').append($('<div></div>').addClass('buttons'));      
+          $('#popup #message').append($('<div></div>').addClass('buttons'));      
           for (var key in buttons) {
-            $('<a href="javascript:;"></a>').addClass('button').html(key).bind('click', buttons[key]).appendTo('#error #message .buttons');
+            $('<a href="javascript:;"></a>').addClass('button').html(key).bind('click', buttons[key]).appendTo('#popup #message .buttons');
           }
   
         } else {
           $close = $('<br /><br /><a href="javascript:;" onClick="$.fancybox.close();">ok</a>');      
-          $('#error #message').append($close);  
+          $('#popup #message').append($close);  
         }
   
-        $('#errorlink').trigger('click')
+        $('#popuplink').trigger('click')
       }
     }
   }
@@ -563,9 +563,7 @@
         if (clicks == 1) {
           setTimeout(function() {
             if(clicks == 1) {
-              queueTrack(node.attr('id'));
-              $(this).addClass('randomable');
-            } else {
+              // SINGLE CLICK
               $.ajax({
                 url: '/data.php',
                 dataType: 'json',
@@ -577,17 +575,24 @@
                       .append($('<h2></h2>').html(d.name))
                       .append($('<h3></h3>').html(d.artist+' - '+d.album))
                       .append($('<div></div>').html(parseInt(d.duration / 60)+':'+(String('0'+d.duration %60, -2).substr(-2,2))))
-                      .append($('<div><div>').addClass('preview').attr('rel', node.attr('id')).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.jpg')))
+                      .append($('<div><div>').addClass('preview').attr('rel', node.attr('id')).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.png')))
+                      .append($('<div><div>').addClass('request').attr('rel', node.attr('id')).html('Add to queue').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))
                     )
                   display($detail);
                 }
-              });
+              });              
+            } else {
+              // DOUBLE CLICK
+              queueTrack(node.attr('id'));
             }
             clicks = 0;
           }, 500);
         }
       }      
-      
+    });
+    
+    $('.request').live('click', function() {
+      queueTrack($(this).attr('rel'));
     });
       
     $.widget( "custom.catcomplete", $.ui.autocomplete, {
@@ -804,10 +809,13 @@
       'padding': 0
     });
     
-    $('#errorlink').fancybox({
+    $('#popuplink').fancybox({
       width: 300,
-      showCloseButton: false,
       onCleanup: function() {
+        $('#popup #message').css({
+          width: 'auto',
+          height: 'auto'
+        })
         stopPreview();
       }
     })

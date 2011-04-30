@@ -63,10 +63,10 @@
       <div id="RdioStream"></div>
       <div id="RdioPreview"></div>      
       <div class="hidden">
-        <div id="error">
+        <div id="popup">
           <div id="message"></div>
         </div>
-        <a href="#error" id="errorlink"></a>
+        <a href="#popup" id="popuplink"></a>
 <?php
   if (!$rdio->loggedIn()) { 
 ?>    
