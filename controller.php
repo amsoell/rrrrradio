@@ -94,6 +94,31 @@
       $db->query("DELETE FROM request WHERE albumKey='".$_REQUEST['a']."' LIMIT 1");
       
       break;
+    case "removefromcollection":
+      switch (substr($_REQUEST['key'], 0, 1)=='t') {
+        case 't':
+          $t = $rdio->get(array("keys"=>$_REQUEST['key']));
+          $a = $t->result->$_REQUEST['key']->albumKey;
+          break;
+        case 'a':
+          $a = $_REQUEST['key'];
+          break;
+      }
+      
+      if (isset($a)) {
+        $t = $rdio->get(array("keys"=>$a, "extras"=>"trackKeys"));
+        $t = $t->result->$a;
+        
+        $keys = array();
+        foreach ($t->trackKeys as $trackKey) {
+          $keys[] = $trackKey;
+        }
+          
+        $rdio->removeFromCollection(array("keys"=>implode(',',$keys)));        
+        $db->query("DELETE FROM queue WHERE trackKey IN ('".implode("','",$keys)."')");
+      }
+
+      break;
     case "approve":
       $rs = $rdio->get(array('keys'=>$_REQUEST['a'], 'extras'=>'trackKeys'));
       

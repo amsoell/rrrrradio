@@ -578,6 +578,7 @@
                       .append($('<div><div>').addClass('preview').attr('rel', node.attr('id')).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.png')))
                       .append($('<div><div>').addClass('request').attr('rel', node.attr('id')).html('Add to queue').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))
                     )
+                    .append($('<div></div>').addClass('_tip footnote').html('Tip: Double click tracks to skip this popup and add songs to the queue immediately'))
                   display($detail);
                 }
               });              

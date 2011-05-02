@@ -757,12 +757,25 @@ label {
 }
 
 .trackPreview {
-  width: 250px;
-  text-align: center;
+  width: 500px;
+  text-align: left;
+  position: relative;
+}
+
+.trackPreview .detail {
+  width: 290px;
+  position: absolute;
+  left: 210px;
+  top: 0;
 }
 
 .trackPreview .coverart {
   border: 1px solid #DFDFDF;
+}
+
+.trackPreview .footnote {
+  clear: left;
+  padding-top: 10px;
 }
 
 .trackPreview h2 {
