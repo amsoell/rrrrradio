@@ -258,6 +258,16 @@
         $('.song_title').html(track.name);
         $('.song_artist').html(track.artist);
         $('.song_album').html(track.album);
+        if (track.likes>0) {
+          $('.song_likes').html('This song is loved by ' + track.likes + ' listener'+(track.likes>1?'s':'')).prepend($('<img>').attr('src', '/theme/cramppbo/images/tools/heart.png'));
+        } else {
+          $('.song_likes').html('');
+        }
+        if (track.requests>0) {
+          $('.song_requests').html('This song has been requested ' + track.requests + ' time'+(track.requests>1?'s':'')).prepend($('<img>').attr('src', '/theme/cramppbo/images/tools/request.png'));
+        } else {
+          $('.song_requests').html('');
+        }        
       }    
     
       $t = $('<div></div>').attr('id', track.key).addClass('track').css('background-image', 'url('+track.icon+')');
@@ -592,7 +602,7 @@
       }      
     });
     
-    $('.request').live('click', function() {
+    $('#message .request').live('click', function() {
       queueTrack($(this).attr('rel'));
     });
       

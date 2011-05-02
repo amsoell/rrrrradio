@@ -84,6 +84,7 @@ function queueTrack(trackKey) {
             title: "Oops...",
             description: d.response
           })
+          $.fancybox.close();
         } else {
           display(d.response);
         }

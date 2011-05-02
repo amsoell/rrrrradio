@@ -12,13 +12,14 @@
     function getQueue() {
       $db = new Db();
 
-      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.albumKey, queue.artistKey, queue.startplay, queue.endplay ";
+      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.albumKey, queue.artistKey, queue.startplay, queue.endplay, GROUP_CONCAT(f.userKey) AS likes, COUNT(q.trackKey) AS requests ";
       if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
-        $sqlx .= ", mark.mark FROM queue LEFT JOIN mark on queue.trackKey=mark.trackKey AND queue.userKey=mark.userKey ";
+        $sqlx .= ", m.mark FROM queue LEFT JOIN mark AS m ON queue.trackKey=m.trackKey AND m.userKey='".$_SESSION['user']->key."' ";
       } else {
         $sqlx .= "FROM queue ";
       }
-      $sqlx .= "WHERE endplay>=UNIX_TIMESTAMP(NOW()) ORDER BY startplay";
+      $sqlx .= "LEFT JOIN mark AS f ON queue.trackKey=f.trackKey LEFT JOIN (SELECT * FROM queue WHERE userKey IS NOT NULL) AS q ON queue.trackKey=q.trackKey WHERE queue.endplay>=UNIX_TIMESTAMP(NOW()) AND (f.mark IS NULL OR f.mark=1) GROUP BY queue.trackKey ORDER BY startplay";
+
       $rs = $db->query($sqlx);
       $tracks = Array();
 
@@ -32,6 +33,8 @@
         $t->endplay = $rec['endplay'];
         $t->duration = $rec['endplay']-$rec['startplay'];
         $t->mark = $rec['mark'];
+        $t->likes = is_null($rec['likes'])?0:count(explode(',',$rec['likes']));
+        $t->requests = $rec['requests'];
         if (!is_null($rec['userKey'])) {
           $t->user = new User($rec['userKey']);
         }

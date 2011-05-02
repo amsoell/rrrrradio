@@ -269,8 +269,18 @@ dd {
   float: left;  
 }
 
-#queue #now_playing #album {
+#queue #now_playing  {
   font-size: 11px;
+}
+
+#queue #now_playing .song_title {
+  font-size: 16px
+}
+
+#queue #now_playing #detail img {
+  padding-right: 5px;
+  width: 10px;
+  height: 10px;
 }
 
 .progress {

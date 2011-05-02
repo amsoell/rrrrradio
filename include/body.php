@@ -47,6 +47,11 @@
           <div id="now_playing">
             <div id="song"><span class="song_title"></span> - <span class="song_artist"></span></div>
             <div id="album">From the album <span class="song_album"></span></div>
+            <br />
+            <div id="detail">
+              <div class="song_likes"></div>
+              <div class="song_requests"></div>
+            </div>
           </div>
 <?php else: ?>
           <div id="intro">
