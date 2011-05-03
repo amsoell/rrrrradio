@@ -5,7 +5,7 @@
         Five Rs, each one louder than the last.
       </div>
       <div class="rdio">
-        rrrrradio is powered by <a href="<?php print $c->affiliate_link_subscribe; ?>" target="_blank"><img src="/theme/cramppbo/images/RdioWhiteLogo.png" border="0" /></a>
+        Powered by <a href="<?php print $c->affiliate_link_subscribe; ?>" target="_blank"><img src="/theme/cramppbo/images/RdioWhiteLogo.png" border="0" /></a>, <a href="http://typekit.com/colophons/goy0iya" target="_blank">fonts by Typekit</a>
       </div>
     </div>
     <script type="text/javascript">
