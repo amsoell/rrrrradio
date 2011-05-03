@@ -270,6 +270,9 @@
         }       
         if (track.user != null) {         
           $('.song_requester').html('Requested by '+track.user.firstName+' '+track.user.lastName).prepend($('<img>').attr('src', track.user.icon))
+        } else {
+          $('.song_requester').html('');
+          
         }
       }    
     
