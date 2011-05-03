@@ -51,6 +51,7 @@
             <div id="detail">
               <div class="song_likes"></div>
               <div class="song_requests"></div>
+              <div class="song_requester"></div>              
             </div>
           </div>
 <?php else: ?>

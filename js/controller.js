@@ -264,10 +264,13 @@
           $('.song_likes').html('');
         }
         if (track.requests>0) {
-          $('.song_requests').html('This song has been requested ' + track.requests + ' time'+(track.requests>1?'s':'')).prepend($('<img>').attr('src', '/theme/cramppbo/images/tools/request.png'));
+          $('.song_requests').html('This song has been requested ' + (track.requests==1?'once':(track.requests==2?'twice':track.requests+' times'))).prepend($('<img>').attr('src', '/theme/cramppbo/images/tools/request.png'));
         } else {
           $('.song_requests').html('');
-        }        
+        }       
+        if (track.user != null) {         
+          $('.song_requester').html('Requested by '+track.user.firstName+' '+track.user.lastName).prepend($('<img>').attr('src', track.user.icon))
+        }
       }    
     
       $t = $('<div></div>').attr('id', track.key).addClass('track').css('background-image', 'url('+track.icon+')');
