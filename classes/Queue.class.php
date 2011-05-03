@@ -18,7 +18,7 @@
       } else {
         $sqlx .= "FROM queue ";
       }
-      $sqlx .= "LEFT JOIN mark AS f ON queue.trackKey=f.trackKey LEFT JOIN (SELECT * FROM queue WHERE userKey IS NOT NULL) AS q ON queue.trackKey=q.trackKey WHERE queue.endplay>=UNIX_TIMESTAMP(NOW()) AND (f.mark IS NULL OR f.mark=1) GROUP BY queue.trackKey ORDER BY startplay";
+      $sqlx .= "LEFT JOIN (SELECT * FROM mark WHERE mark=1) AS f ON queue.trackKey=f.trackKey LEFT JOIN (SELECT * FROM queue WHERE userKey IS NOT NULL) AS q ON queue.trackKey=q.trackKey WHERE queue.endplay>=UNIX_TIMESTAMP(NOW()) GROUP BY queue.trackKey ORDER BY startplay";
 
       $rs = $db->query($sqlx);
       $tracks = Array();
