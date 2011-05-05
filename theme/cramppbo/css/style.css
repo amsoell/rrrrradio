@@ -402,6 +402,14 @@ dd {
   font-weight: bold;
 }
 
+#collection div#browser .unstreamable h1 {
+  padding-bottom: 0 !important;
+}
+
+#collection div#browser .unstreamable h2 {
+  padding-bottom: 10px !important;
+}
+
 #collection #browser #album .album img {
   clear: both;
   float: left;
@@ -436,6 +444,11 @@ dd {
 
 #collection #browser #album li.randomable {
   font-weight: 700;
+}
+
+.unstreamable {
+  font-weight: 300 !important;
+  color: #999 !important;
 }
 
 #queue {
@@ -807,6 +820,12 @@ label {
   font-size: 14px;
 }
 
+.trackPreview .detail img {
+  height: 12px;
+  width: 12px;
+  padding-right: 5px;
+}
+
 .trackPreview .preview {
   cursor: pointer;
   padding-top: 15px;
@@ -818,12 +837,9 @@ label {
 .trackPreview .preview img {
   background: url('/theme/cramppbo/images/ajax-loader.gif') no-repeat;
   overflow: hidden;
-  width: 12px;
-  height: 12px;
-  padding-right: 5px;
 }
 
-.trackPreview .request {
+.trackPreview .request, .trackPreview .like {
   cursor: pointer;
 }
 

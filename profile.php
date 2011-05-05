@@ -41,7 +41,7 @@
   $trackKeys = Array();
   foreach ($rs as $key=>$track) {
     $trackKeys[] = $track->key;
-    print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'">'.$track->name." - ".$track->artist."</a></li>\n";
+    print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'" class="'.($track->canStream?'':'unstreamable').'">'.$track->name." - ".$track->artist."</a></li>\n";
   }  
 ?>
     <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Export these songs to an Rdio playlist</li>
@@ -54,7 +54,7 @@
   $trackKeys = Array();
   foreach ($keys as $key) {
     $trackKeys[] = $key;
-    print '<li><a href="#!/'.$rs->result->$key->artistKey.'/'.$rs->result->$key->albumKey.'/'.$rs->result->$key->key.'">'.$rs->result->$key->name." - ".$rs->result->$key->artist."</a></li>\n";
+    print '<li><a href="#!/'.$rs->result->$key->artistKey.'/'.$rs->result->$key->albumKey.'/'.$rs->result->$key->key.'" class="'.($rs->result->$key->canStream?'':'unstreamable').'">'.$rs->result->$key->name." - ".$rs->result->$key->artist."</a></li>\n";
   }  
 ?>
     <li class="export" rel="<?php print implode(',',array_reverse($trackKeys)); ?>" title="Save this as an Rdio playlist">Export these songs to an Rdio playlist</li>
@@ -67,7 +67,7 @@
   $trackKeys = Array();
   foreach ($rs->result as $key=>$track) {
     $trackKeys[] = $track->key;
-    print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'">'.$track->name." - ".$track->artist."</a></li>\n";
+    print '<li><a href="#!/'.$track->artistKey.'/'.$track->albumKey.'/'.$track->key.'" class="'.($rs->result->$key->canStream?'':'unstreamable').'">'.$track->name." - ".$track->artist."</a></li>\n";
   }  
 ?>
     <li class="export" rel="<?php print implode(',',$trackKeys); ?>" title="Save this as an Rdio playlist">Export these songs to an Rdio playlist</li>

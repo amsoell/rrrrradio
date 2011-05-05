@@ -103,19 +103,28 @@
   function displayArtistWorks(d) {
     $('#collection #browser #album').empty();
     for (i=0; i<d.length; i++) {
-      if ((d[i]!=undefined) && (d[i].canStream)) {
+      if (d[i]!=undefined) {
         $a = $('<div></div>').addClass('album').attr('id', d[i].key);
+        if (!d[i].canStream) $a.addClass('unstreamable');
         $a.append($('<img>').attr('src',d[i].icon).attr('width','125').attr('height','125'));
         
         $d = $('<div></div>').addClass('detail');
         $d.append($('<h1></h1>').html(d[i].name));
+        if (!d[i].canStream) {
+          if ((new Date(d[i].releaseDate)).getTime() > (new Date()).getTime()) {
+            $d.append($('<h2></h2>').html('Available: '+(new Date(d[i].releaseDate)).toLocaleDateString()));
+          } else {
+            $d.append($('<h2></h2>').html('Unavailable for streaming'));        
+          }
+        }
         
         $tracks = $('<ol></ol>');
         $prevtrack = 0;
         for (j=0; j<d[i].tracks.length; j++) {
-          if (d[i].tracks[j].canStream && (d[i].tracks[j].trackNum!=$prevtrack)) {
+          if (d[i].tracks[j].trackNum!=$prevtrack) {
             $t = $('<li></li>').addClass('track').attr('id', d[i].tracks[j].key).attr('value', d[i].tracks[j].trackNum).html(d[i].tracks[j].name);
             if (d[i].tracks[j].randomable==1) $t.addClass('randomable');
+            if (!d[i].canStream) $t.addClass('unstreamable');
             $tracks.append($t);
           }
           $prevtrack = d[i].tracks[j].trackNum;
@@ -194,9 +203,6 @@
           classes: 'ui-tooltip-light ui-tooltip-shadow ui-tooltip-rounded'
         }
         
-      }).click(function() { 
-        $('.qtip').qtip('hide');
-        setmark($(this).attr('rel'), 1); 
       })
     ).append(
       $('<div></div>').attr('rel', key).addClass('dislike').html('Hate it!').prepend($('<img>').attr('src','/theme/cramppbo/images/cancel.png')).qtip({
@@ -217,9 +223,6 @@
           classes: 'ui-tooltip-light ui-tooltip-shadow ui-tooltip-rounded'
         }
         
-      }).click(function() { 
-        $('.qtip').qtip('hide');
-        setmark($(this).attr('rel'), -1); 
       })
     ).click(function() { setmark($(this).attr('rel'), -1); });
     
@@ -468,6 +471,18 @@
       }
     });  
     
+    $('.like').live('click', function() { 
+        $('.qtip').qtip('hide');
+        $.fancybox.close();
+        setmark($(this).attr('rel'), 1); 
+      });
+    
+    $('.dislike').live('click', function() { 
+        $('.qtip').qtip('hide');
+        $.fancybox.close();
+        setmark($(this).attr('rel'), -1); 
+      })
+    
     $('.approveRequest').live('click', function() {
       node = $(this);
       
@@ -580,27 +595,14 @@
           setTimeout(function() {
             if(clicks == 1) {
               // SINGLE CLICK
-              $.ajax({
-                url: '/data.php',
-                dataType: 'json',
-                data: 't='+node.attr('id'),
-                success: function(d) {
-                  $detail = $('<div></div>').addClass('trackPreview')
-                    .append($('<img>').addClass('coverart').attr('src',d.icon))
-                    .append($('<div></div>').addClass('detail')
-                      .append($('<h2></h2>').html(d.name))
-                      .append($('<h3></h3>').html(d.artist+' - '+d.album))
-                      .append($('<div></div>').html(parseInt(d.duration / 60)+':'+(String('0'+d.duration %60, -2).substr(-2,2))))
-                      .append($('<div><div>').addClass('preview').attr('rel', node.attr('id')).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.png')))
-                      .append($('<div><div>').addClass('request').attr('rel', node.attr('id')).html('Add to queue').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))
-                    )
-                    .append($('<div></div>').addClass('_tip footnote').html('Tip: Double click tracks to skip this popup and add songs to the queue immediately'))
-                  display($detail);
-                }
-              });              
+              displayTrack(node.attr('id'));             
             } else {
               // DOUBLE CLICK
-              queueTrack(node.attr('id'));
+              if (node.hasClass('unstreamable')) {
+                displayTrack(node.attr('id'));             
+              } else {
+                queueTrack(node.attr('id'));
+              }
             }
             clicks = 0;
           }, 500);

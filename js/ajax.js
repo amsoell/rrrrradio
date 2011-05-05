@@ -97,6 +97,37 @@ function queueTrack(trackKey) {
   });
 }
 
+function displayTrack(trackKey) {
+  $.ajax({
+    url: '/data.php',
+    dataType: 'json',
+    data: 't='+trackKey,
+    success: function(d) {
+      $detail = $('<div></div>').addClass('trackPreview')
+        .append($('<img>').addClass('coverart').attr('src',d.icon))
+        .append($('<div></div>').addClass('detail')
+          .append($('<h2></h2>').html(d.name))
+          .append($('<h3></h3>').html(d.artist+' - '+d.album))
+          .append($('<div></div>').html(parseInt(d.duration / 60)+':'+(String('0'+d.duration %60, -2).substr(-2,2))))
+        )
+
+        
+      if (d.canStream) {
+        $detail.append($('<div></div>').addClass('_tip footnote').html('Tip: Double click tracks to skip this popup and add songs to the queue immediately'))
+          .find('.detail').append($('<div><div>').addClass('preview').attr('rel', trackKey).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.png')))
+                          .append($('<div><div>').addClass('request').attr('rel', trackKey).html('Add to queue').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))
+                          .append($('<div><div>').addClass('like').attr('rel', trackKey).html('Mark as favorite').prepend($('<img>').attr('src','/theme/cramppbo/images/tools/heart.png')));                          
+                               
+      } else {
+        $detail.find('.detail').append($('<br /><div><div>').addClass('like').attr('rel', trackKey).html('Mark as favorite').prepend($('<img>').attr('src','/theme/cramppbo/images/tools/heart.png')))
+                               .append($('<div></div>').html('This track is not available for playback at this time.'));
+      }
+  
+      display($detail);
+    }
+  }); 
+}
+
 function setmark(key, val) {
   $('.qtip').qtip('hide');
   $.ajax({
