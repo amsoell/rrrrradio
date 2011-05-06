@@ -47,6 +47,7 @@
     <script src="/js/jquery-ui-1.8.11.custom.min.js"></script>  
     <script src="/js/jquery.qtip.pack.js"></script>          
     <script src="/js/jquery.scrollTo-1.4.2-min.js"></script>                  
+    <script src="/js/jquery.hotkeys.js"></script>       
     <script src="/js/controller.js"></script>      
     <script type="text/javascript" src="http://use.typekit.com/goy0iya.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>

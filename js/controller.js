@@ -1,14 +1,27 @@
 
   function playerMute() {
     RdioPlayer().rdio_setMute(1);
-    window.fluid.removeDockMenuItem('Mute');
-    window.fluid.addDockMenuItem('Unmute', function() { playerUnmute() });
   }
   
   function playerUnmute() {
     RdioPlayer().rdio_setMute(0);
-    window.fluid.removeDockMenuItem('Unmute');
-    window.fluid.addDockMenuItem('Mute', function() { playerMute() });
+  }
+  
+  function toggleMute(mute) {
+    if ((mute == 1) || (mute == 0)) muting = mute;
+    
+    if (mute==1) {
+      playerMute();
+      muting = 1;
+      
+      $('.player_mute').attr('src','/theme/cramppbo/images/tools/sound_mute.png');
+    } else {
+      playerUnmute();
+      muting = 0;
+      ignoring = 0;
+            
+      $('.player_mute').attr('src','/theme/cramppbo/images/tools/sound_high.png');      
+    }
   }
   
   function radioplay() {
@@ -17,15 +30,20 @@
   }
    
   
-  function setVolumeIndicator(level) {
-    $('#volume').children().each(function(i, e) {
-      if (i<level) {
-        $(e).attr('src','/theme/cramppbo/images/volnotch.gif');
-      } else {
-        $(e).attr('src','/theme/cramppbo/images/volnotchoff.gif');
-      }
-    });
+  function setVolume(level, indicatorOnly) { // level = integer from 1 to 10
+    if ((level>=0) & (level<=10)) {
+      $('#volume').attr('rel',level).children().each(function(i, e) {
+        if (indicatorOnly!=true) RdioPlayer().rdio_setVolume(parseInt(level)/10);    
+        if (i<level) {
+          $(e).attr('src','/theme/cramppbo/images/volnotch.gif');
+        } else {
+          $(e).attr('src','/theme/cramppbo/images/volnotchoff.gif');
+        }
+      });
+    }
   }
+  
+  
   
   function RdioPlayer() {
     return $('#RdioStream').get(0);
@@ -400,6 +418,24 @@
   
 
   $(document).ready(function() {
+    // keyboard shortcuts
+    $(document).bind('keydown', 'Ctrl+m', function() {
+      toggleMute();
+    });
+    
+    $(document).bind('keydown', 'Ctrl+i', function() {
+      ignoring = 1;
+      toggleMute(1);
+    });    
+    
+    $(document).bind('keydown', 'Ctrl+down', function() {
+      setVolume(parseInt($('#volume').attr('rel'))-1);
+    })
+
+    $(document).bind('keydown', 'Ctrl+up', function() {
+      setVolume(parseInt($('#volume').attr('rel'))+1);
+    })
+  
     $('a[href^="#!/"]').live('click', function() {
       scrollTo($(this).attr('href').substr(3));
       return false;
@@ -668,16 +704,9 @@
     });
   
     $('.player_mute').live('click', function() {
-      RdioPlayer().rdio_setMute(1);
-      $(this).attr('src','/theme/cramppbo/images/tools/sound_mute.png').addClass('player_unmute').removeClass('player_mute');
+      toggleMute();
     });
-    
-    $('.player_unmute').live('click', function() {
-      muting = 1;
-      RdioPlayer().rdio_setMute(0);
-      $(this).attr('src','/theme/cramppbo/images/tools/sound_high.png').addClass('player_mute').removeClass('player_unmute');    
-    });
-    
+        
     $('.catchup').live('click', function() {
       if (skip>0) {
         RdioPlayer().rdio_seek(skip+currentPosition)
@@ -806,9 +835,8 @@
     
     $('#volume img').click(function() {
       level = $(this).attr('rel');
-      volume = $(this).parent();
-      RdioPlayer().rdio_setVolume($(this).attr('rel')/10);
-      setVolumeIndicator(level);
+
+      setVolume(level);
     })
   
     $('#collection .header').click(function(event) {

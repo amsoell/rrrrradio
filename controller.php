@@ -95,25 +95,31 @@
       
       break;
     case "removefromcollection":
-      switch (substr($_REQUEST['key'], 0, 1)=='t') {
-        case 't':
-          $t = $rdio->get(array("keys"=>$_REQUEST['key']));
-          $a = $t->result->$_REQUEST['key']->albumKey;
-          break;
-        case 'a':
-          $a = $_REQUEST['key'];
-          break;
-      }
+      $thekeys = explode(',',$_REQUEST['keys']);
       
+      $a = array();
+      foreach ($thekeys as $key) {
+        switch (substr($key, 0, 1)) {
+          case 't':
+            $t = $rdio->get(array("keys"=>$key));
+            $a[] = $t->result->$key->albumKey;
+            break;
+          case 'a':
+            $a[] = $key;
+            break;
+        }
+      }
+        
       if (isset($a)) {
-        $t = $rdio->get(array("keys"=>$a, "extras"=>"trackKeys"));
-        $t = $t->result->$a;
+        $t = $rdio->get(array("keys"=>implode(',',$a), "extras"=>"trackKeys"));
         
         $keys = array();
-        foreach ($t->trackKeys as $trackKey) {
-          $keys[] = $trackKey;
+        foreach ($t->result as $a) {
+          foreach ($a->trackKeys as $trackKey) {
+            $keys[] = $trackKey;
+          }
         }
-          
+        
         $rdio->removeFromCollection(array("keys"=>implode(',',$keys)));        
         $db->query("DELETE FROM queue WHERE trackKey IN ('".implode("','",$keys)."')");
       }

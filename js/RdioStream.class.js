@@ -28,6 +28,7 @@ var RdioStream = {
       if (playerstate!=2) {
         playerstate=2;
         RdioPlayer().rdio_play(_QUEUE.getNext().key);
+        if (ignoring==1) toggleMute(0);        
       }
     } else 
     if (state==4) { // PAUSED -- USUALLY ONLY HAPPENS WHEN RDIO IS DOWN
@@ -57,7 +58,7 @@ var RdioStream = {
   
   volumeChanged: function(level) {
     if (muting!=1) {
-      setVolumeIndicator(level);
+      setVolume(level*10, true);
     } else {
       muting = 0;
     }

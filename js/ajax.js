@@ -2,6 +2,7 @@ var _QUEUE = new musicQueue();
 var skip;
 var playerstate = 2;
 var muting = 0;
+var ignoring = 0;
 var currentPosition = 0;
 
 // Gets the latest queue from the server and passes it on to the JS:Queue object

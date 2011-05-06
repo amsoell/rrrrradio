@@ -21,12 +21,12 @@
     
     function load($key) {
       $r = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
-      $t = $r->get(array("keys"=> $key, "extras"=>"trackNum"));
+      $t = $r->get(array("keys"=> $key, "extras"=>"trackNum,isOnCompilation"));
 
       $this->key = $key;
       $this->name = $t->result->$key->name;
       $this->album = $t->result->$key->albumKey;
-      $this->artist = $t->result->$key->artistKey;
+      $this->artist = ($t->result->$key->isOnCompilation?'r62':$t->result->$key->artistKey);
       $this->icon = $t->result->$key->icon;
       $this->duration = $t->result->$key->duration;
       $this->trackNum = $t->result->$key->trackNum;
