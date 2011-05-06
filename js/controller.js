@@ -129,8 +129,8 @@
         $d = $('<div></div>').addClass('detail');
         $d.append($('<h1></h1>').html(d[i].name));
         if (!d[i].canStream) {
-          if ((new Date(d[i].releaseDate)).getTime() > (new Date()).getTime()) {
-            $d.append($('<h2></h2>').html('Available: '+(new Date(d[i].releaseDate)).toLocaleDateString()));
+          if ((new Date(d[i].releaseDate.replace(/-/gi,"/"))).getTime() > (new Date()).getTime()) {
+            $d.append($('<h2></h2>').html('Available: '+(new Date(d[i].releaseDate.replace(/-/gi,"/"))).toLocaleDateString()));
           } else {
             $d.append($('<h2></h2>').html('Unavailable for streaming'));        
           }
