@@ -9,9 +9,9 @@
   }
   
   function toggleMute(mute) {
-    if ((mute == 1) || (mute == 0)) muting = mute;
+    if ((mute == 1) || (mute == 0)) muting = ((mute+1)%2);
     
-    if (mute==1) {
+    if (muting==0) {
       playerMute();
       muting = 1;
       
@@ -922,7 +922,7 @@
     
     if (window.location.href.indexOf('#!/')>0) scrollTo(window.location.href.substring(window.location.href.indexOf('#!/')+3));
   
-    setInterval("getQueue()", 15000);  
+    setInterval("updateQueue()", 15000);  
   });
   
   

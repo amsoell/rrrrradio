@@ -45,6 +45,7 @@ var RdioStream = {
   
   positionChanged: function(pos) {
     currentPosition = pos;
+
     if (skip==-1) {
       $('.progress').each(function() {
         progress = $(this);
