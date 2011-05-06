@@ -12,7 +12,7 @@
     function getQueue() {
       $db = new Db();
 
-      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.albumKey, queue.artistKey, queue.startplay, queue.endplay, GROUP_CONCAT(f.userKey) AS likes, COUNT(q.trackKey) AS requests ";
+      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.albumKey, queue.artistKey, queue.startplay, queue.endplay, queue.muted, GROUP_CONCAT(f.userKey) AS likes, COUNT(q.trackKey) AS requests ";
       if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
         $sqlx .= ", m.mark FROM queue LEFT JOIN mark AS m ON queue.trackKey=m.trackKey AND m.userKey='".$_SESSION['user']->key."' ";
       } else {
@@ -35,6 +35,7 @@
         $t->mark = $rec['mark'];
         $t->likes = is_null($rec['likes'])?0:count(explode(',',$rec['likes']));
         $t->requests = $rec['requests'];
+        $t->muted = explode(',',$rec['muted']);
         if (!is_null($rec['userKey'])) {
           $t->user = new User($rec['userKey']);
         }
@@ -48,6 +49,22 @@
     function freeQueue() {
       $c = new Config();
       return ($this->length()<$c->free_if_queue_less_than);
+    }
+    
+    function addMuter($userKey) {
+      $db = new Db();
+      $db->query("UPDATE queue SET muted=CONCAT('$userKey',',',IFNULL(muted, '')) WHERE startPlay<=".time()." AND endPlay>=".time()." AND (muted NOT LIKE '%$userKey%' OR muted IS NULL)");
+    }
+    
+    function removeMuter($userKey) {
+      $db = new Db();
+      $rs = $db->query("SELECT id, muted FROM queue WHERE startPlay<=".time()." AND endPlay>=".time()." AND muted LIKE '%$userKey%'");
+      if ($rec = mysql_fetch_array($rs)) {
+        $muted = $rec['muted'];
+        $muted = str_replace($userKey, "", $muted);
+        $muted = str_replace(",,",",",$muted);
+        $db->query("UPDATE queue SET muted='".addslashes($muted)."' WHERE id=".$rec['id']);
+      }
     }
     
     function push($obj, $requested=false, $requestedBy=null) {

@@ -182,6 +182,12 @@ dd {
   width: 18px;  
 }
 
+#toolbar .listeners img.muted {
+  filter:alpha(opacity=20);
+  /* CSS3 standard */
+  opacity:0.2;
+}
+
 #toolbar #tools #ops {
   position: absolute;
   top: 30px;

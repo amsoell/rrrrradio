@@ -4,6 +4,7 @@
   }
   
   function playerUnmute() {
+    if (ignoring==1) unignoreCurrent();
     RdioPlayer().rdio_setMute(0);
   }
   
@@ -41,6 +42,36 @@
         }
       });
     }
+  }
+  
+  function unignoreCurrent() {
+    $.ajax({
+      url: '/controller.php',
+      data: 'r=ignore&off=true',
+      dataType: 'json',
+      success: function(d) {      
+        _QUEUE.updateQueue(d.queue);      
+        refreshListeners(d.listeners);        
+      }
+    });
+    
+    ignoring = 0;
+    toggleMute(0);  
+  }
+  
+  function ignoreCurrent(unmute) {
+    $.ajax({
+      url: '/controller.php',
+      data: 'r=ignore',
+      dataType: 'json',
+      success: function(d) {      
+        _QUEUE.updateQueue(d.queue);      
+        refreshListeners(d.listeners);        
+      }
+    });
+    
+    ignoring = 1;
+    toggleMute(1);  
   }
   
   
@@ -384,6 +415,10 @@
           top: 100
         })
       });
+      
+      if (_QUEUE.q[0].muted.indexOf(listener.key)>=0) {
+        $l.addClass('muted');
+      }
       $('#toolbar .listeners').append($l);
     })
   }
@@ -424,8 +459,7 @@
     });
     
     $(document).bind('keydown', 'Ctrl+i', function() {
-      ignoring = 1;
-      toggleMute(1);
+      ignoreCurrent();
     });    
     
     $(document).bind('keydown', 'Ctrl+down', function() {
@@ -887,7 +921,8 @@
     getQueue();
     
     if (window.location.href.indexOf('#!/')>0) scrollTo(window.location.href.substring(window.location.href.indexOf('#!/')+3));
-    
+  
+    setInterval("getQueue()", 15000);  
   });
   
   

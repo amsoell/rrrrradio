@@ -59,6 +59,7 @@
   class QueueTrack extends Track {
     public $startplay;
     public $endplay;
+    public $muted;
     public $user;
     public $mark;
   }

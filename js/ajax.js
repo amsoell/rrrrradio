@@ -9,6 +9,7 @@ var currentPosition = 0;
 // May be redundant with the existance of the updateQueue function.
 // Consider combining in the future.
 function getQueue($play, $seek) {
+  console.log("running getqueue")
   $.ajax({
     url: '/controller.php',
     dataType: 'json',

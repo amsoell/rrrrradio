@@ -37,6 +37,15 @@
       }
       
       // break intentionally omitted
+    case "ignore":
+      if (isset($_REQUEST['off'])) {
+        $q->removeMuter($_SESSION['user']->key);
+      } else {
+        $q->addMuter($_SESSION['user']->key);
+      }
+      
+      // break intentionally omitted
+      
     case 'getqueue':
       $tracks = $q->getQueue();  
       for ($i=0; $i<count($tracks); $i++) {

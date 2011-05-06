@@ -26,13 +26,14 @@ function musicQueue() {
       if (this.q[i].key == tracks[0].key) {
         q = [];
         
-        q[0] = this.q[i];
+        q[0] = tracks[0];
         for (j=1;j<tracks.length;j++) {
           q[j] = tracks[j];
         }
         
         this.q = q;
         this.ptr = 0;        
+    
         break;
       }
     }
