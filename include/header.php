@@ -15,6 +15,7 @@
       var api_swf = "http://www.rdio.com/api/swf/";
       var playbackToken = "<?php print $token->result; ?>";
       var domain = "<?php print $c->app_domain; ?>";
+      var refreshInterval = <?php print $c->refresh_interval; ?>;
     </script>
     <script src="js/RdioStream.class.js"></script>     
     <script src="js/RdioPreview.class.js"></script>         

@@ -922,7 +922,7 @@
     
     if (window.location.href.indexOf('#!/')>0) scrollTo(window.location.href.substring(window.location.href.indexOf('#!/')+3));
   
-    setInterval("updateQueue()", 15000);  
+    setInterval("updateQueue()", refreshInterval*1000);  
   });
   
   
