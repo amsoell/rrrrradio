@@ -20,28 +20,31 @@
       $track->mark($_REQUEST['val']);
       
       break;
-    case "queue":
-      // add a requested track to the queue
-      $track = new Track($_REQUEST['key']);     
-      if ($q->isComingUp($_REQUEST['key'])) { 
-        $response = "Track is already in upcoming queue";
-      } elseif (!$rdio->loggedIn()) {
-        $response = "You are not logged in to Rdio";
-      } else {
-        $e = $q->isRequestable($track);
-        if ($e instanceof QueueError) {
-          $response = $e->errorMessage;
-        } else {
-          $q->push($track, true, $_SESSION['user']->key);
-        }
-      }
-      
-      // break intentionally omitted
     case "ignore":
       if (isset($_REQUEST['off'])) {
         $q->removeMuter($_SESSION['user']->key);
       } else {
         $q->addMuter($_SESSION['user']->key);
+      }
+      
+      // break intentionally omitted
+
+    case "queue":
+      // add a requested track to the queue
+      if (isset($_REQUEST['key'])) {
+        $track = new Track($_REQUEST['key']);     
+        if ($q->isComingUp($_REQUEST['key'])) { 
+          $response = "Track is already in upcoming queue";
+        } elseif (!$rdio->loggedIn()) {
+          $response = "You are not logged in to Rdio";
+        } else {
+          $e = $q->isRequestable($track);
+          if ($e instanceof QueueError) {
+            $response = $e->errorMessage;
+          } else {
+            $q->push($track, true, $_SESSION['user']->key);
+          }
+        }
       }
       
       // break intentionally omitted
