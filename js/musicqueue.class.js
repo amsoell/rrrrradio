@@ -1,40 +1,59 @@
 function musicQueue() {
   this.q = [];
   this.ptr = -1;
+  this.locked = false;
+  
+  this.lock = function() {
+    this.locked = true;
+  }
+  
+  this.unlock = function() {
+    this.locked = false;
+  }
+  
   this.getNext = function() {
-    return this.q[++this.ptr];
+    this.lock();
+    this.ptr++;
+    for (i=0;i<this.ptr;i++) {
+      if (this.q[i].prune==1) {
+        this.q.shift();
+        this.ptr--;
+        i--;
+      }
+    }
+    this.unlock();    
+    return this.currentTrack();
   }
   this.currentTrack = function() {
     return this.q[this.ptr];
   }
-  this.EOF = function() {
-    return ((this.ptr+1)>=this.q.length);
-  };
+
   this.push = function(newTracks) {
     return this.q.push(newTracks);
   }
   this.init = function(tracks) {
     this.q = tracks;
-    this.ptr = -1;
   }
   this.length = function() {
     return this.q.length;
   }
-  this.updateQueue = function(tracks) {
-    // find the track in the internal queue that matches the first track in `tracks`
-    for (i=0;i<this.q.length;i++) {
-      if (this.q[i].key == tracks[0].key) {
-        q = [];
-        
-        q[0] = tracks[0];
-        for (j=1;j<tracks.length;j++) {
-          q[j] = tracks[j];
+  this.updateQueue = function(tracks) {   
+    if (!this.locked) {
+      offset = 0;
+      
+      for (i=0;i<this.q.length;i++) {
+        if (this.q[i].key==tracks[0].key) {
+          offset = i;
+          break;
         }
-        
-        this.q = q;
-        this.ptr = 0;        
-    
-        break;
+      }
+      
+      for (i=0; i<offset; i++) {
+        this.q[i].prune = 1;
+      }
+      
+      for (i=0; i<tracks.length; i++) {
+        this.q[i+offset] = tracks[i];
       }
     }
   }

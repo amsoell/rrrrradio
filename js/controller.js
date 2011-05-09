@@ -303,10 +303,13 @@
   }
 
   // UI Function: Loads up the contents of the JS:Queue object into the user interface
-  function refreshQueueDisplay() {
-    $('#queue .track').remove();
-    $.each(_QUEUE.q.slice(_QUEUE.ptr), function(i, track) {
-      if (i==_QUEUE.ptr) {
+  function refreshQueueDisplay() {  
+    $('#queue .track').remove();   
+
+    for (i=(_QUEUE.ptr>=0?_QUEUE.ptr:0); i<_QUEUE.q.length; i++) {
+      track = _QUEUE.q[i]; 
+    
+      if ($('#queue .track').size()==0) {
         $('.song_title').html(track.name);
         $('.song_artist').html(track.artist);
         $('.song_album').html(track.album);
@@ -377,12 +380,12 @@
         });
       }
   
-      if (i==0) {
+      if ($('#queue .track').size()==0) {
         $('#queue').prepend($t);
       } else {
         $('#queue').append($t);
       }
-    });
+    }
   }
     
   function refreshListeners(listeners) {
@@ -449,6 +452,10 @@
         }
       });
     });    
+  }
+  
+  function debug($msg) {
+    if (__debugMode) console.log($msg);
   }
   
 

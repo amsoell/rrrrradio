@@ -20,14 +20,13 @@ var RdioStream = {
   playStateChanged: function(state) {
     if (state==1) { // PLAY
       if (playerstate!=1) {
-        updateQueue();
         playerstate=1;
       }
     } else
     if (state==2) { // STOP
       if (playerstate!=2) {
         playerstate=2;
-        RdioPlayer().rdio_play(_QUEUE.getNext().key);
+        RdioPlayer().rdio_play(_QUEUE.getNext().key); // play the newly bottom item in the queue
         if (ignoring==1) toggleMute(0);        
       }
     } else 
@@ -36,6 +35,8 @@ var RdioStream = {
         display("Rdio appears to be down. Please check back soon!");
         playerstate = 4;
       }
+    } else {
+      debug("buffering:"+(new Date()).toLocaleString());
     }
   },
   

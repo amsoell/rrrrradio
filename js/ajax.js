@@ -25,8 +25,6 @@ function getQueue($play, $seek) {
       refreshListeners(d.listeners);  
       refreshRequestBadge(d.pendingRequests);
       
-      _QUEUE.ptr = -1;
-
       if ($play && loggedIn) {
         RdioPlayer().rdio_play(_QUEUE.getNext().key);      
       }
