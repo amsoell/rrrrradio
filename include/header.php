@@ -16,7 +16,9 @@
       var playbackToken = "<?php print $token->result; ?>";
       var domain = "<?php print $c->app_domain; ?>";
       var refreshInterval = <?php print $c->refresh_interval; ?>;
-      var __debugMode = <?php print $c->debug; ?>;
+<?php if $c->debug: ?>
+      var __debugMode = true;
+<?php endif; ?>      
     </script>
     <script src="js/RdioStream.class.js"></script>     
     <script src="js/RdioPreview.class.js"></script>         
