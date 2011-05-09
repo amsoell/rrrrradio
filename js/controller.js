@@ -471,11 +471,19 @@
     
     $(document).bind('keydown', 'Ctrl+down', function() {
       setVolume(parseInt($('#volume').attr('rel'))-1);
-    })
+    });
 
     $(document).bind('keydown', 'Ctrl+up', function() {
       setVolume(parseInt($('#volume').attr('rel'))+1);
-    })
+    });
+    
+    $(document).bind('keydown', 'Ctrl+r', function() { 
+      $('#collection .header').trigger('click');
+    });
+    
+    $(document).bind('keydown', 'Ctrl+e', function() {  
+      $('#toolbar .export').trigger('click');
+    });
   
     $('a[href^="#!/"]').live('click', function() {
       scrollTo($(this).attr('href').substr(3));

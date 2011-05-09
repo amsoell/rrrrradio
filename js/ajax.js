@@ -57,7 +57,7 @@ function updateQueue() {
     success: function(d) {
       _QUEUE.updateQueue(d.queue);
       if (window.fluid) { 
-        window.fluid.dockBadge = _QUEUE.length();
+        window.fluid.dockBadge = _QUEUE.length()-_QUEUE.ptr;
       }
       refreshQueueDisplay();  
       refreshListeners(d.listeners);    
