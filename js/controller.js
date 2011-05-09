@@ -419,7 +419,7 @@
         })
       });
       
-      if (_QUEUE.q[0].muted.indexOf(listener.key)>=0) {
+      if (_QUEUE.q[_QUEUE.ptr].muted.indexOf(listener.key)>=0) {
         $l.addClass('muted');
       }
       $('#toolbar .listeners').append($l);
