@@ -53,11 +53,12 @@
       $tracks = $q->getQueue();  
       for ($i=0; $i<count($tracks); $i++) {
         $key = $tracks[$i]->key;
-        $detail = $rdio->get(array("keys"=>$key, "extras"=>"trackNum"));
+        $detail = $rdio->get(array("keys"=>$key, "extras"=>"trackNum,bigIcon"));
         $tracks[$i]->name = $detail->result->$key->name;
         $tracks[$i]->icon = $detail->result->$key->icon;  
         $tracks[$i]->artist = $detail->result->$key->artist;
         $tracks[$i]->album = $detail->result->$key->album;
+        $tracks[$i]->bigIcon = $detail->result->$key->bigIcon;
         $tracks[$i]->canStream = intval($detail->result->$key->canStream);
       }
       
