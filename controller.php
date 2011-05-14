@@ -50,6 +50,10 @@
       // break intentionally omitted
       
     case 'getqueue':
+      if (isset($_REQUEST['userKey'])) {
+        $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()) WHERE `key`='".addslashes($_REQUEST['userKey'])."'");          
+      }
+    
       $tracks = $q->getQueue();  
       for ($i=0; $i<count($tracks); $i++) {
         $key = $tracks[$i]->key;
