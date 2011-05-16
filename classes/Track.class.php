@@ -43,14 +43,18 @@
       return (mysql_num_rows($rs)>0);
     }
     
-    function mark($val) {
+    function mark($val, $userKey=null) {
       $db = new Db();
       
-      if (isset($_SESSION['user']) && property_exists($_SESSION['user'], 'key')) {
+      if (is_null($userKey) && property_exists($_SESSION['user'], 'key')) {
+        $userKey = $_SESSION['user']->key;
+      }
+      
+      if (!is_null($userKey)) {
         if ($val==0) {
-          $db->query("DELETE FROM mark  WHERE userKey='".$_SESSION['user']->key."' AND trackKey='".$this->key."' LIMIT 1");
+          $db->query("DELETE FROM mark  WHERE userKey='".$userKey."' AND trackKey='".$this->key."' LIMIT 1");
         } else {
-          $db->query("REPLACE INTO mark (userKey, trackKey, mark) VALUES ('".$_SESSION['user']->key."', '".$this->key."', $val)");
+          $db->query("REPLACE INTO mark (userKey, trackKey, mark) VALUES ('".$userKey."', '".$this->key."', $val)");
         }
       }
     }

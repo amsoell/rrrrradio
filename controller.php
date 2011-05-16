@@ -17,7 +17,7 @@
   switch (strtolower($_REQUEST['r'])) {
     case "mark":
       $track = new Track($_REQUEST['key']);
-      $track->mark($_REQUEST['val']);
+      $track->mark($_REQUEST['val'], isset($_REQUEST['userKey'])?$_REQUEST['userKey']:null);
       
       break;
     case "ignore":
