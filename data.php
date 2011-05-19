@@ -22,7 +22,11 @@
     } else {    
       $albums = $rdio->getAlbumsForArtistInCollection($args);
     }
-    $albums = $albums->result;
+    if ($albums->status=="error") {
+      $albums = Array();
+    } else {
+      $albums = $albums->result;
+    }
 
     usort($albums, "albumsort");
     
