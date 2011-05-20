@@ -38,7 +38,7 @@
       $db = new Db();
       
       $l = array();
-      $rs = $db->query("SELECT `key` FROM user WHERE lastseen>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL ".$minutes." MINUTE)) ORDER BY lastseen DESC");      
+      $rs = $db->query("SELECT `key` FROM user WHERE lastseen>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL ".$minutes." MINUTE)) ORDER BY `key` DESC");      
       while ($rec = mysql_fetch_array($rs)) {
         $l[] = new User($rec['key']);
       }
