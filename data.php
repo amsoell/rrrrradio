@@ -150,6 +150,10 @@
     }
     
     print json_encode($requests);
+  } else {
+    $artists = Collection::getArtists();
+
+    print json_encode($artists);
   }
 
   function albumsort($a, $b) { 
