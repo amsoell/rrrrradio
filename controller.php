@@ -32,17 +32,17 @@
     case "queue":
       // add a requested track to the queue
       if (isset($_REQUEST['key'])) {
-        $track = new Track($_REQUEST['key']);     
+        $track = new Track($_REQUEST['key']);             
         if ($q->isComingUp($_REQUEST['key'])) { 
           $response = "Track is already in upcoming queue";
-        } elseif (!$rdio->loggedIn()) {
+        } elseif ((!$rdio->loggedIn()) && (!isset($_REQUEST['oauth_token']))) {
           $response = "You are not logged in to Rdio";
         } else {
           $e = $q->isRequestable($track);
           if ($e instanceof QueueError) {
             $response = $e->errorMessage;
           } else {
-            $q->push($track, true, $_SESSION['user']->key);
+            $q->push($track, true, (isset($_REQUEST['userKey'])?$_REQUEST['userKey']:$_SESSION['user']->key));
           }
         }
       }
