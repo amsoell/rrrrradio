@@ -51,7 +51,7 @@
       
     case 'getqueue':
       if (isset($_REQUEST['userKey'])) {
-        $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()) WHERE `key`='".addslashes($_REQUEST['userKey'])."'");          
+        $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()), lastclient='".addslashes($_REQUEST['client'])."' WHERE `key`='".addslashes($_REQUEST['userKey'])."'");          
       }
     
       $tracks = $q->getQueue();  

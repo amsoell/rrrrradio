@@ -7,7 +7,7 @@
     $db = new Db();
     
     if (isset($_SESSION['access_key']) && isset($_SESSION['access_secret'])) {
-      $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()) WHERE `key`='".addslashes($_SESSION['user']->key)."'");    
+      $db->query("UPDATE user SET lastseen=UNIX_TIMESTAMP(NOW()), lastclient='' WHERE `key`='".addslashes($_SESSION['user']->key)."'");    
       return true;
     } 
 /*
