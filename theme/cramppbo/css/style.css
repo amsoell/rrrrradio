@@ -188,6 +188,10 @@ dd {
   opacity:0.2;
 }
 
+#toolbar .listeners img.mobile {
+  border-style: dotted;
+}
+
 #toolbar #tools #ops {
   position: absolute;
   top: 30px;

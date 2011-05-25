@@ -419,6 +419,10 @@
         })
       });
       
+      if (listener.lastclient!="") {
+        $l.addClass('mobile');
+      }
+      
       if ((_QUEUE.ptr>=0) && (_QUEUE.q[_QUEUE.ptr].muted.indexOf(listener.key)>=0)) {
         $l.addClass('muted');
       }

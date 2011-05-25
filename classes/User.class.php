@@ -6,21 +6,24 @@
     public $lastName;
     public $icon;
     public $gender;
+    public $lastclient;    
     private $state;
     private $token;
     private $secret;
+
     public $isCurator;
     
     function __construct($key) {
       $db = new Db();
       $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
       
-      $rs = $db->query("SELECT `key`, state, token, secret FROM user WHERE `key`='$key' LIMIT 1");
+      $rs = $db->query("SELECT `key`, state, token, secret, lastclient FROM user WHERE `key`='$key' LIMIT 1");
       if ($rec = mysql_fetch_array($rs)) {
         $this->key = $rec['key'];
         $this->state = $rec['state'];
         $this->token = $rec['token'];
         $this->secret = $rec['secret'];
+        $this->lastclient = $rec['lastclient'];
         
         $key = $rec['key'];
         if (class_exists("OAuth")) {
@@ -34,7 +37,7 @@
       }
     }
     
-    function getCurrentListeners($minutes = 10) {
+    function getCurrentListeners($minutes = 4) {
       $db = new Db();
       
       $l = array();
