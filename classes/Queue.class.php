@@ -67,7 +67,7 @@
       }
     }
     
-    function push($obj, $requested=false, $requestedBy=null) {
+    function push($obj, $requested=false, $requestedBy=null, $client='web') {
       $db = new Db();
       $c = new Config();
       $buffer = $c->song_buffer; // seconds between tracks
@@ -83,7 +83,7 @@
       if (is_object($obj) && property_exists($obj, "canStream") && $obj->canStream==0) {
         return false;
       } else {
-        $db->query("INSERT INTO queue (trackKey, albumKey, artistKey, userKey, free, added, startplay, endplay) VALUES ('$key', '".$obj->album."', '".$obj->artist."', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", ".($this->length()<$c->free_if_queue_less_than?'1':'0').", UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
+        $db->query("INSERT INTO queue (trackKey, albumKey, artistKey, userKey, free, client, added, startplay, endplay) VALUES ('$key', '".$obj->album."', '".$obj->artist."', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", ".($this->length()<$c->free_if_queue_less_than?'1':'0').", '".addslashes($client)."', UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
       }
     }
     
