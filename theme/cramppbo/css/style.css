@@ -498,10 +498,17 @@ dd {
 #queue .track .indicator {
   width: 10px;
   height: 10px;
-  background: url('/theme/cramppbo/images/indicator_req.png');
   position: absolute;
   left: 190px;
 }
+#queue .track.request .indicator {
+  background: url('/theme/cramppbo/images/indicator_req.png');
+}
+
+#queue .track.request.dedication .indicator {
+  background: url('/theme/cramppbo/images/indicator_ded.png');
+}
+
 
 #queue .track:first-child {
 }
@@ -648,6 +655,10 @@ dd {
   position: absolute;
   display: none;
   z-index: 51;
+}
+
+#queue .track.dedication .user {
+  height: 24px;
 }
 
 #queue .track .user .username {
@@ -816,6 +827,25 @@ label {
   top: 0;
 }
 
+.trackPreview .detail label {
+  display: block;
+  width: 80px;
+}
+
+.trackPreview .detail input {
+  width: 200px;
+}
+
+.trackPreview .detail textarea {
+  width: 280px;
+  height: 40px;
+  clear: left;
+}
+
+.trackPreview .detail #doDedication {
+  padding-top: 4px;
+}
+
 .trackPreview .coverart {
   border: 1px solid #DFDFDF;
 }
@@ -849,9 +879,11 @@ label {
   overflow: hidden;
 }
 
-.trackPreview .request, .trackPreview .like {
+.trackPreview .dedicate, .trackPreview .request, .trackPreview .like {
   cursor: pointer;
 }
+
+
 
 .trackPreview .request img {
   padding-right: 5px;

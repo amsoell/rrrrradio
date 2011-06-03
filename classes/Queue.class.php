@@ -1,5 +1,7 @@
 <?php
   include_once("User.class.php");
+  date_default_timezone_set('America/Toronto');
+  require_once('class.phpmailer.php');
 
   class Queue {
     function isComingUp($key) {
@@ -12,7 +14,7 @@
     function getQueue() {
       $db = new Db();
 
-      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.albumKey, queue.artistKey, queue.startplay, queue.endplay, queue.muted, GROUP_CONCAT(f.userKey) AS likes, COUNT(q.trackKey) AS requests ";
+      $sqlx = "SELECT queue.trackKey, queue.userKey, queue.albumKey, queue.artistKey, queue.dedicationName, queue.dedicationMessage, queue.startplay, queue.endplay, queue.muted, GROUP_CONCAT(f.userKey) AS likes, COUNT(q.trackKey) AS requests ";
       if (isset($_SESSION['user']) && property_exists($_SESSION['user'], "key")) {
         $sqlx .= ", m.mark FROM queue LEFT JOIN mark AS m ON queue.trackKey=m.trackKey AND m.userKey='".$_SESSION['user']->key."' ";
       } else {
@@ -39,6 +41,10 @@
         if (!is_null($rec['userKey'])) {
           $t->user = new User($rec['userKey']);
         }
+        if (!(is_null($rec['dedicationName']) || ($rec['dedicationName']==""))) {
+          $t->dedicationName = $rec['dedicationName'];
+          $t->dedicationMessage = $rec['dedicationMessage'];
+        } 
         $tracks[] = $t;
 
       }
@@ -67,7 +73,7 @@
       }
     }
     
-    function push($obj, $requested=false, $requestedBy=null, $client='web') {
+    function push($obj, $requested=false, $requestedBy=null, $client='web', $dedicationName=null, $dedicationRecipient=null, $dedicationMessage=null) {
       $db = new Db();
       $c = new Config();
       $buffer = $c->song_buffer; // seconds between tracks
@@ -75,15 +81,32 @@
       
       if (is_object($obj)) {
         $key = $obj->key;
+        $track = $obj;
         $duration = $obj->duration;
       } else {
         $key = $obj;
+        $track = new Track($key);
       }
 
       if (is_object($obj) && property_exists($obj, "canStream") && $obj->canStream==0) {
         return false;
       } else {
-        $db->query("INSERT INTO queue (trackKey, albumKey, artistKey, userKey, free, client, added, startplay, endplay) VALUES ('$key', '".$obj->album."', '".$obj->artist."', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", ".($this->length()<$c->free_if_queue_less_than?'1':'0').", '".addslashes($client)."', UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
+        $db->query("INSERT INTO queue (trackKey, albumKey, artistKey, userKey, free, dedicationName, dedicationRecipient, dedicationMessage, client, added, startplay, endplay) VALUES ('$key', '".$obj->album."', '".$obj->artist."', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", ".($this->length()<$c->free_if_queue_less_than?'1':'0').", '".addslashes($dedicationName)."', '".addslashes($dedicationRecipient)."', '".addslashes($dedicationMessage)."', '".addslashes($client)."', UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
+        
+        if (trim(strlen($dedicationRecipient))>0) {
+          $r = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+          $t = $r->get(array("keys"=> $key, "extras"=>"trackNum,isOnCompilation"));
+
+          $dedicationMessage = "Oh, hello! I thought you would like to know that the following dedication has been made for you at ".$c->sitename.":\r\n\r\n".
+                               "Artist: " . $t->result->$key->artist . "\r\n" .
+                               "Song: " . $t->result->$key->name . "\r\n" .
+                               "Dedicated to: " . $dedicationName . "\r\n" . 
+                               "Dedicated by: " . $_SESSION['user']->firstName." ".$_SESSION['user']->lastName . "\r\n\r\n".
+                               "Message:\r\n".$dedicationMessage."\r\n\r\n".
+                               "To listen to this dedication, log on to ".$c->app_domain;
+          
+          $this->sendNotification($dedicationRecipient, $dedicationName, $dedicationMessage);
+        }
       }
     }
     
@@ -170,6 +193,39 @@
       
       return true;
     }
+    
+    function sendNotification($address, $name, $message) {
+      $c = new Config();
+      
+      $recipients = explode(",", $address);
+      
+      foreach ($recipients as $recipient) {
+        $recipient = trim($recipient);      
+
+        if(eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$", $recipient)) {
+  
+          $mail = new PHPMailer();
+          $mail->IsSMTP();
+  //        $mail->SMTPDebug = 2;
+          $mail->SMTPAuth = true;
+          $mail->SMTPSecure = "ssl";
+          $mail->Host = $c->smtp_host;
+          $mail->Port = $c->smtp_port;
+          $mail->Username = $c->smtp_username;
+          $mail->Password = $c->smtp_password;
+          $mail->SetFrom("noreply@rrrrradio.com", "rrrrradio");
+          $mail->Subject = $c->sitename." Dedication";
+          $mail->AltBody = $message;
+          $mail->MsgHTML(nl2br($message));
+          $mail->AddAddress($recipient, $name);
+          
+          $mail->Send();
+        }
+      }
+    }
+    
+    
+    
   }
   
   class QueueError {

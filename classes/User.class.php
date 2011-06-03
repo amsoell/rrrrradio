@@ -53,7 +53,7 @@
       $db = new Db();
       
       $t = array();
-      $rs = $db->query("SELECT GROUP_CONCAT(trackKey) AS favoriteTracks FROM mark WHERE userKey='".$this->key."' AND mark=1");
+      $rs = $db->query("SELECT GROUP_CONCAT(trackKey) AS favoriteTracks FROM mark WHERE trackKey LIKE 't%' AND userKey='".$this->key."' AND mark=1");
       
       if ($rec = mysql_fetch_array($rs)) {
         $t = explode(",", $rec['favoriteTracks']);

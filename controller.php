@@ -42,7 +42,7 @@
           if ($e instanceof QueueError) {
             $response = $e->errorMessage;
           } else {
-            $q->push($track, true, (isset($_REQUEST['userKey'])?$_REQUEST['userKey']:$_SESSION['user']->key), $_REQUEST['client']);
+            $q->push($track, true, (isset($_REQUEST['userKey'])?$_REQUEST['userKey']:$_SESSION['user']->key), $_REQUEST['client'], $_REQUEST['dedicationName'], $_REQUEST['dedicationRecipient'], $_REQUEST['dedicationMessage']);
           }
         }
       }

@@ -68,11 +68,17 @@ function updateQueue() {
   return true;
 }
 
-function queueTrack(trackKey) {
+function queueTrack(trackKey, dedicationName, dedicationRecipient, dedicationMessage) {
+  if (arguments.length>=4) {
+    dedication = "&dedicationName="+encodeURIComponent(dedicationName)+'&dedicationRecipient='+encodeURIComponent(dedicationRecipient)+'&dedicationMessage='+encodeURIComponent(dedicationMessage);
+  } else {
+    dedication = ""
+  }
+  
   $.ajax({
     url: '/controller.php',
     dataType: 'json',
-    data: 'r=queue&key='+trackKey,
+    data: 'r=queue&key='+trackKey+dedication,
     beforeSend: function() {
       $('#queue').append($('<div></div>').addClass('track placeholder'));
     },
@@ -115,6 +121,7 @@ function displayTrack(trackKey) {
         $detail.append($('<div></div>').addClass('_tip footnote').html('Tip: Double click tracks to skip this popup and add songs to the queue immediately'))
           .find('.detail').append($('<div><div>').addClass('preview').attr('rel', trackKey).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.png')))
                           .append($('<div><div>').addClass('request').attr('rel', trackKey).html('Add to queue').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))
+                          .append($('<div><div>').addClass('dedicate').attr('rel', trackKey).html('Dedicate').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))                          
                           .append($('<div><div>').addClass('like').attr('rel', trackKey).html('Mark as favorite').prepend($('<img>').attr('src','/theme/cramppbo/images/tools/heart.png')));                          
                                
       } else {

@@ -323,8 +323,12 @@
         } else {
           $('.song_requests').html('');
         }       
-        if (track.user != null) {         
-          $('.song_requester').html('Requested by '+track.user.firstName+' '+track.user.lastName).prepend($('<img>').attr('src', track.user.icon))
+        if (track.user != null) {  
+          if (track.dedicationName != null) {
+            $('.song_requester').html('Dedicated by '+track.user.firstName+' '+track.user.lastName+' to '+track.dedicationName+"<br /><br />"+track.user.firstName+" "+track.user.lastName+" says...<br /><br />&quot;"+track.dedicationMessage+"&quot;").prepend($('<img>').attr('src', track.user.icon))          
+          } else {       
+            $('.song_requester').html('Requested by '+track.user.firstName+' '+track.user.lastName).prepend($('<img>').attr('src', track.user.icon))
+          }
         } else {
           $('.song_requester').html('');
           
@@ -338,11 +342,36 @@
       $title.append($track).append($artist);
       
       if (track.user != null) {
-        $userpic = $('<img>').addClass('userpic').attr('src', track.user.icon).attr('width', '14').attr('height', '14');
-        $username = $('<div></div>').addClass('username').html('Requested by '+track.user.username);
-        $user = $('<div></div>').addClass('user').append($userpic).append($username);
+        if (track.dedicationName != null) {
+          $extraclass = "request dedication";
 
-        $t.addClass('request').attr('rel',track.user.username).append($('<div></div>').addClass('indicator')).append($user);
+          $userpic = $('<img>').addClass('userpic').attr('src', track.user.icon).attr('width', '14').attr('height', '14');
+          $username = $('<div></div>').addClass('username').html('Dedicated by '+track.user.username+' to '+track.dedicationName);
+          $user = $('<div></div>').addClass('user').append($userpic).append($username).qtip({
+            content: {
+              text: track.user.username+" says...<br /><br />&quot;"+track.dedicationMessage+'&quot'
+            },
+            position: {
+              target: 'mouse',
+              my: 'top center',
+              adjust: {
+                y: 15
+              }          
+            },
+            style: {
+              classes: 'ui-tooltip-light ui-tooltip-shadow ui-tooltip-rounded'
+            }
+            
+          });
+        } else {
+          $extraclass = "request";
+          
+          $userpic = $('<img>').addClass('userpic').attr('src', track.user.icon).attr('width', '14').attr('height', '14');
+          $username = $('<div></div>').addClass('username').html('Requested by '+track.user.username);
+          $user = $('<div></div>').addClass('user').append($userpic).append($username);
+        }
+
+        $t.addClass($extraclass).attr('rel',track.user.username).append($('<div></div>').addClass('indicator')).append($user);
       }
       
       $details = $('<div></div>').addClass('detail');
@@ -699,6 +728,27 @@
       }      
     });
     
+    $('#doDedication').live('click', function() {
+      queueTrack($(this).attr('rel'), $('#dedicationName').val(), $('#dedicationRecipient').val(), $('#dedicationMessage').val());
+    });
+    
+    $('.dedicate').live('click', function() {
+      console.log("dedication");
+      $key = $(this).attr('rel');
+      console.log($key);
+      $parent = $(this).parent();
+      $parent.children('[rel='+$key+']').remove();
+      
+      $parent
+        .append($('<label>').attr('for', 'dedicationName').html('Dedicate to'))
+        .append($('<input />').attr('id', 'dedicationName').attr('name','dedicationName'))
+        .append($('<label>').attr('for', 'dedicationRecipient').html('Their email'))        
+        .append($('<input />').attr('id', 'dedicationRecipient').attr('name','dedicationRecipient'))        
+        .append($('<label>').attr('for', 'dedicationMessage').html('Message'))        
+        .append($('<textarea></textarea>').attr('id', 'dedicationMessage').attr('name','dedicationMessage').attr('rows',4))
+        .append($('<input />').attr('rel', $key).attr('type','button').attr('id','doDedication').attr('value','Make Dedication').css('width','auto'));
+    });    
+    
     $('#message .request').live('click', function() {
       queueTrack($(this).attr('rel'));
     });
@@ -819,9 +869,8 @@
         playPreview($(this).attr('rel'));
         $(this).addClass('playing').html('Stop preview').prepend($('<img>'));
       }
-
     });
-    
+        
     $('.requests').live('click', function() {
       $('.qtip').qtip('hide'); 
       node = $(this);   
