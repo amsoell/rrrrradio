@@ -8,6 +8,19 @@
     RdioPlayer().rdio_setMute(0);
   }
   
+  function toggleLowVolume() {
+    console.log('hi');
+    if ($('#volume').children('img[src$="volnotch.gif"]').length > 1) {
+      oldVol = $('#volume').children('img[src$="volnotch.gif"]').length;    
+      setVolume(1);
+      $('#volume').attr('rel', oldVol);          
+    } else if ($('#volume').attr('rel') > 1) {
+      setVolume($('#volume').attr('rel'));
+    } else {
+      console.log("else " + $('#volume').attr('rel'));
+    }
+  }
+  
   function toggleMute(mute) {
     if ((mute == 1) || (mute == 0)) muting = ((mute+1)%2);
     
@@ -349,7 +362,7 @@
           $username = $('<div></div>').addClass('username').html('Dedicated by '+track.user.username+' to '+track.dedicationName);
           $user = $('<div></div>').addClass('user').append($userpic).append($username).qtip({
             content: {
-              text: track.user.username+" says...<br /><br />&quot;"+track.dedicationMessage+'&quot'
+              text: track.user.username+" says...<br /><br />&quot;"+track.dedicationMessage+'&quot;'
             },
             position: {
               target: 'mouse',
@@ -497,6 +510,10 @@
     $(document).bind('keydown', 'Ctrl+m', function() {
       toggleMute();
     });
+    
+    $(document).bind('keydown', 'Ctrl+Shift+m', function() {
+      toggleLowVolume();
+    })
     
     $(document).bind('keydown', 'Ctrl+i', function() {
       ignoreCurrent();
