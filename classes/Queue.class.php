@@ -35,7 +35,7 @@
         $t->endplay = $rec['endplay'];
         $t->duration = $rec['endplay']-$rec['startplay'];
         $t->mark = $rec['mark'];
-        $t->likes = is_null($rec['likes'])?0:count(explode(',',$rec['likes']));
+        $t->likes = is_null($rec['likes'])?0:count(array_unique(explode(',',$rec['likes'])));
         $t->requests = $rec['requests'];
         $t->muted = explode(',',$rec['muted']);
         if (!is_null($rec['userKey'])) {
