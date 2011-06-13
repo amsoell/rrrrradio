@@ -1,11 +1,11 @@
 
   function playerMute() {
-    RdioPlayer().rdio_setMute(1);
+//-    RdioPlayer().rdio_setMute(1);
   }
   
   function playerUnmute() {
     if (ignoring==1) unignoreCurrent();
-    RdioPlayer().rdio_setMute(0);
+//-    RdioPlayer().rdio_setMute(0);
   }
   
   function toggleLowVolume() {
@@ -99,14 +99,14 @@
   
   function playPreview(trackKey) {
     if (playerstate==1) {
-      RdioPlayer().rdio_setMute(1);
+//-      RdioPlayer().rdio_setMute(1);
     }
     setTimeout("RdioPreviewer().rdio_play('"+trackKey+"')", 1000);
   }
   
   function stopPreview() {
-    RdioPreviewer().rdio_setMute(1);
-    setTimeout("RdioPreviewer().rdio_stop();RdioPreviewer().rdio_setMute(0);if ((playerstate==1) && (skip==-1)) RdioPlayer().rdio_setMute(0);", 1000);  
+//-    RdioPreviewer().rdio_setMute(1);
+//-    setTimeout("RdioPreviewer().rdio_stop();RdioPreviewer().rdio_setMute(0);if ((playerstate==1) && (skip==-1)) RdioPlayer().rdio_setMute(0);", 1000);  
   }
   
   function display(msg, buttons) {
@@ -399,7 +399,7 @@
           $details.append($('<img>').attr('src', '/theme/cramppbo/images/play_button_overlay.png').attr('id', 'playbutton').click(function() {
             $(this).attr('src', '/theme/cramppbo/images/ajax-loader-large-dark.gif').delay(2000).fadeOut(500, function() {
               RdioPlayer().rdio_seek(currentPosition + skip);
-              RdioPlayer().rdio_setMute(0);
+              RdioPlayer().rdio_setVolume(0.7);
               $('#queue').addClass('playing');
               skip = -1;
               

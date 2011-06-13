@@ -7,7 +7,7 @@ var RdioStream = {
     var pb = document.getElementById('playbutton');
     pb.className = "ready";
     
-    RdioPlayer().rdio_setMute(1);
+    RdioPlayer().rdio_setVolume(0);
     getQueue(true);
   },
 
@@ -27,7 +27,7 @@ var RdioStream = {
       if (playerstate!=2) {
         playerstate=2;
         RdioPlayer().rdio_play(_QUEUE.getNext().key); // play the newly bottom item in the queue
-        if (ignoring==1) toggleMute(0);        
+        if (ignoring==1) RdioPlayer().rdio_setVolume(3);
       }
     } else 
     if (state==4) { // PAUSED -- USUALLY ONLY HAPPENS WHEN RDIO IS DOWN
