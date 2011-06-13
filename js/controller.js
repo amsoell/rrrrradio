@@ -1,18 +1,23 @@
 
   function playerMute() {
-//-    RdioPlayer().rdio_setMute(1);
+    oldVol = $('#volume').children('img[src$="volnotch.gif"]').length;      
+    setVolume(0);
+    $('#volume').attr('rel', oldVol);              
   }
   
   function playerUnmute() {
     if (ignoring==1) unignoreCurrent();
-//-    RdioPlayer().rdio_setMute(0);
+    oldVol = $('#volume').attr('rel');    
+    if (!(oldVol>0)) {
+      oldVol = 0.5;
+    }
+    setVolume(oldVol);
   }
   
   function toggleLowVolume() {
-    console.log('hi');
     if ($('#volume').children('img[src$="volnotch.gif"]').length > 1) {
       oldVol = $('#volume').children('img[src$="volnotch.gif"]').length;    
-      setVolume(1);
+      setVolume(oldVol);
       $('#volume').attr('rel', oldVol);          
     } else if ($('#volume').attr('rel') > 1) {
       setVolume($('#volume').attr('rel'));
@@ -54,6 +59,8 @@
           $(e).attr('src','/theme/cramppbo/images/volnotchoff.gif');
         }
       });
+      
+      if ((level!=0) && (ignoring==1)) unignoreCurrent();
     }
   }
   
@@ -99,14 +106,14 @@
   
   function playPreview(trackKey) {
     if (playerstate==1) {
-//-      RdioPlayer().rdio_setMute(1);
+      playerMute();
     }
     setTimeout("RdioPreviewer().rdio_play('"+trackKey+"')", 1000);
   }
   
   function stopPreview() {
-//-    RdioPreviewer().rdio_setMute(1);
-//-    setTimeout("RdioPreviewer().rdio_stop();RdioPreviewer().rdio_setMute(0);if ((playerstate==1) && (skip==-1)) RdioPlayer().rdio_setMute(0);", 1000);  
+    playerUnmute();
+    RdioPreviewer().rdio_stop();
   }
   
   function display(msg, buttons) {
