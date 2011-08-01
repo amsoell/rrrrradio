@@ -58,7 +58,7 @@ class Rdio {
   }
 
   public function __call($method, $arguments) {
-    $db = new Db();
+    if (class_exists("Db")) $db = new Db();
     
     if (is_array($arguments) && array_key_exists('ttl', $arguments)) {
       $ttl = $arguments['ttl'];
@@ -74,8 +74,8 @@ class Rdio {
     $params['method'] = $method;
     
     // check API cache
-    $rs = $db->query("SELECT `return` FROM api_usage WHERE api='rdio' AND params='".addslashes(json_encode($params))."' AND executed>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR)) ORDER BY executed DESC LIMIT 1");
-    if (($params['method']!='currentUser') && !array_key_exists('force', $arguments) && ($rec = mysql_fetch_array($rs)) && (!is_null($rec['return'])) ) {
+    if (isset($db)) $rs = $db->query("SELECT `return` FROM api_usage WHERE api='rdio' AND params='".addslashes(json_encode($params))."' AND executed>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR)) ORDER BY executed DESC LIMIT 1");
+    if (isset($db) && ($params['method']!='currentUser') && !array_key_exists('force', $arguments) && ($rec = mysql_fetch_array($rs)) && (!is_null($rec['return'])) ) {
       $json = json_decode($rec['return']);
     } else {    
       // make the request
@@ -91,10 +91,12 @@ class Rdio {
   }
   
   public function log($arguments, $return) {
+    if (class_exists("Db")) {
       $db = new Db();
   
       if (array_key_exists('force', $arguments)) unset($arguments['force']);
       $db->query("INSERT INTO api_usage (user, api, executed, params, `return`) VALUES ('".addslashes($user)."', 'rdio', UNIX_TIMESTAMP(NOW()), '".addslashes(json_encode($arguments))."', '".addslashes($return)."')");
+    }
   }
 
 
@@ -114,7 +116,9 @@ class Rdio {
   }
 
   public function complete_authentication($verifier) {
-    $db = new Db();
+    if (class_exists("Db")) {
+      $db = new Db();
+    }
     
     $oauth = $this->_getOAuth();
     $pieces = $oauth->getAccessToken(RDIO_ACCESS_TOKEN, '', $verifier);
@@ -124,8 +128,10 @@ class Rdio {
     $_SESSION['access_secret'] = $pieces['oauth_token_secret'];
     
     $_SESSION['user'] = $this->currentUser()->result;
-    $rs = $db->query("SELECT curator FROM user WHERE `key`='".$_SESSION['user']->key."'");
-    if (($rec = mysql_fetch_array($rs)) && ($rec['curator']==1)) $_SESSION['user']->isCurator = true;
+    if (isset($db)) {
+      $rs = $db->query("SELECT curator FROM user WHERE `key`='".$_SESSION['user']->key."'");
+      if (($rec = mysql_fetch_array($rs)) && ($rec['curator']==1)) $_SESSION['user']->isCurator = true;
+    }
     
     // clear the request token
     unset($_SESSION['request_key']);

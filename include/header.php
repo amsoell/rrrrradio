@@ -62,5 +62,6 @@
     <link type="text/css" rel="stylesheet" href="/css/jquery.qtip.min.css" />         
 <?php endif; ?>    
     <link id="page_favicon" href="/favicon.ico" rel="icon" type="image/x-icon" />
+    <link rel="fluid-icon" href="/theme/cramppbo/images/fluid-icon.png" />
   </head>
   <body onload="$('.autoclick').trigger('click')">

@@ -55,15 +55,38 @@
       }
     
       $tracks = $q->getQueue();  
-      for ($i=0; $i<count($tracks); $i++) {
-        $key = $tracks[$i]->key;
-        $detail = $rdio->get(array("keys"=>$key, "extras"=>"trackNum,bigIcon"));
-        $tracks[$i]->name = $detail->result->$key->name;
-        $tracks[$i]->icon = $detail->result->$key->icon;  
-        $tracks[$i]->artist = $detail->result->$key->artist;
-        $tracks[$i]->album = $detail->result->$key->album;
-        $tracks[$i]->bigIcon = $detail->result->$key->bigIcon;
-        $tracks[$i]->canStream = intval($detail->result->$key->canStream);
+      
+      if (count($tracks)>0) {
+          for ($i=0; $i<count($tracks); $i++) {
+            $key = $tracks[$i]->key;
+            $detail = $rdio->get(array("keys"=>$key, "extras"=>"trackNum,bigIcon"));
+            $tracks[$i]->name = $detail->result->$key->name;
+            $tracks[$i]->icon = $detail->result->$key->icon;  
+            $tracks[$i]->artist = $detail->result->$key->artist;
+            $tracks[$i]->album = $detail->result->$key->album;
+            $tracks[$i]->bigIcon = $detail->result->$key->bigIcon;
+            $tracks[$i]->canStream = intval($detail->result->$key->canStream);
+          }
+      } else {
+        $tracks = Array();
+        $tracks[0]->startplay = 0;
+        $tracks[0]->endplay = 9999999999;
+        $tracks[0]->user = null;
+        $tracks[0]->mark = null;
+        $tracks[0]->key = "";
+        $tracks[0]->name = "Stream unavailable";
+        $tracks[0]->album = "";        
+        $tracks[0]->artist = "Rdio servers are unavailable, check back soon!";        
+        $tracks[0]->albumKey = "";
+        $tracks[0]->artistKey = "";
+        $tracks[0]->icon = "http://".$c->app_domain."/images/failwhale200.jpg";
+        $tracks[0]->duration = 9999999999;
+        $tracks[0]->trackNum = null;
+        $tracks[0]->canStream = 1;
+        $tracks[0]->likes = 0;
+        $tracks[0]->requests = 0;
+        $tracks[0]->bigIcon = "http://".$c->app_domain."/images/failwhale600.jpg";
+
       }
       
       $listeners = User::getCurrentListeners(); 
