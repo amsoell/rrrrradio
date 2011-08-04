@@ -173,7 +173,7 @@
     $('#collection #browser #album').empty();
     for (i=0; i<d.length; i++) {
       if (d[i]!=undefined) {
-        $a = $('<div></div>').addClass('album').attr('id', d[i].key);
+        $a = $('<div></div>').addClass('album').attr('id', d[i].albumKey);
         if (!d[i].canStream) $a.addClass('unstreamable');
         $a.append($('<img>').attr('src',d[i].icon).attr('width','125').attr('height','125'));
         
@@ -413,6 +413,8 @@
               refreshQueueDisplay();
             });
           }));
+        } else {
+            $details.append($('<a>').attr('href', '/?op=login').append($('<img>').attr('src', '/theme/cramppbo/images/play_button_overlay.png').attr('id', 'playbutton')));
         }
       }
       
@@ -977,11 +979,6 @@
       }
     });
     
-    $('#welcomelink').fancybox({
-      'width': 700,  
-      'padding': 0
-    });
-    
     $('#popuplink').fancybox({
       width: 300,
       onCleanup: function() {
@@ -992,6 +989,19 @@
         stopPreview();
       }
     })
+    
+    $('.lightbox').fancybox({
+      width: 750,
+      height: 500,
+      onCleanup: function() {
+        $('#popup #message').css({
+          width: 'auto',
+          height: 'auto'
+        })
+        stopPreview();
+      }
+
+    });
   
     var flashvars = {
       'playbackToken': playbackToken,

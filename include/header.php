@@ -16,6 +16,7 @@
       var playbackToken = "<?php print $token->result; ?>";
       var domain = "<?php print $c->app_domain; ?>";
       var refreshInterval = <?php print $c->refresh_interval; ?>;
+      var previews = <?php print $c->previews?'true':'false'; ?>;
 <?php if ($c->debug): ?>
       var __debugMode = true;
 <?php endif; ?>      

@@ -118,11 +118,13 @@ function displayTrack(trackKey) {
 
         
       if (d.canStream) {
-        $detail.append($('<div></div>').addClass('_tip footnote').html('Tip: Double click tracks to skip this popup and add songs to the queue immediately'))
-          .find('.detail').append($('<div><div>').addClass('preview').attr('rel', trackKey).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.png')))
-                          .append($('<div><div>').addClass('request').attr('rel', trackKey).html('Add to queue').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))
-                          .append($('<div><div>').addClass('dedicate').attr('rel', trackKey).html('Dedicate').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))                          
-                          .append($('<div><div>').addClass('like').attr('rel', trackKey).html('Mark as favorite').prepend($('<img>').attr('src','/theme/cramppbo/images/tools/heart.png')));                          
+        $detail.append($('<div></div>').addClass('_tip footnote').html('Tip: Double click tracks to skip this popup and add songs to the queue immediately'));
+        if (previews==true) {
+            $detail.find('.detail').append($('<div><div>').addClass('preview').attr('rel', trackKey).html('Preview this song').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.play.png')))
+        }
+        $detail.find('.detail').append($('<div><div>').addClass('request').attr('rel', trackKey).html('Add to queue').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))
+                                  .append($('<div><div>').addClass('dedicate').attr('rel', trackKey).html('Dedicate').prepend($('<img>').attr('src','/theme/cramppbo/images/preview.add.png')))                          
+                                  .append($('<div><div>').addClass('like').attr('rel', trackKey).html('Mark as favorite').prepend($('<img>').attr('src','/theme/cramppbo/images/tools/heart.png')));                          
                                
       } else {
         $detail.find('.detail').append($('<br /><div><div>').addClass('like').attr('rel', trackKey).html('Mark as favorite').prepend($('<img>').attr('src','/theme/cramppbo/images/tools/heart.png')))

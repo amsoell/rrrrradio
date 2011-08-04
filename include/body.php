@@ -56,11 +56,12 @@
           </div>
 <?php else: ?>
           <div id="intro">
-            <h1>Welcome to <?php print $c->sitename; ?>!</h1>
+            <h2>Welcome to <?php print $c->sitename; ?>!</h2>
             <p>
               <?php print $c->sitename; ?> is the best place to listen to your favorite music along with your friends across the Internet. 
               <?php print $c->sitename; ?> is powered by Rdio Internet Radio, so you'll need a web subscription to enjoy the music. If you have 
               an account, <a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">log in</a> and join in!</p>
+            <p>For a quick intro into how <?php print $c->sitename; ?> works, check out our <a href="howitworks.php" class="lightbox iframe">introduction</a></p>
             <p>Don't have an Rdio account? Sign up for a <a href="<?php print $c->affiliate_link_subscribe; ?>">free 7-day trial</a> and see what you think.</p>
           </div>
 <?php endif; ?>      
@@ -76,21 +77,12 @@
 <?php
   if (!$rdio->loggedIn()) { 
 ?>    
-        <div id="welcome">
-          <h1><?php print $c->sitename; ?>: Social Listening</h1>
-          <p>We're putting the social back into radio. Listen to music in a truly social way with your friends; You hear what they hear. You listen to what they request, and they hear your requests along with you. Make requests, make dedications, and maybe make some friends.
-          <p>Starting is simple</p>
-          <ol>
-            <li>Log in to your Rdio account</li>
-            <p><?php print $c->sitename; ?> is powered by Rdio's massive online collection of music, so you'll need a subscription to join in. Plans start at $4.99/month, but you can always give it a try with a free 7-day trial to see if you like it first.</p>
-            <p><a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">Log in now</a>, or <a href="<?php print $c->affiliate_link_subscribe; ?>">sign up for a free 7-day trial</a>.</p>
-            <li>Authorize <?php print $c->sitename; ?>to connect to your Rdio account</li>
-            <p><a href="<?php print $_SERVER['PHP_SELF']; ?>?op=login">Click here</a> to hook it up.</p>
-            <li>Start listening</li>
-            <p>That's the easy part. Just come back to this site, click "play," and you're done!</p>
-          </ol>    
+        <div id="howitworks1">
+          <img src="/images/howitworks/step1.png" align="right" vspace="5" />
+          <p>When you first get to <?php print $c->sitename; ?> and log in to your Rdio account, you'll start listening to the play queue. If you like what you see coming up, you don't have to do anything else! Just enjoy!</p>
+          <p>If you would like to add some specific songs to the upcoming queue, though, you can start by clicking on the "Request a song" bar at the top of the page.</p>
         </div>
-        <a href="#welcome" id="welcomelink" class="autoclick">Introduction</a>
+        
       </div>
 <?php 
   }
