@@ -145,9 +145,15 @@
       $db->query("SET SESSION GROUP_CONCAT_MAX_LEN = 30000");      
       $sqlx  = "SELECT GROUP_CONCAT(DISTINCT trackKey) AS trackKeys FROM queue WHERE ";
       // Nothing that's played in the past x number of hours
-      $sqlx .= "startPlay>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL ".$c->random_rotation." HOUR)) OR ";
-      // Nothing longer than y number of seconds
+      $sqlx .= "startPlay>=UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL ".$c->random_rotation." HOUR)) OR (";
+      // Nothing longer than y number of seconds...
       $sqlx .= "endPlay-startPlay>".$c->random_max_length;
+      if ($c->random_requests_required>0) {
+          // ...unless it's been requested a certain number of times
+          $sqlx .= " AND trackKey NOT IN (SELECT trackKey FROM (SELECT COUNT(trackKey) as theCount, trackKey FROM queue WHERE userKey IS NOT NULL GROUP BY trackKey) r WHERE theCount>=".$c->random_requests_required."))";
+      } else {
+          $sqlx .= ")";
+      }
       
       $rs = $db->query($sqlx);
       if ($rec = mysql_fetch_array($rs)) {
