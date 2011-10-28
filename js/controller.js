@@ -2,7 +2,7 @@
   function playerMute() {
     oldVol = $('#volume').children('img[src$="volnotch.gif"]').length;      
     setVolume(0);
-    $('#volume').attr('rel', oldVol);              
+    $('#volume').attr('rel', oldVol/10);              
   }
   
   function playerUnmute() {
