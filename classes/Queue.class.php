@@ -134,6 +134,37 @@
       }
     }
     
+    function getPlaylists() {
+      $db = new Db();
+      $c = new Config();
+      
+      $playlists = Array();
+      $rs = $db->query("SELECT id, trackKey, userKey, startplay, endplay FROM queue WHERE userKey IS NOT NULL ORDER BY startplay");
+      
+      $prev = 0;
+      $currentPlaylist = 0;
+      while ($rec = mysql_fetch_array($rs)) {
+        $t = new QueueTrack($rec['trackKey']);
+        $t->startplay = $rec['startplay'];
+        $t->endplay = $rec['endplay'];
+        $t->user = new User($rec['userKey']);
+        if ($rec['id']!=($prev+1)) {
+          // new set of tracks
+          // if current set is less than 10 tracks, delete it
+          if (count($playlists[$currentPlaylist])<10) {
+            unset($playlists[$currentPlaylist]);
+          } else {
+            $currentPlaylist++;
+          }
+        }
+        
+        $playlists[$currentPlaylist][] = $t;
+        $prev = $rec['id'];
+      }
+      
+      return $playlists;
+    }
+    
     function isRandomable($track) {
       // RESTRICTIONS ON RANDOMLY QUEUED TRACKS
       $db = new Db();
