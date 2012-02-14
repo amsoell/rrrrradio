@@ -1,28 +1,65 @@
 
   function playerMute() {
-    oldVol = $('#volume').children('img[src$="volnotch.gif"]').length;      
-    setVolume(0);
-    $('#volume').attr('rel', oldVol/10);              
+    if (ignoring==1) {
+      unignoreCurrent();
+    } else {  
+      oldVol = $('#volume').children('img[src$="volnotch.gif"]').length;      
+      setVolume(0);
+      $('#volume').attr('rel', oldVol);              
+    }
   }
   
   function playerUnmute() {
-    if (ignoring==1) unignoreCurrent();
-    oldVol = $('#volume').attr('rel');    
-    if (!(oldVol>0)) {
-      oldVol = 0.5;
+    if (ignoring==1) {
+      unignoreCurrent();
+    } else {
+      oldVol = $('#volume').attr('rel');  
+      if (!(oldVol>0)) {
+        oldVol = 5;
+      }
+      setVolume(oldVol);
     }
-    setVolume(oldVol);
+  }
+
+  function ignoreCurrent() {
+    $.ajax({
+      url: '/controller.php',
+      data: 'r=ignore',
+      dataType: 'json',
+      success: function(d) {      
+        _QUEUE.updateQueue(d.queue);      
+        refreshListeners(d.listeners);        
+      }
+    });
+
+    playerMute(); 
+    ignoring = 1;    
+  }
+  
+  function unignoreCurrent() {
+    $.ajax({
+      url: '/controller.php',
+      data: 'r=ignore&off=true',
+      dataType: 'json',
+      success: function(d) {      
+        _QUEUE.updateQueue(d.queue);      
+        refreshListeners(d.listeners);        
+      }
+    });
+    ignoring = 0;
+    playerUnmute();
   }
   
   function toggleLowVolume() {
+    console.log('low volume');
     if ($('#volume').children('img[src$="volnotch.gif"]').length > 1) {
+    console.log('condition 1');
       oldVol = $('#volume').children('img[src$="volnotch.gif"]').length;    
-      setVolume(oldVol);
+      setVolume(1);
       $('#volume').attr('rel', oldVol);          
     } else if ($('#volume').attr('rel') > 1) {
+    console.log('condition 2');    
       setVolume($('#volume').attr('rel'));
-    } else {
-      console.log("else " + $('#volume').attr('rel'));
     }
   }
   
@@ -50,6 +87,7 @@
    
   
   function setVolume(level, indicatorOnly) { // level = integer from 1 to 10
+console.log('setting volume to '+level);  
     if ((level>=0) & (level<=10)) {
       $('#volume').attr('rel',level).children().each(function(i, e) {
         if (indicatorOnly!=true) RdioPlayer().rdio_setVolume(parseInt(level)/10);    
@@ -64,35 +102,6 @@
     }
   }
   
-  function unignoreCurrent() {
-    $.ajax({
-      url: '/controller.php',
-      data: 'r=ignore&off=true',
-      dataType: 'json',
-      success: function(d) {      
-        _QUEUE.updateQueue(d.queue);      
-        refreshListeners(d.listeners);        
-      }
-    });
-    
-    ignoring = 0;
-    toggleMute(0);  
-  }
-  
-  function ignoreCurrent(unmute) {
-    $.ajax({
-      url: '/controller.php',
-      data: 'r=ignore',
-      dataType: 'json',
-      success: function(d) {      
-        _QUEUE.updateQueue(d.queue);      
-        refreshListeners(d.listeners);        
-      }
-    });
-    
-    ignoring = 1;
-    toggleMute(1);  
-  }
   
   
   
@@ -757,9 +766,7 @@
     });
     
     $('.dedicate').live('click', function() {
-      console.log("dedication");
       $key = $(this).attr('rel');
-      console.log($key);
       $parent = $(this).parent();
       $parent.children('[rel='+$key+']').remove();
       
