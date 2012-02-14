@@ -404,12 +404,10 @@
       } else if ((i==0)) {
         if (loggedIn) {
           $details.append($('<img>').attr('src', '/theme/cramppbo/images/play_button_overlay.png').attr('id', 'playbutton').click(function() {
-            $(this).attr('src', '/theme/cramppbo/images/ajax-loader-large-dark.gif').delay(2000).fadeOut(500, function() {
-              RdioPlayer().rdio_seek(currentPosition + skip);
-              RdioPlayer().rdio_setVolume(0.7);
+            RdioPlayer().rdio_play(_QUEUE.getNext().key, { 'initialPosition': skip });
+            $(this).attr('src', '/theme/cramppbo/images/ajax-loader-large-dark.gif').delay(2000).fadeOut(400, function() {              
               $('#queue').addClass('playing');
               skip = -1;
-              
               refreshQueueDisplay();
             });
           }));

@@ -6,8 +6,6 @@ var RdioStream = {
   ready: function() {
     var pb = document.getElementById('playbutton');
     pb.className = "ready";
-    
-    RdioPlayer().rdio_setVolume(0);
     getQueue(true);
   },
 

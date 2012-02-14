@@ -24,10 +24,6 @@ function getQueue($play, $seek) {
       refreshQueueDisplay();  
       refreshListeners(d.listeners);  
       refreshRequestBadge(d.pendingRequests);
-      
-      if ($play && loggedIn) {
-        RdioPlayer().rdio_play(_QUEUE.getNext().key);      
-      }
     }
   });
 }
