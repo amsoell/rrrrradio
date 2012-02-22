@@ -695,7 +695,7 @@ console.log('setting volume to '+level);
       click: function(event, targetInfo) {
         node = $(this);      
         
-        if ($(this).attr('id')=='thisweek' || $(this).attr('id')=='lastweek') {
+        if ($(this).attr('id')=='thisweek' || $(this).attr('id')=='lastweek' || $(this).attr('id')=='twoweeks') {
           $.ajax({
             url: '/data.php',
             dataType: 'json',

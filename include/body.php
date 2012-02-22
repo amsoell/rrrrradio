@@ -30,8 +30,15 @@
           </div>
           <div id="browser">
             <ul id="music">
-              <li class="artist closed" id="thisweek">New Releases: This week</li>
-              <li class="artist closed" id="lastweek">New Releases: Last week</li>
+              <li class="heading">New Releases</li>
+<?php
+  $tuesday = strtotime('last Tuesday');
+//  $tuesday = date('W', $tuesday)==date('W') ? $tuesday-7*86400+7200 : $tuesday;
+?>
+              <li class="artist closed" id="thisweek">Week of <?php print date('F j', $tuesday); ?> </li>
+              <li class="artist closed" id="lastweek">Week of <?php print date('F j', $tuesday-604800); ?></li>
+              <li class="artist closed" id="twoweeks">Week of <?php print date('F j', $tuesday-1209600); ?></li>
+              <li class="heading">Artists</li>              
 <?php
   foreach (Collection::getArtists() as $artist) {
     $key = explode("|", $artist->key);

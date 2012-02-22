@@ -376,6 +376,11 @@ dd {
   cursor: pointer;
 }
 
+#collection #browser #music .heading {
+  font-weight: bold;
+  padding-top: 10px;
+}
+
 #collection #browser #music ul ul li {
   list-style: decimal;
 }
