@@ -179,15 +179,21 @@ console.log('setting volume to '+level);
   }
 
   function displayArtistWorks(d) {
+  
     $('#collection #browser #album').empty();
     for (i=0; i<d.length; i++) {
       if (d[i]!=undefined) {
-        $a = $('<div></div>').addClass('album').attr('id', d[i].albumKey);
+        if (d[i].albumKey!=undefined) {
+          key = d[i].albumKey;
+        } else {
+          key = d[i].key;
+        }
+        $a = $('<div></div>').addClass('album').attr('id', key);
         if (!d[i].canStream) $a.addClass('unstreamable');
-        $a.append($('<img>').attr('src',d[i].icon).attr('width','125').attr('height','125'));
         
+        $a.append($('<img>').attr('src',d[i].icon).attr('width','125').attr('height','125'));        
         $d = $('<div></div>').addClass('detail');
-        $d.append($('<h1></h1>').html(d[i].name));
+        $d.append($('<h1></h1>').html(d[i].artist+': '+d[i].name));
         if (!d[i].canStream) {
           if ((new Date(d[i].releaseDate.replace(/-/gi,"/"))).getTime() > (new Date()).getTime()) {
             $d.append($('<h2></h2>').html('Available: '+(new Date(d[i].releaseDate.replace(/-/gi,"/"))).toLocaleDateString()));
@@ -687,36 +693,67 @@ console.log('setting volume to '+level);
   
     $('li.artist').live({
       click: function(event, targetInfo) {
-        node = $(this);
-    
-        $.ajax({
-          url: '/data.php',
-          dataType: 'json',
-          data: 'r='+$(this).attr('id'),
-          async: true,
-          beforeSend: function() {
-            $('#collection #browser .artist.highlight').removeClass('highlight');
-            node.addClass('highlight');          
-            $('#collection #browser #album').empty().append($('<img>').addClass('loading').attr('src', '/theme/cramppbo/images/ajax-loader-bar.gif'));       
-          },
-          success: function(d) {
-            displayArtistWorks(d);
-            
-            $('.ajax-loader').remove();
-          },
-          complete: function() {
-            if ((targetInfo!=undefined) && (targetInfo.length>0)) {
-              albumKey = targetInfo[0];
-              tinfo = targetInfo.slice(1);
+        node = $(this);      
+        
+        if ($(this).attr('id')=='thisweek' || $(this).attr('id')=='lastweek') {
+          $.ajax({
+            url: '/data.php',
+            dataType: 'json',
+            data: 'n='+$(this).attr('id'),
+            async: true,
+            beforeSend: function() {
+              $('#collection #browser .artist.highlight').removeClass('highlight');
+              node.addClass('highlight');          
+              $('#collection #browser #album').empty().append($('<img>').addClass('loading').attr('src', '/theme/cramppbo/images/ajax-loader-bar.gif'));       
+            },
+            success: function(d) {
+              displayArtistWorks(d);
               
-              $('#collection #browser #album').scrollTo('#'+albumKey+' .detail', 400);
-              if (tinfo.length>0) {
-                $('#collection #album .track.highlight').removeClass('highlight');
-                $('#'+albumKey+' #'+tinfo[0]).addClass('highlight');
+              $('.ajax-loader').remove();
+            },
+            complete: function() {
+              if ((targetInfo!=undefined) && (targetInfo.length>0)) {
+                albumKey = targetInfo[0];
+                tinfo = targetInfo.slice(1);
+                
+                $('#collection #browser #album').scrollTo('#'+albumKey+' .detail', 400);
+                if (tinfo.length>0) {
+                  $('#collection #album .track.highlight').removeClass('highlight');
+                  $('#'+albumKey+' #'+tinfo[0]).addClass('highlight');
+                }
               }
-            }
-          }      
-        })
+            }      
+          });
+        } else {
+          $.ajax({
+            url: '/data.php',
+            dataType: 'json',
+            data: 'r='+$(this).attr('id'),
+            async: true,
+            beforeSend: function() {
+              $('#collection #browser .artist.highlight').removeClass('highlight');
+              node.addClass('highlight');          
+              $('#collection #browser #album').empty().append($('<img>').addClass('loading').attr('src', '/theme/cramppbo/images/ajax-loader-bar.gif'));       
+            },
+            success: function(d) {
+              displayArtistWorks(d);
+              
+              $('.ajax-loader').remove();
+            },
+            complete: function() {
+              if ((targetInfo!=undefined) && (targetInfo.length>0)) {
+                albumKey = targetInfo[0];
+                tinfo = targetInfo.slice(1);
+                
+                $('#collection #browser #album').scrollTo('#'+albumKey+' .detail', 400);
+                if (tinfo.length>0) {
+                  $('#collection #album .track.highlight').removeClass('highlight');
+                  $('#'+albumKey+' #'+tinfo[0]).addClass('highlight');
+                }
+              }
+            }      
+          });
+        }
       },
       dblclick: function() {
         node = $(this);

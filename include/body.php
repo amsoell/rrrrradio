@@ -30,6 +30,8 @@
           </div>
           <div id="browser">
             <ul id="music">
+              <li class="artist closed" id="thisweek">New Releases: This week</li>
+              <li class="artist closed" id="lastweek">New Releases: Last week</li>
 <?php
   foreach (Collection::getArtists() as $artist) {
     $key = explode("|", $artist->key);

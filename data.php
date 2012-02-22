@@ -60,6 +60,46 @@
     $tracks = $tracks->result->$key;
 
     print json_encode($tracks);
+  } elseif (array_key_exists('n', $_REQUEST)) {
+    // GET NEW RELEASE DATA AND RETURN VIA JSON OBJECT  
+    $args = array("time"=>$_REQUEST['n'], "extras"=>"tracks");
+    $albums = $rdio->getNewReleases($args);
+    if ($albums->status=="error") {
+      $albums = Array();
+    } else {
+      $albums = $albums->result;
+    }
+
+    usort($albums, "albumsort");
+    
+    // filter out artists not in collection
+    $args = array("user"=>$c->rdio_collection_userkey);
+    $collectionartists = $rdio->getArtistsInCollection($args);    
+    if ($collectionartists->status=="error") {
+      $artists = Array();
+    } else {
+      $artists = $collectionartists->result;
+    }
+    $collectionartists = Array();
+    
+    foreach ($artists as $artist) {
+      $artist = $artist->key;
+      $artist = explode("|", $artist);
+      if ($artist[0]!='rl62') $collectionartists[] = str_replace("rl", "r", $artist[0]);
+    }
+    
+    $randomables = Collection::getRandomables();
+    for ($i=0; $i<count($albums); $i++) {
+      // remove non-collection albums
+      if (in_array($albums[$i]->artistKey, $collectionartists)) {
+        for ($j=0; $j<count($albums[$i]->tracks); $j++) {
+          $albums[$i]->tracks[$j]->randomable = in_array($albums[$i]->tracks[$j]->key, $randomables)?"1":"0";
+        }
+      } else {
+        $albums[$i] = null;
+      }
+    }
+    print json_encode($albums);
   } elseif (array_key_exists('term', $_REQUEST)) {
     $results = array();
     $results_tracks = array();
