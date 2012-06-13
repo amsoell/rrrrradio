@@ -14,7 +14,7 @@
   authenticate();  
   
   if (array_key_exists('r', $_REQUEST)) {
-    // GET ALBUMS FROM A SPECIFIED ARTIST AND RETURN VIA JSON OBJECT  
+    //! GET ALBUMS FROM A SPECIFIED ARTIST AND RETURN VIA JSON OBJECT  
     $args = array("artist"=>$_REQUEST['r'], "user"=>$c->rdio_collection_userkey);
     if (array_key_exists('force', $_REQUEST)) $args['force'] = 1;
     if (array_key_exists('all', $_REQUEST)) {
@@ -38,7 +38,7 @@
     }
     print json_encode($albums);
   } elseif (array_key_exists('a', $_REQUEST)) {
-    // GET TRACKS FROM A SPECIFIED ALBUM AND RETURN VIA JSON OBJECT
+    //! GET TRACKS FROM A SPECIFIED ALBUM AND RETURN VIA JSON OBJECT
     $args = array("album"=>$_REQUEST['a'], "extras"=>"trackNum", "user"=>$c->rdio_collection_userkey);
     if (array_key_exists('force', $_REQUEST)) $args['force'] = 1;
     if (array_key_exists('all', $_REQUEST)) {
@@ -52,7 +52,7 @@
 
     print json_encode($tracks);
   } elseif (array_key_exists('t', $_REQUEST)) {
-    // GET TRACK DETAIL AND RETURN VIA JSON OBJECT
+    //! GET TRACK DETAIL AND RETURN VIA JSON OBJECT
     $key = $_REQUEST['t'];
     $args = array("keys"=>$_REQUEST['t'], "extras"=>"trackNum");
     if (array_key_exists('force', $_REQUEST)) $args['force'] = 1;
@@ -61,13 +61,28 @@
 
     print json_encode($tracks);
   } elseif (array_key_exists('n', $_REQUEST)) {
-    // GET NEW RELEASE DATA AND RETURN VIA JSON OBJECT  
-    $args = array("time"=>$_REQUEST['n'], "extras"=>"tracks");
-    $albums = $rdio->getNewReleases($args);
-    if ($albums->status=="error") {
+    //! GET NEW RELEASE DATA AND RETURN VIA JSON OBJECT  
+    if ($_REQUEST['n']=='newreleases') {
       $albums = Array();
+      foreach (Array('thisweek','lastweek','twoweeks') as $range) {
+        $args = array("time"=>$range, "extras"=>"tracks");
+        $albumset = $rdio->getNewReleases($args);
+        if ($albumset->status=="error") {
+          $albumset = Array();
+        } else {
+          $albumset = $albumset->result;
+        }
+        
+        $albums = array_merge($albums, $albumset);
+      }
     } else {
-      $albums = $albums->result;
+      $args = array("time"=>$_REQUEST['n'], "extras"=>"tracks");
+      $albums = $rdio->getNewReleases($args);
+      if ($albums->status=="error") {
+        $albums = Array();
+      } else {
+        $albums = $albums->result;
+      }
     }
 
     usort($albums, "albumsort");
@@ -95,12 +110,20 @@
         for ($j=0; $j<count($albums[$i]->tracks); $j++) {
           $albums[$i]->tracks[$j]->randomable = in_array($albums[$i]->tracks[$j]->key, $randomables)?"1":"0";
         }
+        
+        if ($_REQUEST['extra']='prependartist') {
+          $albums[$i]->name = $albums[$i]->artist.': '.$albums[$i]->name;
+        }
       } else {
         $albums[$i] = null;
       }
     }
+
+    $albums = array_values(array_filter($albums, 'isanull'));
+//    $albums = array_diff($albums, $remove);
     print json_encode($albums);
   } elseif (array_key_exists('term', $_REQUEST)) {
+    //! SEARCH
     $results = array();
     $results_tracks = array();
     $results_albums = array();
@@ -183,6 +206,7 @@
     
     print json_encode($results);
   } elseif ($_REQUEST['v']=='requests') {
+    //! GET REQUESTED TRACKS
     $rs = $db->query("SELECT GROUP_CONCAT(albumKey) as albumKeys FROM request WHERE approved IS NULL");
     
     if ($rec = mysql_fetch_array($rs)) {
@@ -191,7 +215,14 @@
     
     print json_encode($requests);
   } else {
-    $artists = Collection::getArtists();
+    //! GET ARTIST LIST
+    
+    $artists = Array();
+    if ($_REQUEST['v']=='newalbums') {
+      $artists[] = json_decode('{"key":"newreleases","name":"New Releases","type":"nr"}');
+    }
+    
+    $artists = array_merge($artists, Collection::getArtists());    
 
     print json_encode($artists);
   }
@@ -212,4 +243,8 @@
     
 
     return (($sortOrder[$a->type] > $sortOrder[$b->type]) ? 1 : -1);
+  }
+  
+  function isanull($val) {
+    return !is_null($val);
   }
