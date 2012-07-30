@@ -152,11 +152,40 @@ console.log('setting volume to '+level);
         $('#popuplink').trigger('click');
       }
     } else {
-      if ((arguments.length==1) && window.fluid) {
-        window.fluid.showGrowlNotification({
-            title: 'rrrrradio', 
-            description: msg
-        });
+      if (arguments.length==1) {
+        if (window.fluid) {
+          window.fluid.showGrowlNotification({
+              title: 'rrrrradio', 
+              description: msg
+          });
+        } else {
+          console.log('new display: ' + msg);
+          $('#wrapper').append($("<div></div>").addClass('notification').css({
+            'position': 'fixed',
+            'top': '0',
+            'left': '50%',
+            'margin-left': '-150px',
+            'background': '#B27011',
+            'padding': '15px 10px 5px 10px',
+            'height': '20px',
+            'width': '300px',
+            'text-align': 'center',
+            'z-index': '999',
+            '-moz-border-bottom-left-radius': '10px',
+            'border-bottom-left-radius': '10px',
+            '-moz-border-bottom-right-radius': '10px',
+            'border-bottom-right-radius': '10px',
+            'color': '#FFF',
+            'font-size': '12px',
+            'box-shadow': '0 0 3px #000',
+            '-moz-box-shadow': '0 0 3px #000',
+            '-webkit-box-shadow': '0 0 3px #000'            
+          }).html(msg).animate({
+            'top': '20px'
+          }, 1000).delay(2000).animate({
+            'top': '-10px'
+          }, 1000, function() { $(this).remove(); }));
+        }
       } else {
         $('#popup #message').css({
           width: 'auto',
