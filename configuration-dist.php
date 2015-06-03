@@ -17,6 +17,7 @@
     var $lastfm_conssec = "";
     var $lastfm_api_url = "http://ws.audioscrobbler.com/2.0/";    
     
+    var $db_host     = "localhost";
     var $db_username = "";
     var $db_password = "";
     var $db_database = "";

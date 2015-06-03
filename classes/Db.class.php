@@ -8,11 +8,12 @@
     
     function __construct() {
       $c = new Config();
+      $this->host     = $c->db_host;
       $this->username = $c->db_username;
       $this->password = $c->db_password;
       $this->database = $c->db_database;
       
-      $this->dblink = mysql_connect("localhost", $this->username, $this->password);
+      $this->dblink = mysql_connect($this->host, $this->username, $this->password);
       mysql_select_db($this->database, $this->dblink);
       
     }
