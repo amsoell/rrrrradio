@@ -95,7 +95,7 @@
         $db->query("INSERT INTO queue (trackKey, albumKey, artistKey, userKey, free, dedicationName, dedicationRecipient, dedicationMessage, client, added, startplay, endplay) VALUES ('$key', '".$obj->album."', '".$obj->artist."', ".(is_null($requestedBy)?"NULL":"'$requestedBy'").", ".($this->length()<$c->free_if_queue_less_than?'1':'0').", '".addslashes($dedicationName)."', '".addslashes($dedicationRecipient)."', '".addslashes($dedicationMessage)."', '".addslashes($client)."', UNIX_TIMESTAMP(NOW()), ".($endplay).", ".($endplay+$obj->duration).")");
 
         if (trim(strlen($dedicationRecipient))>0) {
-          $r = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+          $r = new RdioLib(RDIO_CLIENT_ID, RDIO_CLIENT_SECRET, RDIO_CLIENT_REDIRECT_URI);
           $t = $r->get(array("keys"=> $key, "extras"=>"trackNum,isOnCompilation"));
 
           $dedicationMessage = "Oh, hello! I thought you would like to know that the following dedication has been made for you at ".$c->sitename.":\r\n\r\n".

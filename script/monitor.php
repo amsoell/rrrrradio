@@ -1,11 +1,11 @@
-#!/usr/bin/php -c/home/170824/etc
+#!/usr/bin/php5-latest -c/home/170824/etc
 <?php
   $dir = __FILE__;
   $dir = substr($dir, 0, strrpos($dir, "/"))."/";
 
   include("$dir../configuration.php");
   include("$dir../classes/Db.class.php");
-  include("$dir../classes/Rdio.class.php");
+  include("$dir../classes/RdioLib.class.php");
   include("$dir../classes/Track.class.php");
   include("$dir../classes/Queue.class.php");
   include("$dir../classes/Collection.class.php");
@@ -14,7 +14,7 @@
   $c = new Config();
   $db = new Db();
   $q = new Queue();
-  $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+  $rdio = new RdioLib(RDIO_CLIENT_ID, RDIO_CLIENT_SECRET, RDIO_CLIENT_REDIRECT_URI);
 
   $length = $q->length();
 

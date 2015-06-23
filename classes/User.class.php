@@ -15,7 +15,7 @@
 
     function __construct($key) {
       $db = new Db();
-      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+      $rdio = new RdioLib(RDIO_CLIENT_ID, RDIO_CLIENT_SECRET, RDIO_CLIENT_REDIRECT_URI);
 
       $rs = $db->query("SELECT `key`, state, token, secret, lastclient FROM user WHERE `key`='$key' LIMIT 1");
       if ($rec = mysql_fetch_array($rs)) {
@@ -95,7 +95,7 @@
 
     function getTopArtists($count=10) {
       $db = new Db();
-      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+      $rdio = new RdioLib(RDIO_CLIENT_ID, RDIO_CLIENT_SECRET, RDIO_CLIENT_REDIRECT_URI);
 
       $rs = $db->query("SELECT artistKey, count(id) AS requestCount FROM queue WHERE userKey='".$this->key."' GROUP BY artistKey ORDER BY requestCount DESC LIMIT $count");
       $a = array();
@@ -110,7 +110,7 @@
 
     function getTopTracks($count=10) {
       $db = new Db();
-      $rdio = new Rdio(RDIO_CONSKEY, RDIO_CONSSEC);
+      $rdio = new RdioLib(RDIO_CLIENT_ID, RDIO_CLIENT_SECRET, RDIO_CLIENT_REDIRECT_URI);
 
       $rs = $db->query("SELECT trackKey, count(id) AS requestCount FROM queue WHERE userKey='".$this->key."' GROUP BY trackKey ORDER BY requestCount DESC LIMIT $count");
       $a = array();

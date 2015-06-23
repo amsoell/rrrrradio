@@ -1,4 +1,4 @@
-<?php 
+<?php
   include_once("include/header.php");
   if (strpos($_SERVER['HTTP_USER_AGENT'],"iPhone")) {
     include("include/body.touch.php");
@@ -7,4 +7,4 @@
   }
   include("include/footer.php");
 ?>
-    
+
